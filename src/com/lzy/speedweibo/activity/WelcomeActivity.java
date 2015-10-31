@@ -1,12 +1,8 @@
 package com.lzy.speedweibo.activity;
 
-import java.text.SimpleDateFormat;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
@@ -18,35 +14,31 @@ import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 
-public class WelcomeActivity extends Activity {
-	private AuthInfo mAuthInfo;
+public class WelcomeActivity extends BaseActivity {
+	// private AuthInfo mAuthInfo;
 	/** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能 */
-	private Oauth2AccessToken mAccessToken;
 	/** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
-	private SsoHandler mSsoHandler;
-	private ImageView welcomeImageView;
+	// private SsoHandler mSsoHandler;
+	private Oauth2AccessToken mAccessToken;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
 
-		welcomeImageView = (ImageView) findViewById(R.id.welcomeImageView);
-
 		// 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
-		mAuthInfo = new AuthInfo(this, Constants.APP_KEY,
+		AuthInfo mAuthInfo = new AuthInfo(this, Constants.APP_KEY,
 				Constants.REDIRECT_URL, Constants.SCOPE);
-		mSsoHandler = new SsoHandler(WelcomeActivity.this, mAuthInfo);
+		SsoHandler mSsoHandler = new SsoHandler(WelcomeActivity.this, mAuthInfo);
 
 		// 从 SharedPreferences 中读取上次已保存好 AccessToken 等信息，
 		// 第一次启动本应用，AccessToken 不可用
 		mAccessToken = AccessTokenKeeper.readAccessToken(this);
 		if (mAccessToken.isSessionValid()) {
-			updateTokenView(true);
+			// updateTokenView(true);
 			// 已认证则跳转到主界面
 			Intent intent = new Intent(WelcomeActivity.this,
 					EntryActivity.class);
-			// intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 			finish();
 		} else {
@@ -71,7 +63,7 @@ public class WelcomeActivity extends Activity {
 			// String phoneNum = mAccessToken.getPhoneNum();
 			if (mAccessToken.isSessionValid()) {
 				// 显示 Token
-				updateTokenView(false);
+				// updateTokenView(false);
 
 				// 保存 Token 到 SharedPreferences
 				AccessTokenKeeper.writeAccessToken(WelcomeActivity.this,
@@ -83,7 +75,6 @@ public class WelcomeActivity extends Activity {
 				// 已认证则跳转到主界面
 				Intent intent = new Intent(WelcomeActivity.this,
 						EntryActivity.class);
-				// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
 				finish();
 			} else {
@@ -122,17 +113,18 @@ public class WelcomeActivity extends Activity {
 	 * @param hasExisted
 	 *            配置文件中是否已存在 token 信息并且合法
 	 */
-	private void updateTokenView(boolean hasExisted) {
-		String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-				.format(new java.util.Date(mAccessToken.getExpiresTime()));
-		String format = getString(R.string.weibosdk_demo_token_to_string_format_1);
-		// tv.setText(String.format(format, mAccessToken.getToken(), date));
-
-		String message = String.format(format, mAccessToken.getToken(), date);
-		if (hasExisted) {
-			message = getString(R.string.weibosdk_demo_token_has_existed)
-					+ "\n" + message;
-		}
-		// authInfoTv.setText(message);
-	}
+	// private void updateTokenView(boolean hasExisted) {
+	// String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+	// .format(new java.util.Date(mAccessToken.getExpiresTime()));
+	// String format =
+	// getString(R.string.weibosdk_demo_token_to_string_format_1);
+	// // tv.setText(String.format(format, mAccessToken.getToken(), date));
+	//
+	// String message = String.format(format, mAccessToken.getToken(), date);
+	// if (hasExisted) {
+	// message = getString(R.string.weibosdk_demo_token_has_existed)
+	// + "\n" + message;
+	// }
+	// // authInfoTv.setText(message);
+	// }
 }

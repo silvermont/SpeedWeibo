@@ -6,6 +6,8 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,50 +17,66 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
+import com.lzy.speedweibo.core.SystemBarTintManager;
 import com.lzy.speedweibo.fragment.HomeFragment;
 import com.lzy.speedweibo.fragment.MeFragment;
 import com.lzy.speedweibo.fragment.MessageFragment;
 
 public class EntryActivity extends FragmentActivity {
 
-	private ViewPager viewPager;
-	private HomeFragment homeFragment;
-	private MessageFragment messageFragment;
-	private MeFragment meFragment;
-	private ArrayList<Fragment> fragmentList;
+	// private ViewPager viewPager;
+	// private HomeFragment homeFragment;
+	// private MessageFragment messageFragment;
+	// private MeFragment meFragment;
+	// private ArrayList<Fragment> fragmentList;
 	private long pressTime = 0;
-	private LinearLayout topBar;
+	// private LinearLayout topBar;
 	private TextView homeTv, messageTv, meTv;
 	private View homeLine, messageLine, meLine;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
-//			getWindow().addFlags(
-//					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//			getWindow().addFlags(
-//					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//
-//			SystemBarTintManager tintManager = new SystemBarTintManager(this);
-//			tintManager.setStatusBarTintEnabled(true);
-//			tintManager.setStatusBarTintResource(R.color.blue);
-//		}
+		if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+			getWindow().addFlags(
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			getWindow().addFlags(
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			tintManager.setStatusBarTintEnabled(true);
+			tintManager.setStatusBarTintResource(R.color.blue);
+		}
 		setContentView(R.layout.activity_entry);
 
 		initViewPager();
+		initActionBar();
+	}
 
+	@Override
+	public void onBackPressed() {
+		if (System.currentTimeMillis() - pressTime < 2000) {
+			super.onBackPressed();
+		} else {
+			pressTime = System.currentTimeMillis();
+			Toast.makeText(EntryActivity.this, "再按一次退出", Toast.LENGTH_SHORT)
+					.show();
+		}
+	}
+
+	private void initActionBar() {
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.action_bar_entry);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView().findViewById(
-				R.id.operate);
+		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()
+				.findViewById(R.id.operate);
 		operate.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -89,21 +107,10 @@ public class EntryActivity extends FragmentActivity {
 		});
 	}
 
-	@Override
-	public void onBackPressed() {
-		if (System.currentTimeMillis() - pressTime < 2000) {
-			super.onBackPressed();
-		} else {
-			pressTime = System.currentTimeMillis();
-			Toast.makeText(EntryActivity.this, "再按一次退出", Toast.LENGTH_SHORT)
-					.show();
-		}
-	}
-
 	@SuppressWarnings("deprecation")
 	private void initViewPager() {
-		viewPager = (ViewPager) findViewById(R.id.viewPager);
-		topBar = (LinearLayout) findViewById(R.id.topBar);
+		ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+		LinearLayout topBar = (LinearLayout) findViewById(R.id.topBar);
 		homeTv = (TextView) topBar.findViewById(R.id.homeTv);
 		messageTv = (TextView) topBar.findViewById(R.id.messageTv);
 		meTv = (TextView) topBar.findViewById(R.id.meTv);
@@ -111,11 +118,11 @@ public class EntryActivity extends FragmentActivity {
 		messageLine = topBar.findViewById(R.id.messageLine);
 		meLine = topBar.findViewById(R.id.meLine);
 
-		fragmentList = new ArrayList<Fragment>();
+		ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
 
-		homeFragment = new HomeFragment();
-		messageFragment = new MessageFragment();
-		meFragment = new MeFragment();
+		HomeFragment homeFragment = new HomeFragment();
+		MessageFragment messageFragment = new MessageFragment();
+		MeFragment meFragment = new MeFragment();
 
 		fragmentList.add(homeFragment);
 		fragmentList.add(messageFragment);

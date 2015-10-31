@@ -15,7 +15,8 @@ public class MyApplication extends Application {
 	private static ImageLoaderConfiguration configuration;
 	private static Status status;
 	private static DisplayImageOptions options;
-	private static MyApplication application;
+
+	// private static MyApplication application;
 
 	@Override
 	public void onCreate() {
@@ -29,12 +30,12 @@ public class MyApplication extends Application {
 				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
 	}
 
-	public static MyApplication getInstance() {
-		if (application == null) {
-			application = new MyApplication();
-		}
-		return application;
-	}
+	// public static MyApplication getInstance() {
+	// if (application == null) {
+	// application = new MyApplication();
+	// }
+	// return application;
+	// }
 
 	/**
 	 * 异步加载图片
@@ -46,8 +47,8 @@ public class MyApplication extends Application {
 		ImageLoader.getInstance().displayImage(imageUrl, imageView, options);
 	}
 
-	public void setStatus(Status status) {
-		this.status = status;
+	public static void setStatus(Status status) {
+		MyApplication.status = status;
 	}
 
 	public static Status getStatus() {

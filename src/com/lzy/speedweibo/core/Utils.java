@@ -46,14 +46,14 @@ public class Utils {
 		int transformedHour = Integer.valueOf(transformedTimeArray[3]);
 		int transformedMin = Integer.valueOf(transformedTimeArray[4]);
 
-		Date curDate = new Date(System.currentTimeMillis());
-		String curTime = myDateFormat.format(curDate);
+		// Date curDate = new Date(System.currentTimeMillis());
+		// String curTime = myDateFormat.format(curDate);
 		String[] curTimeArray = transformedTime.split(" ");
 		int curYear = Integer.valueOf(curTimeArray[0]);
 		int curMonth = Integer.valueOf(curTimeArray[1]);
 		int curDay = Integer.valueOf(curTimeArray[2]);
-		int curHour = Integer.valueOf(curTimeArray[3]);
-		int curMin = Integer.valueOf(curTimeArray[4]);
+		// int curHour = Integer.valueOf(curTimeArray[3]);
+		// int curMin = Integer.valueOf(curTimeArray[4]);
 
 		if (curYear > transformedYear) {
 			dispalyTime = transformedYear + "年" + transformedMonth + "月"

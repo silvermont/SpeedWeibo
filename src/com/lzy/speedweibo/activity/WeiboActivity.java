@@ -1,7 +1,6 @@
 package com.lzy.speedweibo.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -18,7 +17,7 @@ import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Status;
 
-public class WeiboActivity extends Activity {
+public class WeiboActivity extends BaseActivity {
 	private Status status;
 	private ImageView userHead;
 	private ImageView picture;
@@ -62,22 +61,7 @@ public class WeiboActivity extends Activity {
 		float density = metric.density;// 屏幕密度（0.75 / 1.0 / 1.5）
 		imageWidth = (int) ((widthPX - 30 * density) / 3);
 
-		ActionBar actionBar = this.getActionBar();
-		actionBar.setCustomView(R.layout.action_bar_back);
-		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-		TextView title = (TextView) actionBar.getCustomView().findViewById(
-				R.id.title);
-		title.setText("微博正文");
-
-		RelativeLayout back = (RelativeLayout) actionBar.getCustomView().findViewById(
-				R.id.back);
-		back.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		initActionBar();
 
 		text.setMText(status.text);
 		userName.setText(status.user.screen_name);
@@ -149,5 +133,24 @@ public class WeiboActivity extends Activity {
 			e.printStackTrace();
 			retweetedLayout.setVisibility(View.GONE);
 		}
+	}
+
+	private void initActionBar() {
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setCustomView(R.layout.action_bar_back);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		TextView title = (TextView) actionBar.getCustomView().findViewById(
+				R.id.title);
+		title.setText("微博正文");
+
+		RelativeLayout back = (RelativeLayout) actionBar.getCustomView()
+				.findViewById(R.id.back);
+		back.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 	}
 }

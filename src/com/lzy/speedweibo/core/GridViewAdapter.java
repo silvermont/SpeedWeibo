@@ -47,8 +47,7 @@ public class GridViewAdapter extends BaseAdapter {
 		} else {
 			imageView = (ImageView) convertView;
 		}
-		MyApplication.getInstance().asyncLoadImage(urls.get(position),
-				imageView);
+		MyApplication.asyncLoadImage(urls.get(position), imageView);
 		return imageView;
 	}
 
