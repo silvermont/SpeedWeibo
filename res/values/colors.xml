@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="divider_gray">#E7E7E7</color>
+    <color name="retweeted_layout_gray">#F7F7F7</color>
+    <color name="text_gray">#888888</color>
+    <color name="text_black">#333333</color>
+    <color name="blue">#0089E4</color>
+    <color name="light_blue">#5BBAFA</color>
+
+</resources>
