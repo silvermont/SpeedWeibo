@@ -20,11 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.core.AccessTokenKeeper;
 import com.lzy.speedweibo.core.Constants;
+import com.lzy.speedweibo.core.MyApplication;
+import com.lzy.speedweibo.core.WeiboLvAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.StatusesAPI;
@@ -34,7 +34,7 @@ import com.sina.weibo.sdk.openapi.models.StatusList;
 public class HomeFragment extends Fragment {
 	private ListView weiboLv;
 	private SwipeRefreshLayout refreshLayout;
-	private com.lzy.speedweibo.core.ListViewAdapter lvAdapter;
+	private WeiboLvAdapter lvAdapter;
 	private List<Status> statusList;
 	private long maxWeiboID;
 	private long minWeiboID;
@@ -56,13 +56,13 @@ public class HomeFragment extends Fragment {
 		imageWidth = (int) ((widthPX - 30 * density) / 3);
 
 		statusList = new ArrayList<Status>();
-		lvAdapter = new com.lzy.speedweibo.core.ListViewAdapter(getActivity(),
+		lvAdapter = new com.lzy.speedweibo.core.WeiboLvAdapter(getActivity(),
 				statusList, imageWidth);
 
-		Oauth2AccessToken mAccessToken = AccessTokenKeeper
-				.readAccessToken(getActivity());
+		// Oauth2AccessToken mAccessToken = AccessTokenKeFeper
+		// .readAccessToken(getActivity());
 		mStatusesAPI = new StatusesAPI(getActivity(), Constants.APP_KEY,
-				mAccessToken);
+				MyApplication.getmAccessToken());
 
 		mListener = new RequestListener() {
 

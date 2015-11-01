@@ -17,13 +17,13 @@ import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.activity.WeiboActivity;
 import com.sina.weibo.sdk.openapi.models.Status;
 
-public class ListViewAdapter extends BaseAdapter {
+public class WeiboLvAdapter extends BaseAdapter {
 	private List<Status> statusList;
 	private int imageWidth;
 	private Context context;
 	private Holder holder;
 
-	public ListViewAdapter(Context context, List<Status> statusList,
+	public WeiboLvAdapter(Context context, List<Status> statusList,
 			int imageWidth) {
 		super();
 		this.context = context;

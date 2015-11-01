@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.core.AccessTokenKeeper;
 import com.lzy.speedweibo.core.Constants;
+import com.lzy.speedweibo.core.MyApplication;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -36,6 +37,7 @@ public class WelcomeActivity extends BaseActivity {
 		mAccessToken = AccessTokenKeeper.readAccessToken(this);
 		if (mAccessToken.isSessionValid()) {
 			// updateTokenView(true);
+			MyApplication.setmAccessToken(mAccessToken);
 			// 已认证则跳转到主界面
 			Intent intent = new Intent(WelcomeActivity.this,
 					EntryActivity.class);
@@ -68,6 +70,7 @@ public class WelcomeActivity extends BaseActivity {
 				// 保存 Token 到 SharedPreferences
 				AccessTokenKeeper.writeAccessToken(WelcomeActivity.this,
 						mAccessToken);
+				MyApplication.setmAccessToken(mAccessToken);
 				Toast.makeText(WelcomeActivity.this,
 						R.string.weibosdk_demo_toast_auth_success,
 						Toast.LENGTH_SHORT).show();
