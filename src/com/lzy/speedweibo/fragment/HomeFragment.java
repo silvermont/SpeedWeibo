@@ -14,18 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.core.AccessTokenKeeper;
 import com.lzy.speedweibo.core.Constants;
-import com.lzy.speedweibo.core.SmartTextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -38,11 +34,10 @@ import com.sina.weibo.sdk.openapi.models.StatusList;
 public class HomeFragment extends Fragment {
 	private ListView weiboLv;
 	private SwipeRefreshLayout refreshLayout;
-	private com.lzy.speedweibo.core.ListViewAdapter myAdapter;
+	private com.lzy.speedweibo.core.ListViewAdapter lvAdapter;
 	private List<Status> statusList;
-	private List<Status> copyStatusList;
-	private long maxWeiboID = 0;
-	private long minWeiboID = 0;
+	private long maxWeiboID;
+	private long minWeiboID;
 	private boolean isFirstRefresh = true;
 	private boolean isRequestLatestWeibo = true;
 	private RequestListener mListener;
@@ -61,7 +56,7 @@ public class HomeFragment extends Fragment {
 		imageWidth = (int) ((widthPX - 30 * density) / 3);
 
 		statusList = new ArrayList<Status>();
-		myAdapter = new com.lzy.speedweibo.core.ListViewAdapter(getActivity(),
+		lvAdapter = new com.lzy.speedweibo.core.ListViewAdapter(getActivity(),
 				statusList, imageWidth);
 
 		Oauth2AccessToken mAccessToken = AccessTokenKeeper
@@ -85,7 +80,7 @@ public class HomeFragment extends Fragment {
 								.parse(response);
 						if (responseStatuses != null
 								&& responseStatuses.total_number > 0) {
-							handleResponse(responseStatuses);
+							handleResponseStatus(responseStatuses.statusList);
 						}
 					}
 				}
@@ -112,10 +107,7 @@ public class HomeFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				if (!progressDialog.isShowing()) {
-					progressDialog.show();
-					requestPreviousWeibo();
-				}
+				requestPreviousWeibo();
 			}
 		});
 
@@ -142,12 +134,11 @@ public class HomeFragment extends Fragment {
 		});
 		weiboLv.addFooterView(footerView);
 		weiboLv.setEmptyView(emptyView);
-		weiboLv.setAdapter(myAdapter);
+		weiboLv.setAdapter(lvAdapter);
 
 		weiboLv.setOnScrollListener(new PauseOnScrollListener(ImageLoader
 				.getInstance(), true, true));
 
-		progressDialog.show();
 		requestLatestWeibo();
 
 		return view;
@@ -157,18 +148,18 @@ public class HomeFragment extends Fragment {
 	 * 请求最新微博
 	 */
 	private void requestLatestWeibo() {
+		progressDialog.show();
 		isRequestLatestWeibo = true;
-		mStatusesAPI.friendsTimeline(maxWeiboID, 0, 20, 1, false, 0, false,
-				mListener);
-		refreshLayout.setRefreshing(false);
+		mStatusesAPI.friendsTimeline(0, 0, 50, 1, false, 0, false, mListener);
 	}
 
 	/**
 	 * 请求之前微博
 	 */
 	private void requestPreviousWeibo() {
+		progressDialog.show();
 		isRequestLatestWeibo = false;
-		mStatusesAPI.friendsTimeline(0, minWeiboID, 20, 1, false, 0, false,
+		mStatusesAPI.friendsTimeline(0, minWeiboID, 50, 1, false, 0, false,
 				mListener);
 	}
 
@@ -177,42 +168,42 @@ public class HomeFragment extends Fragment {
 	 * 
 	 * @param statuses
 	 */
-	private void handleResponse(StatusList statuses) {
-		try {
-			if (statuses.statusList.size() > 0) {
-				Toast.makeText(getActivity(),
-						"来了" + statuses.statusList.size() + "条新微博",
-						Toast.LENGTH_SHORT).show();
-			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			Toast.makeText(getActivity(), "啊哦 没有新微博", Toast.LENGTH_SHORT)
-					.show();
-			if (progressDialog.isShowing()) {
-				progressDialog.dismiss();
-			}
-			return;
-		}
-
+	private void handleResponseStatus(ArrayList<Status> newStatusList) {
+		int newlyAddedCount = 0;
 		if (isRequestLatestWeibo) {
-			copyStatusList = statusList;
-			statusList = statuses.statusList;
-			for (int i = 0; i < copyStatusList.size(); i++) {
-				statusList.add(copyStatusList.get(i));
+			statusList = newStatusList;
+			for (int i = 0; i < statusList.size(); i++) {
+				if (Long.parseLong(statusList.get(i).id) > maxWeiboID) {
+					newlyAddedCount++;
+				} else {
+					break;
+				}
 			}
+
 		} else {
-			for (int i = 1; i < statuses.statusList.size(); i++) {
-				statusList.add(statuses.statusList.get(i));
+			newlyAddedCount = newStatusList.size() - 1;
+			for (int i = 1; i < newStatusList.size(); i++) {
+				statusList.add(newStatusList.get(i));
 			}
 		}
 
-		refreshExtremum(statuses);
+		if (newlyAddedCount > 0) {
+			Toast.makeText(getActivity(), "来了" + newlyAddedCount + "条新微博",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(getActivity(), "没有新微博", Toast.LENGTH_SHORT).show();
+		}
 
-		myAdapter.setStatusList(statusList);
-		myAdapter.notifyDataSetChanged();
+		refreshWeiboID(statusList);
+
+		lvAdapter.setStatusList(statusList);
+		lvAdapter.notifyDataSetChanged();
 
 		if (progressDialog.isShowing()) {
 			progressDialog.dismiss();
+		}
+		if (refreshLayout.isRefreshing()) {
+			refreshLayout.setRefreshing(false);
 		}
 	}
 
@@ -221,20 +212,22 @@ public class HomeFragment extends Fragment {
 	 * 
 	 * @param statuses
 	 */
-	private void refreshExtremum(StatusList statuses) {
+	private void refreshWeiboID(List<Status> statusList) {
 		if (isFirstRefresh) {
-			maxWeiboID = Long.parseLong(statuses.statusList.get(0).id);
-			minWeiboID = maxWeiboID;
+			maxWeiboID = Long.parseLong(statusList.get(0).id);
+			minWeiboID = Long
+					.parseLong(statusList.get(statusList.size() - 1).id);
 			isFirstRefresh = false;
+			return;
 		}
 
-		if (Long.parseLong(statuses.statusList.get(0).id) > maxWeiboID) {
-			maxWeiboID = Long.parseLong(statuses.statusList.get(0).id);
+		if (Long.parseLong(statusList.get(0).id) > maxWeiboID) {
+			maxWeiboID = Long.parseLong(statusList.get(0).id);
 		}
 
-		if (Long.parseLong(statuses.statusList.get(statuses.statusList.size() - 1).id) < minWeiboID) {
-			minWeiboID = Long.parseLong(statuses.statusList
-					.get(statuses.statusList.size() - 1).id);
+		if (Long.parseLong(statusList.get(statusList.size() - 1).id) < minWeiboID) {
+			minWeiboID = Long
+					.parseLong(statusList.get(statusList.size() - 1).id);
 		}
 	}
 
