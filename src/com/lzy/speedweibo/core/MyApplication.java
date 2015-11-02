@@ -8,6 +8,7 @@ import com.lzy.speedweibo.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.openapi.models.Status;
 
 public class MyApplication extends Application {
@@ -15,12 +16,12 @@ public class MyApplication extends Application {
 	private static ImageLoaderConfiguration configuration;
 	private static Status status;
 	private static DisplayImageOptions options;
-
-	// private static MyApplication application;
+	private static Oauth2AccessToken mAccessToken;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
 		configuration = ImageLoaderConfiguration.createDefault(this);
 		ImageLoader.getInstance().init(configuration);
 
@@ -53,5 +54,13 @@ public class MyApplication extends Application {
 
 	public static Status getStatus() {
 		return status;
+	}
+
+	public static Oauth2AccessToken getmAccessToken() {
+		return mAccessToken;
+	}
+
+	public static void setmAccessToken(Oauth2AccessToken mAccessToken) {
+		MyApplication.mAccessToken = mAccessToken;
 	}
 }
