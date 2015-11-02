@@ -1,7 +1,7 @@
 # cache for current jar dependency. DO NOT EDIT.
 # format is <lastModified> <length> <SHA-1> <path>
 # Encoding is UTF-8
-1439534257000 394574 1c0bfcddc15de1e8a90ff166da0b9abe011346af D:\workspace\WeiboSDK\libs\weiboSDKCore_3.1.2.jar
-1445866312000 394574 1c0bfcddc15de1e8a90ff166da0b9abe011346af D:\workspace\SpeedWeibo\libs\weiboSDKCore_3.1.2.jar
-1445866315000 1184670 fde22d8d2ef6363324a3d79a1dd16c8645c25564 D:\workspace\SpeedWeibo\libs\android-support-v4.jar
-1439534257000 556198 4a6be13368bb64c5a0b0460632d228a1a915f58f D:\workspace\WeiboSDK\libs\android-support-v4.jar
+1445866311007 394574 1c0bfcddc15de1e8a90ff166da0b9abe011346af D:\workspace\WeiboSDK\libs\weiboSDKCore_3.1.2.jar
+1446286716167 394574 1c0bfcddc15de1e8a90ff166da0b9abe011346af D:\workspace\SpeedWeibo\libs\weiboSDKCore_3.1.2.jar
+1446286716062 1184670 fde22d8d2ef6363324a3d79a1dd16c8645c25564 D:\workspace\SpeedWeibo\libs\android-support-v4.jar
+1445866311007 556198 4a6be13368bb64c5a0b0460632d228a1a915f58f D:\workspace\WeiboSDK\libs\android-support-v4.jar
