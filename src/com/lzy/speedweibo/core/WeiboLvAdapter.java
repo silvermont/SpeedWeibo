@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class WeiboLvAdapter extends BaseAdapter {
 	private int imageWidth;
 	private Context context;
 	private Holder holder;
+	private RelativeLayout.LayoutParams params;
 
 	public WeiboLvAdapter(Context context, List<Status> statusList,
 			int imageWidth) {
@@ -29,6 +31,7 @@ public class WeiboLvAdapter extends BaseAdapter {
 		this.context = context;
 		this.statusList = statusList;
 		this.imageWidth = imageWidth;
+		params = new RelativeLayout.LayoutParams(imageWidth, imageWidth);
 	}
 
 	public void setStatusList(List<Status> statusList) {
@@ -54,7 +57,7 @@ public class WeiboLvAdapter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			holder = new Holder();
-			convertView = View.inflate(context, R.layout.item_weibo, null);
+			convertView = View.inflate(context, R.layout.item_weibo2, null);
 			holder.wholeLayout = (RelativeLayout) convertView
 					.findViewById(R.id.wholeLayout);
 			holder.userHead = (ImageView) convertView
@@ -75,8 +78,32 @@ public class WeiboLvAdapter extends BaseAdapter {
 					.findViewById(R.id.retweetedPicture);
 			holder.retweetedRepostsCount = (TextView) convertView
 					.findViewById(R.id.retweetedRepostsCount);
-			holder.pictureGridView = (GridView) convertView
-					.findViewById(R.id.pictureGridView);
+			/*
+			 * holder.pictureGridView = (GridView) convertView
+			 * .findViewById(R.id.pictureGridView);
+			 */
+			holder.picture1 = (ImageView) convertView
+					.findViewById(R.id.picture1);
+			holder.picture2 = (ImageView) convertView
+					.findViewById(R.id.picture2);
+			holder.picture3 = (ImageView) convertView
+					.findViewById(R.id.picture3);
+			holder.picture4 = (ImageView) convertView
+					.findViewById(R.id.picture4);
+			holder.picture5 = (ImageView) convertView
+					.findViewById(R.id.picture5);
+			holder.picture6 = (ImageView) convertView
+					.findViewById(R.id.picture6);
+			holder.picture7 = (ImageView) convertView
+					.findViewById(R.id.picture7);
+			holder.picture8 = (ImageView) convertView
+					.findViewById(R.id.picture8);
+			holder.picture9 = (ImageView) convertView
+					.findViewById(R.id.picture9);
+			holder.pictureArray = new ImageView[] { holder.picture1,
+					holder.picture2, holder.picture3, holder.picture4,
+					holder.picture5, holder.picture6, holder.picture7,
+					holder.picture8, holder.picture9 };
 			holder.retweetedPictureGridView = (GridView) convertView
 					.findViewById(R.id.retweetedPictureGridView);
 
@@ -106,19 +133,57 @@ public class WeiboLvAdapter extends BaseAdapter {
 		try {
 			if (statusList.get(position).pic_urls.size() > 1) {
 				holder.picture.setVisibility(View.GONE);
-				holder.pictureGridView.setVisibility(View.VISIBLE);
-				holder.pictureGridView.setAdapter(new GridViewAdapter(context,
-						statusList.get(position).pic_urls, imageWidth));
+				int imageCount = statusList.get(position).pic_urls.size();
+				Log.e("", "text " + statusList.get(position).text);
+				for (int i = 0; i < 9; i++) {
+					if (i < imageCount) {
+						holder.pictureArray[i].setVisibility(View.VISIBLE);
+						holder.pictureArray[i].setLayoutParams(params);
+						MyApplication.asyncLoadImage(
+								statusList.get(position).pic_urls.get(i),
+								holder.pictureArray[i]);
+					} else {
+						holder.pictureArray[i].setVisibility(View.GONE);
+					}
+
+				}
+				for (int i = 0; i < 9; i++) {
+					if (holder.pictureArray[i].getVisibility() == View.VISIBLE) {
+						Log.e("", i + "可见");
+					}
+				}
+
+				// holder.pictureGridView.setVisibility(View.VISIBLE);
+				// holder.pictureGridView.setAdapter(new
+				// GridViewAdapter(context,
+				// statusList.get(position).pic_urls, imageWidth));
 			} else if (statusList.get(position).pic_urls.size() == 1) {
 				holder.picture.setVisibility(View.VISIBLE);
-				holder.pictureGridView.setVisibility(View.GONE);
+				holder.picture1.setVisibility(View.GONE);
+				holder.picture2.setVisibility(View.GONE);
+				holder.picture3.setVisibility(View.GONE);
+				holder.picture4.setVisibility(View.GONE);
+				holder.picture5.setVisibility(View.GONE);
+				holder.picture6.setVisibility(View.GONE);
+				holder.picture7.setVisibility(View.GONE);
+				holder.picture8.setVisibility(View.GONE);
+				holder.picture9.setVisibility(View.GONE);
+				// holder.pictureGridView.setVisibility(View.GONE);
 				MyApplication.asyncLoadImage(
 						statusList.get(position).bmiddle_pic, holder.picture);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			holder.picture.setVisibility(View.GONE);
-			holder.pictureGridView.setVisibility(View.GONE);
+			holder.picture1.setVisibility(View.GONE);
+			holder.picture2.setVisibility(View.GONE);
+			holder.picture3.setVisibility(View.GONE);
+			holder.picture4.setVisibility(View.GONE);
+			holder.picture5.setVisibility(View.GONE);
+			holder.picture6.setVisibility(View.GONE);
+			holder.picture7.setVisibility(View.GONE);
+			holder.picture8.setVisibility(View.GONE);
+			holder.picture9.setVisibility(View.GONE);
 		}
 
 		try {
@@ -194,7 +259,17 @@ public class WeiboLvAdapter extends BaseAdapter {
 		RelativeLayout retweetedLayout;
 		ImageView retweetedPicture;
 		TextView retweetedRepostsCount;
-		GridView pictureGridView;
+		// GridView pictureGridView;
 		GridView retweetedPictureGridView;
+		ImageView picture1;
+		ImageView picture2;
+		ImageView picture3;
+		ImageView picture4;
+		ImageView picture5;
+		ImageView picture6;
+		ImageView picture7;
+		ImageView picture8;
+		ImageView picture9;
+		ImageView[] pictureArray;
 	}
 }
