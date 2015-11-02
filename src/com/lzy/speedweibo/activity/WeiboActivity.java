@@ -9,16 +9,15 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.core.CommentLvAdapter;
 import com.lzy.speedweibo.core.Constants;
-import com.lzy.speedweibo.core.GridViewAdapter;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
@@ -38,6 +37,26 @@ public class WeiboActivity extends BaseActivity {
 	private TextView source;
 	private TextView time;
 	private SmartTextView retweetedText;
+	private ImageView picture1;
+	private ImageView picture2;
+	private ImageView picture3;
+	private ImageView picture4;
+	private ImageView picture5;
+	private ImageView picture6;
+	private ImageView picture7;
+	private ImageView picture8;
+	private ImageView picture9;
+	private ImageView retweetedPicture1;
+	private ImageView retweetedPicture2;
+	private ImageView retweetedPicture3;
+	private ImageView retweetedPicture4;
+	private ImageView retweetedPicture5;
+	private ImageView retweetedPicture6;
+	private ImageView retweetedPicture7;
+	private ImageView retweetedPicture8;
+	private ImageView retweetedPicture9;
+	private ImageView[] pictureArray;
+	private ImageView[] retweetedPictureArray;
 	// private TextView repostsCount;
 	private TextView retweetedTv;
 	private TextView commentTv;
@@ -47,8 +66,6 @@ public class WeiboActivity extends BaseActivity {
 	private RelativeLayout retweetedLayout;
 	private ImageView retweetedPicture;
 	private TextView retweetedRepostsCount;
-	private GridView pictureGridView;
-	private GridView retweetedPictureGridView;
 	private int imageWidth;
 	/** 微博评论接口 */
 	private CommentsAPI mCommentsAPI;
@@ -77,8 +94,30 @@ public class WeiboActivity extends BaseActivity {
 		retweetedLayout = (RelativeLayout) findViewById(R.id.retweetedLayout);
 		retweetedPicture = (ImageView) findViewById(R.id.retweetedPicture);
 		retweetedRepostsCount = (TextView) findViewById(R.id.retweetedRepostsCount);
-		pictureGridView = (GridView) findViewById(R.id.pictureGridView);
-		retweetedPictureGridView = (GridView) findViewById(R.id.retweetedPictureGridView);
+		picture1 = (ImageView) findViewById(R.id.picture1);
+		picture2 = (ImageView) findViewById(R.id.picture2);
+		picture3 = (ImageView) findViewById(R.id.picture3);
+		picture4 = (ImageView) findViewById(R.id.picture4);
+		picture5 = (ImageView) findViewById(R.id.picture5);
+		picture6 = (ImageView) findViewById(R.id.picture6);
+		picture7 = (ImageView) findViewById(R.id.picture7);
+		picture8 = (ImageView) findViewById(R.id.picture8);
+		picture9 = (ImageView) findViewById(R.id.picture9);
+		pictureArray = new ImageView[] { picture1, picture2, picture3,
+				picture4, picture5, picture6, picture7, picture8, picture9 };
+		retweetedPicture1 = (ImageView) findViewById(R.id.retweetedPicture1);
+		retweetedPicture2 = (ImageView) findViewById(R.id.retweetedPicture2);
+		retweetedPicture3 = (ImageView) findViewById(R.id.retweetedPicture3);
+		retweetedPicture4 = (ImageView) findViewById(R.id.retweetedPicture4);
+		retweetedPicture5 = (ImageView) findViewById(R.id.retweetedPicture5);
+		retweetedPicture6 = (ImageView) findViewById(R.id.retweetedPicture6);
+		retweetedPicture7 = (ImageView) findViewById(R.id.retweetedPicture7);
+		retweetedPicture8 = (ImageView) findViewById(R.id.retweetedPicture8);
+		retweetedPicture9 = (ImageView) findViewById(R.id.retweetedPicture9);
+		retweetedPictureArray = new ImageView[] { retweetedPicture1,
+				retweetedPicture2, retweetedPicture3, retweetedPicture4,
+				retweetedPicture5, retweetedPicture6, retweetedPicture7,
+				retweetedPicture8, retweetedPicture9 };
 
 		DisplayMetrics metric = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -97,8 +136,6 @@ public class WeiboActivity extends BaseActivity {
 		userName.setText(status.user.screen_name);
 		source.setText("来源：" + Utils.transformSource(status.source));
 		time.setText(Utils.transformTime(status.created_at));
-		// repostsCount.setText(Utils.transformRepostsCount(status.reposts_count,
-		// status.comments_count));
 		retweetedTv.setText("转发 " + status.reposts_count);
 		commentTv.setText("评论 " + status.comments_count);
 
@@ -110,18 +147,36 @@ public class WeiboActivity extends BaseActivity {
 		try {
 			if (status.pic_urls.size() > 1) {
 				picture.setVisibility(View.GONE);
-				pictureGridView.setVisibility(View.VISIBLE);
-				pictureGridView.setAdapter(new GridViewAdapter(this,
-						status.pic_urls, imageWidth));
+				int imageCount = status.pic_urls.size();
+				for (int i = 0; i < 9; i++) {
+					if (i < imageCount) {
+						pictureArray[i].setVisibility(View.VISIBLE);
+						LayoutParams params = (LayoutParams) pictureArray[i]
+								.getLayoutParams();
+						params.width = imageWidth;
+						params.height = imageWidth;
+						pictureArray[i].setLayoutParams(params);
+						pictureArray[i]
+								.setScaleType(ImageView.ScaleType.CENTER_CROP);
+						MyApplication.asyncLoadImage(status.pic_urls.get(i),
+								pictureArray[i]);
+					} else {
+						pictureArray[i].setVisibility(View.GONE);
+					}
+				}
 			} else if (status.pic_urls.size() == 1) {
 				picture.setVisibility(View.VISIBLE);
-				pictureGridView.setVisibility(View.GONE);
+				for (int i = 0; i < 9; i++) {
+					pictureArray[i].setVisibility(View.GONE);
+				}
 				MyApplication.asyncLoadImage(status.bmiddle_pic, picture);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			picture.setVisibility(View.GONE);
-			pictureGridView.setVisibility(View.GONE);
+			for (int i = 0; i < 9; i++) {
+				pictureArray[i].setVisibility(View.GONE);
+			}
 		}
 
 		try {
@@ -143,14 +198,30 @@ public class WeiboActivity extends BaseActivity {
 
 				if (status.retweeted_status.pic_urls.size() > 1) {
 					retweetedPicture.setVisibility(View.GONE);
-					retweetedPictureGridView.setVisibility(View.VISIBLE);
-					retweetedPictureGridView
-							.setAdapter(new GridViewAdapter(this,
-									status.retweeted_status.pic_urls,
-									imageWidth));
+					int imageCount = status.retweeted_status.pic_urls.size();
+					for (int i = 0; i < 9; i++) {
+						if (i < imageCount) {
+							retweetedPictureArray[i]
+									.setVisibility(View.VISIBLE);
+							LayoutParams params = (LayoutParams) retweetedPictureArray[i]
+									.getLayoutParams();
+							params.width = imageWidth;
+							params.height = imageWidth;
+							retweetedPictureArray[i].setLayoutParams(params);
+							retweetedPictureArray[i]
+									.setScaleType(ImageView.ScaleType.CENTER_CROP);
+							MyApplication.asyncLoadImage(
+									status.retweeted_status.pic_urls.get(i),
+									retweetedPictureArray[i]);
+						} else {
+							retweetedPictureArray[i].setVisibility(View.GONE);
+						}
+					}
 				} else if (status.retweeted_status.pic_urls.size() == 1) {
 					retweetedPicture.setVisibility(View.VISIBLE);
-					retweetedPictureGridView.setVisibility(View.GONE);
+					for (int i = 0; i < 9; i++) {
+						retweetedPictureArray[i].setVisibility(View.GONE);
+					}
 					MyApplication.asyncLoadImage(
 							status.retweeted_status.bmiddle_pic,
 							retweetedPicture);
@@ -158,7 +229,9 @@ public class WeiboActivity extends BaseActivity {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 				retweetedPicture.setVisibility(View.GONE);
-				retweetedPictureGridView.setVisibility(View.GONE);
+				for (int i = 0; i < 9; i++) {
+					retweetedPictureArray[i].setVisibility(View.GONE);
+				}
 			}
 
 		} catch (Exception e) {
