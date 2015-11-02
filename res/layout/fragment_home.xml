@@ -9,12 +9,12 @@
         android:layout_height="wrap_content"
         android:scrollbarStyle="outsideOverlay" >
 
-        <com.lzy.speedweibo.core.MyListView
+        <ListView
             android:id="@+id/weiboLv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none" >
-        </com.lzy.speedweibo.core.MyListView>
+        </ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <ImageButton
