@@ -129,45 +129,55 @@ public class WeiboLvAdapter extends BaseAdapter {
 		MyApplication.asyncLoadImage(
 				statusList.get(position).user.profile_image_url,
 				holder.userHead);
-
 		try {
 			if (statusList.get(position).pic_urls.size() > 1) {
 				holder.picture.setVisibility(View.GONE);
 				int imageCount = statusList.get(position).pic_urls.size();
-				Log.e("", "text " + statusList.get(position).text);
 				for (int i = 0; i < 9; i++) {
 					if (i < imageCount) {
 						holder.pictureArray[i].setVisibility(View.VISIBLE);
-						holder.pictureArray[i].setLayoutParams(params);
+//						holder.pictureArray[i].setLayoutParams(params);
+//						holder.pictureArray[i]
+//								.setScaleType(ImageView.ScaleType.CENTER_CROP);
 						MyApplication.asyncLoadImage(
 								statusList.get(position).pic_urls.get(i),
 								holder.pictureArray[i]);
 					} else {
 						holder.pictureArray[i].setVisibility(View.GONE);
 					}
-
-				}
-				for (int i = 0; i < 9; i++) {
-					if (holder.pictureArray[i].getVisibility() == View.VISIBLE) {
-						Log.e("", i + "可见");
-					}
 				}
 
+				// holder.pictureArray[0].setVisibility(View.VISIBLE);
+				// holder.pictureArray[0].setLayoutParams(params);
+				// MyApplication.asyncLoadImage(
+				// statusList.get(position).pic_urls.get(0),
+				// holder.pictureArray[0]);
+				// holder.pictureArray[1].setVisibility(View.VISIBLE);
+				// holder.pictureArray[1].setLayoutParams(params);
+				// MyApplication.asyncLoadImage(
+				// statusList.get(position).pic_urls.get(1),
+				// holder.pictureArray[1]);
+				// for (int i = 0; i < 9; i++) {
+				// if (i < imageCount) {
+				// holder.pictureArray[i].setVisibility(View.VISIBLE);
+				// holder.pictureArray[i].setLayoutParams(params);
+				// MyApplication.asyncLoadImage(
+				// statusList.get(position).pic_urls.get(i),
+				// holder.pictureArray[i]);
+				// } else {
+				// holder.pictureArray[i].setVisibility(View.GONE);
+				// }
+				//
+				// }
 				// holder.pictureGridView.setVisibility(View.VISIBLE);
 				// holder.pictureGridView.setAdapter(new
 				// GridViewAdapter(context,
 				// statusList.get(position).pic_urls, imageWidth));
 			} else if (statusList.get(position).pic_urls.size() == 1) {
 				holder.picture.setVisibility(View.VISIBLE);
-				holder.picture1.setVisibility(View.GONE);
-				holder.picture2.setVisibility(View.GONE);
-				holder.picture3.setVisibility(View.GONE);
-				holder.picture4.setVisibility(View.GONE);
-				holder.picture5.setVisibility(View.GONE);
-				holder.picture6.setVisibility(View.GONE);
-				holder.picture7.setVisibility(View.GONE);
-				holder.picture8.setVisibility(View.GONE);
-				holder.picture9.setVisibility(View.GONE);
+				for (int i = 0; i < 9; i++) {
+					holder.pictureArray[i].setVisibility(View.GONE);
+				}
 				// holder.pictureGridView.setVisibility(View.GONE);
 				MyApplication.asyncLoadImage(
 						statusList.get(position).bmiddle_pic, holder.picture);
@@ -175,15 +185,9 @@ public class WeiboLvAdapter extends BaseAdapter {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			holder.picture.setVisibility(View.GONE);
-			holder.picture1.setVisibility(View.GONE);
-			holder.picture2.setVisibility(View.GONE);
-			holder.picture3.setVisibility(View.GONE);
-			holder.picture4.setVisibility(View.GONE);
-			holder.picture5.setVisibility(View.GONE);
-			holder.picture6.setVisibility(View.GONE);
-			holder.picture7.setVisibility(View.GONE);
-			holder.picture8.setVisibility(View.GONE);
-			holder.picture9.setVisibility(View.GONE);
+			for (int i = 0; i < 9; i++) {
+				holder.pictureArray[i].setVisibility(View.GONE);
+			}
 		}
 
 		try {
