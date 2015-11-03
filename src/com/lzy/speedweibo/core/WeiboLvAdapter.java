@@ -143,52 +143,50 @@ public class WeiboLvAdapter extends BaseAdapter {
 		MyApplication.asyncLoadImage(
 				statusList.get(position).user.profile_image_url,
 				holder.userHead);
-		try {
-			if (statusList.get(position).pic_urls.size() > 1) {
-				holder.picture.setVisibility(View.GONE);
-				int imageCount = statusList.get(position).pic_urls.size();
-				for (int i = 0; i < 9; i++) {
-					if (i < imageCount) {
-						holder.pictureArray[i].setVisibility(View.VISIBLE);
-						LayoutParams params = (LayoutParams) holder.pictureArray[i]
-								.getLayoutParams();
-						params.width = imageWidth;
-						params.height = imageWidth;
-						holder.pictureArray[i].setLayoutParams(params);
-						holder.pictureArray[i]
-								.setScaleType(ImageView.ScaleType.CENTER_CROP);
-						MyApplication.asyncLoadImage(
-								statusList.get(position).pic_urls.get(i),
-								holder.pictureArray[i]);
-					} else {
-						holder.pictureArray[i].setVisibility(View.GONE);
-					}
-				}
-			} else if (statusList.get(position).pic_urls.size() == 1) {
-				holder.picture.setVisibility(View.VISIBLE);
-				for (int i = 0; i < 9; i++) {
-					holder.pictureArray[i].setVisibility(View.GONE);
-				}
-				MyApplication.asyncLoadImage(
-						statusList.get(position).bmiddle_pic, holder.picture);
-			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
+
+		if (statusList.get(position).pic_urls.size() == 0) {
 			holder.picture.setVisibility(View.GONE);
 			for (int i = 0; i < 9; i++) {
 				holder.pictureArray[i].setVisibility(View.GONE);
 			}
+		} else if (statusList.get(position).pic_urls.size() == 1) {
+			holder.picture.setVisibility(View.VISIBLE);
+			for (int i = 0; i < 9; i++) {
+				holder.pictureArray[i].setVisibility(View.GONE);
+			}
+			MyApplication.asyncLoadImage(statusList.get(position).bmiddle_pic,
+					holder.picture);
+		} else {
+			holder.picture.setVisibility(View.GONE);
+			int imageCount = statusList.get(position).pic_urls.size();
+			for (int i = 0; i < 9; i++) {
+				if (i < imageCount) {
+					holder.pictureArray[i].setVisibility(View.VISIBLE);
+					LayoutParams params = (LayoutParams) holder.pictureArray[i]
+							.getLayoutParams();
+					params.width = imageWidth;
+					params.height = imageWidth;
+					holder.pictureArray[i].setLayoutParams(params);
+					holder.pictureArray[i]
+							.setScaleType(ImageView.ScaleType.CENTER_CROP);
+					MyApplication.asyncLoadImage(
+							statusList.get(position).pic_urls.get(i),
+							holder.pictureArray[i]);
+				} else {
+					holder.pictureArray[i].setVisibility(View.GONE);
+				}
+			}
 		}
 
-		try {
-			// 表明该微博为转发
+		if (statusList.get(position).retweeted_status.id.equals("0")) {
+			holder.retweetedLayout.setVisibility(View.GONE);
+		} else {
+			holder.retweetedLayout.setVisibility(View.VISIBLE);
 			holder.retweetedText
 					.setMText("@"
 							+ statusList.get(position).retweeted_status.user.screen_name
 							+ ":"
 							+ statusList.get(position).retweeted_status.text);
-			holder.retweetedLayout.setVisibility(View.VISIBLE);
-
 			holder.retweetedText.setTextColor(context.getResources().getColor(
 					R.color.text_black));
 			holder.retweetedText.invalidate();
@@ -196,58 +194,46 @@ public class WeiboLvAdapter extends BaseAdapter {
 			holder.retweetedRepostsCount.setText(Utils.transformRepostsCount(
 					statusList.get(position).retweeted_status.reposts_count,
 					statusList.get(position).retweeted_status.comments_count));
-
-			try {
-
-				if (statusList.get(position).retweeted_status.pic_urls.size() > 1) {
-					holder.retweetedPicture.setVisibility(View.GONE);
-					int imageCount = statusList.get(position).retweeted_status.pic_urls
-							.size();
-					for (int i = 0; i < 9; i++) {
-						if (i < imageCount) {
-							holder.retweetedPictureArray[i]
-									.setVisibility(View.VISIBLE);
-							LayoutParams params = (LayoutParams) holder.retweetedPictureArray[i]
-									.getLayoutParams();
-							params.width = imageWidth;
-							params.height = imageWidth;
-							holder.retweetedPictureArray[i]
-									.setLayoutParams(params);
-							holder.retweetedPictureArray[i]
-									.setScaleType(ImageView.ScaleType.CENTER_CROP);
-							MyApplication
-									.asyncLoadImage(
-											statusList.get(position).retweeted_status.pic_urls
-													.get(i),
-											holder.retweetedPictureArray[i]);
-						} else {
-							holder.retweetedPictureArray[i]
-									.setVisibility(View.GONE);
-						}
-					}
-				} else if (statusList.get(position).retweeted_status.pic_urls
-						.size() == 1) {
-					holder.retweetedPicture.setVisibility(View.VISIBLE);
-					for (int i = 0; i < 9; i++) {
-						holder.retweetedPictureArray[i]
-								.setVisibility(View.GONE);
-					}
-					MyApplication
-							.asyncLoadImage(
-									statusList.get(position).retweeted_status.bmiddle_pic,
-									holder.retweetedPicture);
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			if (statusList.get(position).retweeted_status.pic_urls.size() == 0) {
 				holder.retweetedPicture.setVisibility(View.GONE);
 				for (int i = 0; i < 9; i++) {
 					holder.retweetedPictureArray[i].setVisibility(View.GONE);
 				}
+			} else if (statusList.get(position).retweeted_status.pic_urls
+					.size() == 1) {
+				holder.retweetedPicture.setVisibility(View.VISIBLE);
+				for (int i = 0; i < 9; i++) {
+					holder.retweetedPictureArray[i].setVisibility(View.GONE);
+				}
+				MyApplication.asyncLoadImage(
+						statusList.get(position).retweeted_status.bmiddle_pic,
+						holder.retweetedPicture);
+			} else {
+				holder.retweetedPicture.setVisibility(View.GONE);
+				int imageCount = statusList.get(position).retweeted_status.pic_urls
+						.size();
+				for (int i = 0; i < 9; i++) {
+					if (i < imageCount) {
+						holder.retweetedPictureArray[i]
+								.setVisibility(View.VISIBLE);
+						LayoutParams params = (LayoutParams) holder.retweetedPictureArray[i]
+								.getLayoutParams();
+						params.width = imageWidth;
+						params.height = imageWidth;
+						holder.retweetedPictureArray[i].setLayoutParams(params);
+						holder.retweetedPictureArray[i]
+								.setScaleType(ImageView.ScaleType.CENTER_CROP);
+						MyApplication
+								.asyncLoadImage(
+										statusList.get(position).retweeted_status.pic_urls
+												.get(i),
+										holder.retweetedPictureArray[i]);
+					} else {
+						holder.retweetedPictureArray[i]
+								.setVisibility(View.GONE);
+					}
+				}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			holder.retweetedLayout.setVisibility(View.GONE);
 		}
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
