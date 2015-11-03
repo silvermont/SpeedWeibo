@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import android.util.Log;
-
 public class Utils {
 
 	/**
@@ -16,8 +14,11 @@ public class Utils {
 	 * @return
 	 */
 	public static String transformSource(String source) {
+		if (source.equals("")) {
+			return source;
+		}
 		String[] sourceArray = source.split(">");
-		return sourceArray[1].substring(0, sourceArray[1].length() - 3);
+		return "来源：" + sourceArray[1].substring(0, sourceArray[1].length() - 3);
 	}
 
 	/**

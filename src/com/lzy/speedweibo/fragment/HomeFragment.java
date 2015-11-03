@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,22 +41,15 @@ public class HomeFragment extends Fragment {
 	private boolean isRequestLatestWeibo = true;
 	private RequestListener mListener;
 	private StatusesAPI mStatusesAPI;
-	private int imageWidth;
 	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		DisplayMetrics metric = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metric);
-		int widthPX = metric.widthPixels;// 屏幕宽度（像素）
-		float density = metric.density;// 屏幕密度（0.75 / 1.0 / 1.5）
-		imageWidth = (int) ((widthPX - 30 * density) / 3);
-
 		statusList = new ArrayList<Status>();
 		lvAdapter = new com.lzy.speedweibo.core.WeiboLvAdapter(getActivity(),
-				statusList, imageWidth);
+				statusList);
 
 		// Oauth2AccessToken mAccessToken = AccessTokenKeFeper
 		// .readAccessToken(getActivity());

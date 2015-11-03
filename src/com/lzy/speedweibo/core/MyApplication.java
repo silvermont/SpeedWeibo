@@ -2,6 +2,7 @@ package com.lzy.speedweibo.core;
 
 import android.app.Application;
 import android.graphics.Bitmap;
+import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
 import com.lzy.speedweibo.R;
@@ -17,6 +18,7 @@ public class MyApplication extends Application {
 	private static Status status;
 	private static DisplayImageOptions options;
 	private static Oauth2AccessToken mAccessToken;
+	private static int imageWidth;
 
 	@Override
 	public void onCreate() {
@@ -29,6 +31,11 @@ public class MyApplication extends Application {
 				.showImageOnLoading(R.drawable.blank)
 				.showImageOnFail(R.drawable.blank).cacheInMemory(true)
 				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
+
+		DisplayMetrics metric = getResources().getDisplayMetrics();
+		int widthPX = metric.widthPixels;// 屏幕宽度（像素）
+		float density = metric.density;// 屏幕密度（0.75 / 1.0 / 1.5）
+		imageWidth = (int) ((widthPX - 30 * density) / 3);
 	}
 
 	// public static MyApplication getInstance() {
@@ -46,6 +53,10 @@ public class MyApplication extends Application {
 	 */
 	public static void asyncLoadImage(String imageUrl, ImageView imageView) {
 		ImageLoader.getInstance().displayImage(imageUrl, imageView, options);
+	}
+
+	public static int getImageWidth() {
+		return imageWidth;
 	}
 
 	public static void setStatus(Status status) {

@@ -6,7 +6,7 @@ import java.util.List;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.core.CommentLvAdapter;
@@ -30,6 +31,7 @@ import com.sina.weibo.sdk.openapi.models.Status;
 
 public class WeiboActivity extends BaseActivity {
 	private Status status;
+	private RelativeLayout singleWeibo;
 	private ImageView userHead;
 	private ImageView picture;
 	private TextView userName;
@@ -57,7 +59,6 @@ public class WeiboActivity extends BaseActivity {
 	private ImageView retweetedPicture9;
 	private ImageView[] pictureArray;
 	private ImageView[] retweetedPictureArray;
-	// private TextView repostsCount;
 	private TextView retweetedTv;
 	private TextView commentTv;
 	private View retweetedLine;
@@ -66,75 +67,93 @@ public class WeiboActivity extends BaseActivity {
 	private RelativeLayout retweetedLayout;
 	private ImageView retweetedPicture;
 	private TextView retweetedRepostsCount;
+	private RelativeLayout footerView;
+	private TextView loadMore;
 	private int imageWidth;
 	/** 微博评论接口 */
 	private CommentsAPI mCommentsAPI;
 	private RequestListener mListener;
 	private List<Comment> commentList;
 	private CommentLvAdapter adapter;
+	private long maxID;
+	private boolean isFirstRequest = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_weibo);
 
-		userHead = (ImageView) findViewById(R.id.userHead);
-		picture = (ImageView) findViewById(R.id.picture);
-		userName = (TextView) findViewById(R.id.userName);
-		text = (SmartTextView) findViewById(R.id.text);
-		source = (TextView) findViewById(R.id.source);
-		time = (TextView) findViewById(R.id.time);
-		retweetedText = (SmartTextView) findViewById(R.id.retweetedText);
-		// repostsCount = (TextView) findViewById(R.id.repostsCount);
-		retweetedTv = (TextView) findViewById(R.id.retweetedTv);
-		commentTv = (TextView) findViewById(R.id.commentTv);
-		retweetedLine = findViewById(R.id.retweetedLine);
-		commentLine = findViewById(R.id.commentLine);
+		footerView = (RelativeLayout) View.inflate(this, R.layout.view_footer,
+				null);
+		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
+		singleWeibo = (RelativeLayout) View.inflate(this,
+				R.layout.layout_weibo_for_comment_activity, null);
+		userHead = (ImageView) singleWeibo.findViewById(R.id.userHead);
+		picture = (ImageView) singleWeibo.findViewById(R.id.picture);
+		userName = (TextView) singleWeibo.findViewById(R.id.userName);
+		text = (SmartTextView) singleWeibo.findViewById(R.id.text);
+		source = (TextView) singleWeibo.findViewById(R.id.source);
+		time = (TextView) singleWeibo.findViewById(R.id.time);
+		retweetedText = (SmartTextView) singleWeibo
+				.findViewById(R.id.retweetedText);
+		retweetedTv = (TextView) singleWeibo.findViewById(R.id.retweetedTv);
+		commentTv = (TextView) singleWeibo.findViewById(R.id.commentTv);
+		retweetedLine = singleWeibo.findViewById(R.id.retweetedLine);
+		commentLine = singleWeibo.findViewById(R.id.commentLine);
 		retweetedLv = (ListView) findViewById(R.id.retweetedLv);
-		retweetedLayout = (RelativeLayout) findViewById(R.id.retweetedLayout);
-		retweetedPicture = (ImageView) findViewById(R.id.retweetedPicture);
-		retweetedRepostsCount = (TextView) findViewById(R.id.retweetedRepostsCount);
-		picture1 = (ImageView) findViewById(R.id.picture1);
-		picture2 = (ImageView) findViewById(R.id.picture2);
-		picture3 = (ImageView) findViewById(R.id.picture3);
-		picture4 = (ImageView) findViewById(R.id.picture4);
-		picture5 = (ImageView) findViewById(R.id.picture5);
-		picture6 = (ImageView) findViewById(R.id.picture6);
-		picture7 = (ImageView) findViewById(R.id.picture7);
-		picture8 = (ImageView) findViewById(R.id.picture8);
-		picture9 = (ImageView) findViewById(R.id.picture9);
+		retweetedLayout = (RelativeLayout) singleWeibo
+				.findViewById(R.id.retweetedLayout);
+		retweetedPicture = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture);
+		retweetedRepostsCount = (TextView) singleWeibo
+				.findViewById(R.id.retweetedRepostsCount);
+		picture1 = (ImageView) singleWeibo.findViewById(R.id.picture1);
+		picture2 = (ImageView) singleWeibo.findViewById(R.id.picture2);
+		picture3 = (ImageView) singleWeibo.findViewById(R.id.picture3);
+		picture4 = (ImageView) singleWeibo.findViewById(R.id.picture4);
+		picture5 = (ImageView) singleWeibo.findViewById(R.id.picture5);
+		picture6 = (ImageView) singleWeibo.findViewById(R.id.picture6);
+		picture7 = (ImageView) singleWeibo.findViewById(R.id.picture7);
+		picture8 = (ImageView) singleWeibo.findViewById(R.id.picture8);
+		picture9 = (ImageView) singleWeibo.findViewById(R.id.picture9);
 		pictureArray = new ImageView[] { picture1, picture2, picture3,
 				picture4, picture5, picture6, picture7, picture8, picture9 };
-		retweetedPicture1 = (ImageView) findViewById(R.id.retweetedPicture1);
-		retweetedPicture2 = (ImageView) findViewById(R.id.retweetedPicture2);
-		retweetedPicture3 = (ImageView) findViewById(R.id.retweetedPicture3);
-		retweetedPicture4 = (ImageView) findViewById(R.id.retweetedPicture4);
-		retweetedPicture5 = (ImageView) findViewById(R.id.retweetedPicture5);
-		retweetedPicture6 = (ImageView) findViewById(R.id.retweetedPicture6);
-		retweetedPicture7 = (ImageView) findViewById(R.id.retweetedPicture7);
-		retweetedPicture8 = (ImageView) findViewById(R.id.retweetedPicture8);
-		retweetedPicture9 = (ImageView) findViewById(R.id.retweetedPicture9);
+		retweetedPicture1 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture1);
+		retweetedPicture2 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture2);
+		retweetedPicture3 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture3);
+		retweetedPicture4 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture4);
+		retweetedPicture5 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture5);
+		retweetedPicture6 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture6);
+		retweetedPicture7 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture7);
+		retweetedPicture8 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture8);
+		retweetedPicture9 = (ImageView) singleWeibo
+				.findViewById(R.id.retweetedPicture9);
 		retweetedPictureArray = new ImageView[] { retweetedPicture1,
 				retweetedPicture2, retweetedPicture3, retweetedPicture4,
 				retweetedPicture5, retweetedPicture6, retweetedPicture7,
 				retweetedPicture8, retweetedPicture9 };
 
-		DisplayMetrics metric = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metric);
-		int widthPX = metric.widthPixels;// 屏幕宽度（像素）
-		float density = metric.density;// 屏幕密度（0.75 / 1.0 / 1.5）
-		imageWidth = (int) ((widthPX - 30 * density) / 3);
-
 		status = MyApplication.getStatus();
+		imageWidth = MyApplication.getImageWidth();
 		commentList = new ArrayList<Comment>();
-		adapter = new CommentLvAdapter(this, commentList);
+		retweetedLv.addHeaderView(singleWeibo);
+		retweetedLv.addFooterView(footerView);
+		adapter = new CommentLvAdapter(this);
 		retweetedLv.setAdapter(adapter);
 
 		initActionBar();
 
 		text.setMText(status.text);
 		userName.setText(status.user.screen_name);
-		source.setText("来源：" + Utils.transformSource(status.source));
+		source.setText(Utils.transformSource(status.source));
 		time.setText(Utils.transformTime(status.created_at));
 		retweetedTv.setText("转发 " + status.reposts_count);
 		commentTv.setText("评论 " + status.comments_count);
@@ -256,9 +275,18 @@ public class WeiboActivity extends BaseActivity {
 			}
 		};
 
+		loadMore.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mCommentsAPI.show(Long.parseLong(status.id), 0, maxID, 5, 1, 0,
+						mListener);
+			}
+		});
+
 		mCommentsAPI = new CommentsAPI(this, Constants.APP_KEY,
 				MyApplication.getmAccessToken());
-		mCommentsAPI.show(Long.parseLong(status.id), 0, 0, 50, 1, 0, mListener);
+		mCommentsAPI.show(Long.parseLong(status.id), 0, 0, 5, 1, 0, mListener);
 	}
 
 	private void initActionBar() {
@@ -281,7 +309,26 @@ public class WeiboActivity extends BaseActivity {
 	}
 
 	private void handleResponseComment(List<Comment> newCommentList) {
-		commentList = newCommentList;
+		boolean isNewlyAdded = false;
+
+		if (isFirstRequest) {
+			commentList = newCommentList;
+			isFirstRequest = false;
+		} else {
+			// commentList.addAll(commentList.size() - 1, newCommentList);
+			for (int i = 0; i < newCommentList.size(); i++) {
+				if (Long.valueOf(newCommentList.get(i).id) < maxID) {
+					commentList.add(newCommentList.get(i));
+					isNewlyAdded = true;
+				}
+			}
+			if (!isNewlyAdded) {
+				Toast.makeText(this, "没有更多评论", Toast.LENGTH_SHORT).show();
+				return;
+			}
+		}
+
+		maxID = Long.parseLong(commentList.get(commentList.size() - 1).id);
 		adapter.setCommentList(commentList);
 		adapter.notifyDataSetChanged();
 	}

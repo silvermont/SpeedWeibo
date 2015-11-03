@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -24,12 +23,11 @@ public class WeiboLvAdapter extends BaseAdapter {
 	private Context context;
 	private Holder holder;
 
-	public WeiboLvAdapter(Context context, List<Status> statusList,
-			int imageWidth) {
+	public WeiboLvAdapter(Context context, List<Status> statusList) {
 		super();
 		this.context = context;
 		this.statusList = statusList;
-		this.imageWidth = imageWidth;
+		this.imageWidth = MyApplication.getImageWidth();
 	}
 
 	public void setStatusList(List<Status> statusList) {
@@ -76,10 +74,6 @@ public class WeiboLvAdapter extends BaseAdapter {
 					.findViewById(R.id.retweetedPicture);
 			holder.retweetedRepostsCount = (TextView) convertView
 					.findViewById(R.id.retweetedRepostsCount);
-			/*
-			 * holder.pictureGridView = (GridView) convertView
-			 * .findViewById(R.id.pictureGridView);
-			 */
 			holder.picture1 = (ImageView) convertView
 					.findViewById(R.id.picture1);
 			holder.picture2 = (ImageView) convertView
@@ -134,8 +128,8 @@ public class WeiboLvAdapter extends BaseAdapter {
 
 		holder.text.setMText(statusList.get(position).text);
 		holder.userName.setText(statusList.get(position).user.screen_name);
-		holder.source.setText("来源："
-				+ Utils.transformSource(statusList.get(position).source));
+		holder.source
+				.setText(Utils.transformSource(statusList.get(position).source));
 		holder.time
 				.setText(Utils.transformTime(statusList.get(position).created_at));
 		holder.repostsCount.setText(Utils.transformRepostsCount(

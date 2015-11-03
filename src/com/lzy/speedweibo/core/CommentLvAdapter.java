@@ -1,5 +1,6 @@
 package com.lzy.speedweibo.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -19,13 +20,13 @@ public class CommentLvAdapter extends BaseAdapter {
 	private Context context;
 	private Holder holder;
 
-	public CommentLvAdapter(Context context, List<Comment> commentList) {
+	public CommentLvAdapter(Context context) {
 		super();
 		this.context = context;
-		this.commentList = commentList;
+		this.commentList = new ArrayList<Comment>();
 	}
 
-	public void setCommentList(List<Comment> statusList) {
+	public void setCommentList(List<Comment> commentList) {
 		this.commentList = commentList;
 	}
 
@@ -66,8 +67,8 @@ public class CommentLvAdapter extends BaseAdapter {
 
 		holder.text.setMText(commentList.get(position).text);
 		holder.userName.setText(commentList.get(position).user.screen_name);
-		holder.source.setText("来源："
-				+ Utils.transformSource(commentList.get(position).source));
+		holder.source
+				.setText(Utils.transformSource(commentList.get(position).source));
 		holder.time
 				.setText(Utils.transformTime(commentList.get(position).created_at));
 
