@@ -1,4 +1,4 @@
-package com.lzy.speedweibo.core;
+package com.lzy.speedweibo.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +13,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
+import com.lzy.speedweibo.core.MyApplication;
+import com.lzy.speedweibo.core.SmartTextView;
+import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Comment;
 
-public class CommentLvAdapter extends BaseAdapter {
+public class CommentListAdapter extends BaseAdapter {
 	private List<Comment> commentList;
 	private Context context;
 	private Holder holder;
 
-	public CommentLvAdapter(Context context) {
+	public CommentListAdapter(Context context) {
 		super();
 		this.context = context;
 		this.commentList = new ArrayList<Comment>();
 	}
 
-	public void setCommentList(List<Comment> commentList) {
-		this.commentList = commentList;
+	public void setData(List<Comment> list) {
+		this.commentList = list;
 	}
 
 	@Override
@@ -84,6 +87,7 @@ public class CommentLvAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+
 			}
 		});
 

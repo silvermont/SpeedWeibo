@@ -1,4 +1,4 @@
-package com.lzy.speedweibo.core;
+package com.lzy.speedweibo.adapter;
 
 import java.util.List;
 
@@ -15,15 +15,18 @@ import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.activity.WeiboActivity;
+import com.lzy.speedweibo.core.MyApplication;
+import com.lzy.speedweibo.core.SmartTextView;
+import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Status;
 
-public class WeiboLvAdapter extends BaseAdapter {
+public class WeiboListAdapter extends BaseAdapter {
 	private List<Status> statusList;
 	private int imageWidth;
 	private Context context;
 	private Holder holder;
 
-	public WeiboLvAdapter(Context context, List<Status> statusList) {
+	public WeiboListAdapter(Context context, List<Status> statusList) {
 		super();
 		this.context = context;
 		this.statusList = statusList;

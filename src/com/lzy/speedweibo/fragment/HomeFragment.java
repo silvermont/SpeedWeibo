@@ -19,9 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
+import com.lzy.speedweibo.adapter.WeiboListAdapter;
 import com.lzy.speedweibo.core.Constants;
 import com.lzy.speedweibo.core.MyApplication;
-import com.lzy.speedweibo.core.WeiboLvAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -33,7 +33,7 @@ import com.sina.weibo.sdk.openapi.models.StatusList;
 public class HomeFragment extends Fragment {
 	private ListView weiboLv;
 	private SwipeRefreshLayout refreshLayout;
-	private WeiboLvAdapter lvAdapter;
+	private WeiboListAdapter lvAdapter;
 	private List<Status> statusList;
 	private long maxWeiboID;
 	private long minWeiboID;
@@ -48,14 +48,13 @@ public class HomeFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		statusList = new ArrayList<Status>();
-		lvAdapter = new com.lzy.speedweibo.core.WeiboLvAdapter(getActivity(),
+		lvAdapter = new com.lzy.speedweibo.adapter.WeiboListAdapter(getActivity(),
 				statusList);
 
 		// Oauth2AccessToken mAccessToken = AccessTokenKeFeper
 		// .readAccessToken(getActivity());
 		mStatusesAPI = new StatusesAPI(getActivity(), Constants.APP_KEY,
 				MyApplication.getmAccessToken());
-
 		mListener = new RequestListener() {
 
 			@Override

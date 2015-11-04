@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -17,7 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.core.CommentLvAdapter;
+import com.lzy.speedweibo.adapter.CommentListAdapter;
+import com.lzy.speedweibo.adapter.RepostListAdapter;
 import com.lzy.speedweibo.core.Constants;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
@@ -25,8 +25,11 @@ import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.CommentsAPI;
+import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 import com.sina.weibo.sdk.openapi.models.Comment;
 import com.sina.weibo.sdk.openapi.models.CommentList;
+import com.sina.weibo.sdk.openapi.models.Repost;
+import com.sina.weibo.sdk.openapi.models.RepostList;
 import com.sina.weibo.sdk.openapi.models.Status;
 
 public class WeiboActivity extends BaseActivity {
@@ -63,20 +66,23 @@ public class WeiboActivity extends BaseActivity {
 	private TextView commentTv;
 	private View retweetedLine;
 	private View commentLine;
-	private ListView retweetedLv;
+	private ListView listView;
 	private RelativeLayout retweetedLayout;
 	private ImageView retweetedPicture;
 	private TextView retweetedRepostsCount;
 	private RelativeLayout footerView;
 	private TextView loadMore;
 	private int imageWidth;
-	/** 微博评论接口 */
 	private CommentsAPI mCommentsAPI;
+	private StatusesAPI mStatusesAPI;
 	private RequestListener mListener;
 	private List<Comment> commentList;
-	private CommentLvAdapter adapter;
-	private long maxID;
-	private boolean isFirstRequest = true;
+	private List<Repost> repostList;
+	private CommentListAdapter commentAdapter;
+	private RepostListAdapter repostAdapter;
+	private long maxCommentID;
+	private long maxRepostID;
+	private boolean isShowComments = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,22 +149,35 @@ public class WeiboActivity extends BaseActivity {
 		retweetedLine = weiboLayout.findViewById(R.id.retweetedLine);
 		commentLine = weiboLayout.findViewById(R.id.commentLine);
 
-		retweetedLv = (ListView) findViewById(R.id.retweetedLv);
+		listView = (ListView) findViewById(R.id.retweetedLv);
 
 		status = MyApplication.getStatus();
 		imageWidth = MyApplication.getImageWidth();
 		mCommentsAPI = new CommentsAPI(this, Constants.APP_KEY,
 				MyApplication.getmAccessToken());
+		mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY,
+				MyApplication.getmAccessToken());
 		commentList = new ArrayList<Comment>();
-		adapter = new CommentLvAdapter(this);
+		repostList = new ArrayList<Repost>();
+		commentAdapter = new CommentListAdapter(this);
+		repostAdapter = new RepostListAdapter(this);
+
 		mListener = new RequestListener() {
 			@Override
 			public void onComplete(String response) {
 				if (!TextUtils.isEmpty(response)) {
-					CommentList comments = CommentList.parse(response);
-					if (comments != null && comments.total_number > 0) {
-						handleResponseComment(comments.commentList);
+					if (response.contains("comments")) {
+						CommentList comments = CommentList.parse(response);
+						if (comments != null && comments.total_number > 0) {
+							handleComments(comments.commentList);
+						}
+					} else if (response.contains("reposts")) {
+						RepostList reposts = RepostList.parse(response);
+						if (reposts != null && reposts.total_number > 0) {
+							handleReposts(reposts.repostList);
+						}
 					}
+
 				}
 			}
 
@@ -168,16 +187,22 @@ public class WeiboActivity extends BaseActivity {
 			}
 		};
 
-		retweetedLv.addHeaderView(weiboLayout);
-		retweetedLv.addFooterView(footerView);
-		retweetedLv.setAdapter(adapter);
+		loadMore.setText("暂时没有评论");
+		listView.addHeaderView(weiboLayout);
+		listView.addFooterView(footerView);
+		listView.setAdapter(commentAdapter);
 
 		loadMore.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				mCommentsAPI.show(Long.parseLong(status.id), 0, maxID, 50, 1,
-						0, mListener);
+				if (isShowComments) {
+					mCommentsAPI.show(Long.parseLong(status.id), 0,
+							maxCommentID, 5, 1, 0, mListener);
+				} else {
+					mStatusesAPI.repostTimeline(Long.parseLong(status.id), 0,
+							maxRepostID, 5, 1, 0, mListener);
+				}
 			}
 		});
 
@@ -279,6 +304,8 @@ public class WeiboActivity extends BaseActivity {
 		}
 
 		mCommentsAPI.show(Long.parseLong(status.id), 0, 0, 50, 1, 0, mListener);
+		mStatusesAPI.repostTimeline(Long.parseLong(status.id), 0, 0, 50, 1, 0,
+				mListener);
 	}
 
 	private void initActionBar() {
@@ -300,16 +327,15 @@ public class WeiboActivity extends BaseActivity {
 		});
 	}
 
-	private void handleResponseComment(List<Comment> newCommentList) {
+	private void handleComments(List<Comment> list) {
 		boolean isNewlyAdded = false;
 
-		if (isFirstRequest) {
-			commentList = newCommentList;
-			isFirstRequest = false;
+		if (commentList.size() == 0) {
+			commentList = list;
 		} else {
-			for (int i = 0; i < newCommentList.size(); i++) {
-				if (Long.valueOf(newCommentList.get(i).id) < maxID) {
-					commentList.add(newCommentList.get(i));
+			for (int i = 0; i < list.size(); i++) {
+				if (Long.valueOf(list.get(i).id) < maxCommentID) {
+					commentList.add(list.get(i));
 					isNewlyAdded = true;
 				}
 			}
@@ -319,22 +345,77 @@ public class WeiboActivity extends BaseActivity {
 			}
 		}
 
-		maxID = Long.parseLong(commentList.get(commentList.size() - 1).id);
-		adapter.setCommentList(commentList);
-		adapter.notifyDataSetChanged();
+		maxCommentID = Long
+				.parseLong(commentList.get(commentList.size() - 1).id);
+		commentAdapter.setData(commentList);
+		commentAdapter.notifyDataSetChanged();
+
+		if (isShowComments) {
+			loadMore.setText("加载更多");
+		}
 	}
 
-	public void chooseRetweetedCountLayout(View view) {
-		retweetedTv.setTextColor(getResources().getColor(R.color.blue));
-		commentTv.setTextColor(getResources().getColor(R.color.text_gray));
-		retweetedLine.setVisibility(View.VISIBLE);
-		commentLine.setVisibility(View.GONE);
+	private void handleReposts(List<Repost> responseList) {
+		boolean isNewlyAdded = false;
+
+		if (repostList.size() == 0) {
+			repostList = responseList;
+		} else {
+			for (int i = 0; i < responseList.size(); i++) {
+				if (Long.valueOf(responseList.get(i).id) < maxRepostID) {
+					repostList.add(responseList.get(i));
+					isNewlyAdded = true;
+				}
+			}
+			if (!isNewlyAdded) {
+				Toast.makeText(this, "没有更多转发", Toast.LENGTH_SHORT).show();
+				return;
+			}
+		}
+
+		maxRepostID = Long.parseLong(repostList.get(repostList.size() - 1).id);
+		repostAdapter.setData(repostList);
+		repostAdapter.notifyDataSetChanged();
+
+		if (!isShowComments) {
+			loadMore.setText("加载更多");
+		}
 	}
 
-	public void chooseCommentCountLayout(View view) {
-		commentTv.setTextColor(getResources().getColor(R.color.blue));
-		retweetedTv.setTextColor(getResources().getColor(R.color.text_gray));
-		commentLine.setVisibility(View.VISIBLE);
-		retweetedLine.setVisibility(View.GONE);
+	public void showReposts(View view) {
+		if (isShowComments) {
+			retweetedTv.setTextColor(getResources().getColor(R.color.blue));
+			commentTv.setTextColor(getResources().getColor(R.color.text_gray));
+			retweetedLine.setVisibility(View.VISIBLE);
+			commentLine.setVisibility(View.GONE);
+
+			listView.setAdapter(repostAdapter);
+			isShowComments = false;
+
+			if (repostList.size() == 0) {
+				loadMore.setText("暂时没有转发");
+			} else {
+				loadMore.setText("加载更多");
+			}
+		}
+	}
+
+	public void showComments(View view) {
+		if (!isShowComments) {
+			commentTv.setTextColor(getResources().getColor(R.color.blue));
+			retweetedTv
+					.setTextColor(getResources().getColor(R.color.text_gray));
+			commentLine.setVisibility(View.VISIBLE);
+			retweetedLine.setVisibility(View.GONE);
+
+			listView.setAdapter(commentAdapter);
+			isShowComments = true;
+
+			if (commentList.size() == 0) {
+				loadMore.setText("暂时没有评论");
+			} else {
+				loadMore.setText("加载更多");
+			}
+		}
 	}
 }

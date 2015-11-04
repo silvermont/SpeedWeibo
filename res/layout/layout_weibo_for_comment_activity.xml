@@ -300,7 +300,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="chooseRetweetedCountLayout" >
+            android:onClick="showReposts" >
 
             <TextView
                 android:id="@+id/retweetedTv"
@@ -332,7 +332,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="chooseCommentCountLayout" >
+            android:onClick="showComments" >
 
             <TextView
                 android:id="@+id/commentTv"
