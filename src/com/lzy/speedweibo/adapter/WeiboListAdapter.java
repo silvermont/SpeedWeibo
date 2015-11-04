@@ -2,10 +2,13 @@ package com.lzy.speedweibo.adapter;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -14,6 +17,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
+import com.lzy.speedweibo.activity.CommentActivity;
 import com.lzy.speedweibo.activity.WeiboActivity;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
@@ -185,6 +189,53 @@ public class WeiboListAdapter extends BaseAdapter {
 			holder.retweetedLayout.setVisibility(View.GONE);
 		} else {
 			holder.retweetedLayout.setVisibility(View.VISIBLE);
+
+			holder.retweetedLayout.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					MyApplication.setStatus(statusList.get(position).retweeted_status);
+					Intent intent = new Intent(context, WeiboActivity.class);
+					context.startActivity(intent);
+				}
+			});
+
+			holder.retweetedLayout
+					.setOnLongClickListener(new OnLongClickListener() {
+
+						@Override
+						public boolean onLongClick(View v) {
+							AlertDialog.Builder builder = new AlertDialog.Builder(
+									context);
+							builder.setItems(new String[] { "转发原微博", "评论原微博" },
+									new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											Intent intent = new Intent(context,
+													CommentActivity.class);
+											switch (which) {
+											case 0:
+												intent.putExtra("action", "转发");
+												context.startActivity(intent);
+												break;
+											case 1:
+												intent.putExtra("action", "评论");
+												context.startActivity(intent);
+												break;
+											default:
+												break;
+											}
+										}
+
+									});
+							builder.show();
+							return true;
+						}
+					});
+
 			holder.retweetedText
 					.setMText("@"
 							+ statusList.get(position).retweeted_status.user.screen_name
@@ -246,6 +297,39 @@ public class WeiboListAdapter extends BaseAdapter {
 				MyApplication.setStatus(statusList.get(position));
 				Intent intent = new Intent(context, WeiboActivity.class);
 				context.startActivity(intent);
+			}
+		});
+
+		holder.wholeLayout.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				builder.setItems(new String[] { "转发", "评论" },
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Intent intent = new Intent(context,
+										CommentActivity.class);
+								switch (which) {
+								case 0:
+									intent.putExtra("action", "转发");
+									context.startActivity(intent);
+									break;
+								case 1:
+									intent.putExtra("action", "评论");
+									context.startActivity(intent);
+									break;
+								default:
+									break;
+								}
+							}
+
+						});
+				builder.show();
+				return true;
 			}
 		});
 

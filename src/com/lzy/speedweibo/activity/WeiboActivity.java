@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -256,6 +257,16 @@ public class WeiboActivity extends BaseActivity {
 			retweetedLayout.setVisibility(View.GONE);
 		} else {
 			retweetedLayout.setVisibility(View.VISIBLE);
+			retweetedLayout.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					MyApplication.setStatus(status.retweeted_status);
+					Intent intent = new Intent(WeiboActivity.this,
+							WeiboActivity.class);
+					startActivity(intent);
+				}
+			});
 
 			retweetedText.setMText("@"
 					+ status.retweeted_status.user.screen_name + ":"
