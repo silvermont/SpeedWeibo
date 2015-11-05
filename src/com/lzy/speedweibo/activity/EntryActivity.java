@@ -114,7 +114,7 @@ public class EntryActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(EntryActivity.this,
-						CommentActivity.class);
+						EditActivity.class);
 				intent.putExtra("action", "发表新微博");
 				startActivity(intent);
 			}

@@ -18,7 +18,7 @@
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:layout_toLeftOf="@+id/operate"
-        android:background="@drawable/action_bar_button_selector"
+        android:background="@drawable/selector_action_bar_button"
         android:clickable="true" >
 
         <ImageView
@@ -33,7 +33,7 @@
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/action_bar_button_selector"
+        android:background="@drawable/selector_action_bar_button"
         android:clickable="true" >
 
         <ImageView

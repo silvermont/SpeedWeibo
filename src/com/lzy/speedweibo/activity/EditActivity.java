@@ -18,7 +18,7 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.CommentsAPI;
 import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 
-public class CommentActivity extends BaseActivity {
+public class EditActivity extends BaseActivity {
 	private EditText text;
 	private CommentsAPI mCommentsAPI;
 	private StatusesAPI mStatusesAPI;
@@ -29,7 +29,7 @@ public class CommentActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_comment);
+		setContentView(R.layout.activity_edit);
 
 		text = (EditText) findViewById(R.id.text);
 
@@ -42,13 +42,13 @@ public class CommentActivity extends BaseActivity {
 			@Override
 			public void onWeiboException(WeiboException arg0) {
 				arg0.printStackTrace();
-				Toast.makeText(CommentActivity.this, "操作失敗", Toast.LENGTH_SHORT)
+				Toast.makeText(EditActivity.this, "操作失敗", Toast.LENGTH_SHORT)
 						.show();
 			}
 
 			@Override
 			public void onComplete(String arg0) {
-				Toast.makeText(CommentActivity.this, "操作成功", Toast.LENGTH_SHORT)
+				Toast.makeText(EditActivity.this, "操作成功", Toast.LENGTH_SHORT)
 						.show();
 				finish();
 			}
@@ -90,7 +90,7 @@ public class CommentActivity extends BaseActivity {
 			public void onClick(View v) {
 				String content = text.getText().toString();
 				if (content.equals("")) {
-					Toast.makeText(CommentActivity.this, "内容不能为空",
+					Toast.makeText(EditActivity.this, "内容不能为空",
 							Toast.LENGTH_SHORT).show();
 					return;
 				}

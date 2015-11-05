@@ -1,8 +1,14 @@
 package com.lzy.speedweibo.activity;
 
+import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
@@ -27,6 +33,8 @@ public class WelcomeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
 
+		initActionBar();
+
 		// 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
 		AuthInfo mAuthInfo = new AuthInfo(this, Constants.APP_KEY,
 				Constants.REDIRECT_URL, Constants.SCOPE);
@@ -47,6 +55,12 @@ public class WelcomeActivity extends BaseActivity {
 			mSsoHandler.authorizeWeb(new AuthListener());
 			finish();
 		}
+	}
+
+	private void initActionBar() {
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setCustomView(R.layout.action_bar_general);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 	}
 
 	/**

@@ -17,7 +17,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.activity.CommentActivity;
+import com.lzy.speedweibo.activity.EditActivity;
 import com.lzy.speedweibo.activity.WeiboActivity;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
@@ -215,7 +215,7 @@ public class WeiboListAdapter extends BaseAdapter {
 												DialogInterface dialog,
 												int which) {
 											Intent intent = new Intent(context,
-													CommentActivity.class);
+													EditActivity.class);
 											intent.putExtra(
 													"id",
 													statusList.get(position).retweeted_status.id);
@@ -315,7 +315,7 @@ public class WeiboListAdapter extends BaseAdapter {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								Intent intent = new Intent(context,
-										CommentActivity.class);
+										EditActivity.class);
 								intent.putExtra("id",
 										statusList.get(position).id);
 								switch (which) {

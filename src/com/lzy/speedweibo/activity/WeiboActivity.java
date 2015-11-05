@@ -410,7 +410,7 @@ public class WeiboActivity extends BaseActivity {
 			}
 		} else {
 			Intent intent = new Intent(WeiboActivity.this,
-					CommentActivity.class);
+					EditActivity.class);
 			intent.putExtra("action", "转发");
 			intent.putExtra("id", status.id);
 			startActivity(intent);
@@ -435,7 +435,7 @@ public class WeiboActivity extends BaseActivity {
 			}
 		} else {
 			Intent intent = new Intent(WeiboActivity.this,
-					CommentActivity.class);
+					EditActivity.class);
 			intent.putExtra("action", "评论");
 			intent.putExtra("id", status.id);
 			startActivity(intent);
