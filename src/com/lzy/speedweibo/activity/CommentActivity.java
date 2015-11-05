@@ -95,11 +95,11 @@ public class CommentActivity extends BaseActivity {
 					return;
 				}
 				if (action.equals("评论")) {
-					mCommentsAPI.create(content, id, false, null);
+					mCommentsAPI.create(content, id, false, mListener);
 				} else if (action.equals("转发")) {
-					mStatusesAPI.repost(id, content, 0, null);
+					mStatusesAPI.repost(id, content, 0, mListener);
 				} else if (action.equals("发表新微博")) {
-					mStatusesAPI.update(content, "0", "0", null);
+					mStatusesAPI.update(content, "0", "0", mListener);
 				}
 			}
 		});
