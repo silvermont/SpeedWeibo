@@ -216,6 +216,9 @@ public class WeiboListAdapter extends BaseAdapter {
 												int which) {
 											Intent intent = new Intent(context,
 													CommentActivity.class);
+											intent.putExtra(
+													"id",
+													statusList.get(position).retweeted_status.id);
 											switch (which) {
 											case 0:
 												intent.putExtra("action", "转发");
@@ -313,6 +316,8 @@ public class WeiboListAdapter extends BaseAdapter {
 									int which) {
 								Intent intent = new Intent(context,
 										CommentActivity.class);
+								intent.putExtra("id",
+										statusList.get(position).id);
 								switch (which) {
 								case 0:
 									intent.putExtra("action", "转发");

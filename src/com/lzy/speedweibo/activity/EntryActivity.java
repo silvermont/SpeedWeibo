@@ -75,6 +75,7 @@ public class EntryActivity extends FragmentActivity {
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.action_bar_entry);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
 		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()
 				.findViewById(R.id.operate);
 		operate.setOnClickListener(new OnClickListener() {
@@ -103,6 +104,19 @@ public class EntryActivity extends FragmentActivity {
 							}
 						});
 				builder.show();
+			}
+		});
+
+		RelativeLayout create = (RelativeLayout) actionBar.getCustomView()
+				.findViewById(R.id.create);
+		create.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(EntryActivity.this,
+						CommentActivity.class);
+				intent.putExtra("action", "发表新微博");
+				startActivity(intent);
 			}
 		});
 	}

@@ -4,6 +4,20 @@
     android:layout_height="match_parent"
     android:background="@color/blue" >
 
+    <RelativeLayout
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/action_bar_button_selector"
+        android:clickable="true" >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_action_back" />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -14,22 +28,7 @@
         android:textSize="16sp" />
 
     <RelativeLayout
-        android:id="@+id/create"
-        android:layout_width="48dp"
-        android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/operate"
-        android:background="@drawable/action_bar_button_selector"
-        android:clickable="true" >
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_action_create" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/operate"
+        android:id="@+id/send"
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
@@ -40,7 +39,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_action_operate" />
+            android:src="@drawable/ic_action_send" />
     </RelativeLayout>
 
 </RelativeLayout>
