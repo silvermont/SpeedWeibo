@@ -16,26 +16,26 @@ import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
-import com.sina.weibo.sdk.openapi.models.Status;
+import com.sina.weibo.sdk.openapi.models.Comment;
 
-public class AtMeListAdapter extends BaseAdapter {
-	private List<Status> statusList;
+public class CommentAdapter extends BaseAdapter {
+	private List<Comment> commentList;
 	private Context context;
 	private Holder holder;
 
-	public AtMeListAdapter(Context context) {
+	public CommentAdapter(Context context) {
 		super();
 		this.context = context;
-		this.statusList = new ArrayList<Status>();
+		this.commentList = new ArrayList<Comment>();
 	}
 
-	public void setData(List<Status> list) {
-		this.statusList = list;
+	public void setData(List<Comment> list) {
+		this.commentList = list;
 	}
 
 	@Override
 	public int getCount() {
-		return statusList.size();
+		return commentList.size();
 	}
 
 	@Override
@@ -52,8 +52,7 @@ public class AtMeListAdapter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			holder = new Holder();
-			convertView = View.inflate(context, R.layout.item_comment_to_me,
-					null);
+			convertView = View.inflate(context, R.layout.item_comment, null);
 			holder.wholeLayout = (RelativeLayout) convertView
 					.findViewById(R.id.wholeLayout);
 			holder.userHead = (ImageView) convertView
@@ -63,43 +62,25 @@ public class AtMeListAdapter extends BaseAdapter {
 			holder.text = (SmartTextView) convertView.findViewById(R.id.text);
 			holder.source = (TextView) convertView.findViewById(R.id.source);
 			holder.time = (TextView) convertView.findViewById(R.id.time);
-			holder.retweetedLayout = (RelativeLayout) convertView
-					.findViewById(R.id.retweetedLayout);
-			holder.retweetedText = (SmartTextView) convertView
-					.findViewById(R.id.retweetedText);
 
 			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.text.setMText(statusList.get(position).text);
+		holder.text.setMText(commentList.get(position).text);
+		holder.userName.setText(commentList.get(position).user.screen_name);
+		holder.source
+				.setText(Utils.transformSource(commentList.get(position).source));
+		holder.time
+				.setText(Utils.transformTime(commentList.get(position).created_at));
+
 		holder.text.setTextColor(context.getResources().getColor(
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.userName.setText(statusList.get(position).user.screen_name);
-		holder.source
-				.setText(Utils.transformSource(statusList.get(position).source));
-		holder.time
-				.setText(Utils.transformTime(statusList.get(position).created_at));
-
-		if (null != statusList.get(position).retweeted_status) {
-			holder.retweetedLayout.setVisibility(View.VISIBLE);
-			holder.retweetedText
-					.setMText(statusList.get(position).retweeted_status.user.screen_name
-							+ "："
-							+ statusList.get(position).retweeted_status.text);
-			holder.retweetedText.setTextColor(context.getResources().getColor(
-					R.color.text_black));
-			holder.retweetedText.invalidate();
-		} else {
-			holder.retweetedLayout.setVisibility(View.GONE);
-
-		}
-
 		MyApplication.asyncLoadImage(
-				statusList.get(position).user.profile_image_url,
+				commentList.get(position).user.profile_image_url,
 				holder.userHead);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
@@ -120,7 +101,5 @@ public class AtMeListAdapter extends BaseAdapter {
 		SmartTextView text;
 		TextView source;
 		TextView time;
-		RelativeLayout retweetedLayout;
-		SmartTextView retweetedText;
 	}
 }

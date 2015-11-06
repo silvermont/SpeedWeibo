@@ -18,12 +18,12 @@ import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Repost;
 
-public class RepostListAdapter extends BaseAdapter {
+public class RepostAdapter extends BaseAdapter {
 	private List<Repost> repostList;
 	private Context context;
 	private Holder holder;
 
-	public RepostListAdapter(Context context) {
+	public RepostAdapter(Context context) {
 		super();
 		this.context = context;
 		this.repostList = new ArrayList<Repost>();

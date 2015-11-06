@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.adapter.AtMeListAdapter;
-import com.lzy.speedweibo.adapter.CommentToMeListAdapter;
+import com.lzy.speedweibo.adapter.AtMeAdapter;
+import com.lzy.speedweibo.adapter.CommentToMeAdapter;
 import com.lzy.speedweibo.core.Constants;
 import com.lzy.speedweibo.core.MyApplication;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -28,7 +27,6 @@ import com.sina.weibo.sdk.openapi.CommentsAPI;
 import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 import com.sina.weibo.sdk.openapi.models.Comment;
 import com.sina.weibo.sdk.openapi.models.CommentList;
-import com.sina.weibo.sdk.openapi.models.RepostList;
 import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 
@@ -42,8 +40,8 @@ public class MessageFragment extends Fragment {
 	private CommentsAPI mCommentsAPI;
 	private StatusesAPI mStatusesAPI;
 	private RequestListener mListener;
-	private CommentToMeListAdapter commentAdapter;
-	private AtMeListAdapter atMeAdapter;
+	private CommentToMeAdapter commentAdapter;
+	private AtMeAdapter atMeAdapter;
 	private List<Comment> commentList;
 	private List<Status> statusList;
 	private long maxCommentID;
@@ -61,13 +59,11 @@ public class MessageFragment extends Fragment {
 				R.layout.view_footer, null);
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
 
-		mCommentsAPI = new CommentsAPI(getActivity(), Constants.APP_KEY,
-				MyApplication.getmAccessToken());
-		mStatusesAPI = new StatusesAPI(getActivity(), Constants.APP_KEY,
-				MyApplication.getmAccessToken());
+		mCommentsAPI = MyApplication.getCommentsAPI();
+		mStatusesAPI = MyApplication.getStatusesAPI();
 
-		commentAdapter = new CommentToMeListAdapter(getActivity());
-		atMeAdapter = new AtMeListAdapter(getActivity());
+		commentAdapter = new CommentToMeAdapter(getActivity());
+		atMeAdapter = new AtMeAdapter(getActivity());
 		commentList = new ArrayList<Comment>();
 		statusList = new ArrayList<Status>();
 

@@ -16,26 +16,26 @@ import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
-import com.sina.weibo.sdk.openapi.models.Comment;
+import com.sina.weibo.sdk.openapi.models.Status;
 
-public class CommentToMeListAdapter extends BaseAdapter {
-	private List<Comment> commentList;
+public class AtMeAdapter extends BaseAdapter {
+	private List<Status> statusList;
 	private Context context;
 	private Holder holder;
 
-	public CommentToMeListAdapter(Context context) {
+	public AtMeAdapter(Context context) {
 		super();
 		this.context = context;
-		this.commentList = new ArrayList<Comment>();
+		this.statusList = new ArrayList<Status>();
 	}
 
-	public void setData(List<Comment> list) {
-		this.commentList = list;
+	public void setData(List<Status> list) {
+		this.statusList = list;
 	}
 
 	@Override
 	public int getCount() {
-		return commentList.size();
+		return statusList.size();
 	}
 
 	@Override
@@ -73,30 +73,33 @@ public class CommentToMeListAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.text.setMText(commentList.get(position).text);
+		holder.text.setMText(statusList.get(position).text);
 		holder.text.setTextColor(context.getResources().getColor(
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.userName.setText(commentList.get(position).user.screen_name);
+		holder.userName.setText(statusList.get(position).user.screen_name);
 		holder.source
-				.setText(Utils.transformSource(commentList.get(position).source));
+				.setText(Utils.transformSource(statusList.get(position).source));
 		holder.time
-				.setText(Utils.transformTime(commentList.get(position).created_at));
+				.setText(Utils.transformTime(statusList.get(position).created_at));
 
-		if (null != commentList.get(position).reply_comment) {
-			holder.retweetedText.setMText("回复我的评论："
-					+ commentList.get(position).reply_comment.text);
+		if (null != statusList.get(position).retweeted_status) {
+			holder.retweetedLayout.setVisibility(View.VISIBLE);
+			holder.retweetedText
+					.setMText(statusList.get(position).retweeted_status.user.screen_name
+							+ "："
+							+ statusList.get(position).retweeted_status.text);
+			holder.retweetedText.setTextColor(context.getResources().getColor(
+					R.color.text_black));
+			holder.retweetedText.invalidate();
 		} else {
-			holder.retweetedText.setMText("评论我的微博："
-					+ commentList.get(position).status.text);
+			holder.retweetedLayout.setVisibility(View.GONE);
+
 		}
-		holder.retweetedText.setTextColor(context.getResources().getColor(
-				R.color.text_black));
-		holder.retweetedText.invalidate();
 
 		MyApplication.asyncLoadImage(
-				commentList.get(position).user.profile_image_url,
+				statusList.get(position).user.profile_image_url,
 				holder.userHead);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {

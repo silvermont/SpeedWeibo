@@ -33,10 +33,8 @@ public class EditActivity extends BaseActivity {
 
 		text = (EditText) findViewById(R.id.text);
 
-		mCommentsAPI = new CommentsAPI(this, Constants.APP_KEY,
-				MyApplication.getmAccessToken());
-		mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY,
-				MyApplication.getmAccessToken());
+		mCommentsAPI = MyApplication.getCommentsAPI();
+		mStatusesAPI = MyApplication.getStatusesAPI();
 		mListener = new RequestListener() {
 
 			@Override

@@ -18,12 +18,12 @@ import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Comment;
 
-public class CommentListAdapter extends BaseAdapter {
+public class CommentToMeAdapter extends BaseAdapter {
 	private List<Comment> commentList;
 	private Context context;
 	private Holder holder;
 
-	public CommentListAdapter(Context context) {
+	public CommentToMeAdapter(Context context) {
 		super();
 		this.context = context;
 		this.commentList = new ArrayList<Comment>();
@@ -52,7 +52,8 @@ public class CommentListAdapter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			holder = new Holder();
-			convertView = View.inflate(context, R.layout.item_comment, null);
+			convertView = View.inflate(context, R.layout.item_comment_to_me,
+					null);
 			holder.wholeLayout = (RelativeLayout) convertView
 					.findViewById(R.id.wholeLayout);
 			holder.userHead = (ImageView) convertView
@@ -62,6 +63,10 @@ public class CommentListAdapter extends BaseAdapter {
 			holder.text = (SmartTextView) convertView.findViewById(R.id.text);
 			holder.source = (TextView) convertView.findViewById(R.id.source);
 			holder.time = (TextView) convertView.findViewById(R.id.time);
+			holder.retweetedLayout = (RelativeLayout) convertView
+					.findViewById(R.id.retweetedLayout);
+			holder.retweetedText = (SmartTextView) convertView
+					.findViewById(R.id.retweetedText);
 
 			convertView.setTag(holder);
 		} else {
@@ -69,15 +74,26 @@ public class CommentListAdapter extends BaseAdapter {
 		}
 
 		holder.text.setMText(commentList.get(position).text);
+		holder.text.setTextColor(context.getResources().getColor(
+				R.color.text_black));
+		holder.text.invalidate();
+
 		holder.userName.setText(commentList.get(position).user.screen_name);
 		holder.source
 				.setText(Utils.transformSource(commentList.get(position).source));
 		holder.time
 				.setText(Utils.transformTime(commentList.get(position).created_at));
 
-		holder.text.setTextColor(context.getResources().getColor(
+		if (null != commentList.get(position).reply_comment) {
+			holder.retweetedText.setMText("回复我的评论："
+					+ commentList.get(position).reply_comment.text);
+		} else {
+			holder.retweetedText.setMText("评论我的微博："
+					+ commentList.get(position).status.text);
+		}
+		holder.retweetedText.setTextColor(context.getResources().getColor(
 				R.color.text_black));
-		holder.text.invalidate();
+		holder.retweetedText.invalidate();
 
 		MyApplication.asyncLoadImage(
 				commentList.get(position).user.profile_image_url,
@@ -101,5 +117,7 @@ public class CommentListAdapter extends BaseAdapter {
 		SmartTextView text;
 		TextView source;
 		TextView time;
+		RelativeLayout retweetedLayout;
+		SmartTextView retweetedText;
 	}
 }

@@ -24,13 +24,13 @@ import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Status;
 
-public class WeiboListAdapter extends BaseAdapter {
+public class WeiboAdapter extends BaseAdapter {
 	private List<Status> statusList;
 	private int imageWidth;
 	private Context context;
 	private Holder holder;
 
-	public WeiboListAdapter(Context context, List<Status> statusList) {
+	public WeiboAdapter(Context context, List<Status> statusList) {
 		super();
 		this.context = context;
 		this.statusList = statusList;

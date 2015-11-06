@@ -10,6 +10,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.openapi.CommentsAPI;
+import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 import com.sina.weibo.sdk.openapi.models.Status;
 
 public class MyApplication extends Application {
@@ -18,6 +20,8 @@ public class MyApplication extends Application {
 	private static Status status;
 	private static DisplayImageOptions options;
 	private static Oauth2AccessToken mAccessToken;
+	private static CommentsAPI mCommentsAPI;
+	private static StatusesAPI mStatusesAPI;
 	private static int imageWidth;
 
 	@Override
@@ -26,6 +30,11 @@ public class MyApplication extends Application {
 
 		configuration = ImageLoaderConfiguration.createDefault(this);
 		ImageLoader.getInstance().init(configuration);
+
+		mCommentsAPI = new CommentsAPI(this, Constants.APP_KEY,
+				MyApplication.getmAccessToken());
+		mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY,
+				MyApplication.getmAccessToken());
 
 		options = new DisplayImageOptions.Builder()
 				.showImageOnLoading(R.drawable.blank)
@@ -57,6 +66,14 @@ public class MyApplication extends Application {
 
 	public static int getImageWidth() {
 		return imageWidth;
+	}
+
+	public static CommentsAPI getCommentsAPI() {
+		return mCommentsAPI;
+	}
+
+	public static StatusesAPI getStatusesAPI() {
+		return mStatusesAPI;
 	}
 
 	public static void setStatus(Status status) {

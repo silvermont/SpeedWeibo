@@ -17,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.adapter.CommentListAdapter;
-import com.lzy.speedweibo.adapter.RepostListAdapter;
+import com.lzy.speedweibo.adapter.CommentAdapter;
+import com.lzy.speedweibo.adapter.RepostAdapter;
 import com.lzy.speedweibo.core.Constants;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
@@ -79,8 +79,8 @@ public class WeiboActivity extends BaseActivity {
 	private RequestListener mListener;
 	private List<Comment> commentList;
 	private List<Repost> repostList;
-	private CommentListAdapter commentAdapter;
-	private RepostListAdapter repostAdapter;
+	private CommentAdapter commentAdapter;
+	private RepostAdapter repostAdapter;
 	private long maxCommentID;
 	private long maxRepostID;
 	private boolean isShowComments = true;
@@ -154,14 +154,12 @@ public class WeiboActivity extends BaseActivity {
 
 		status = MyApplication.getStatus();
 		imageWidth = MyApplication.getImageWidth();
-		mCommentsAPI = new CommentsAPI(this, Constants.APP_KEY,
-				MyApplication.getmAccessToken());
-		mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY,
-				MyApplication.getmAccessToken());
+		mCommentsAPI = MyApplication.getCommentsAPI();
+		mStatusesAPI = MyApplication.getStatusesAPI();
 		commentList = new ArrayList<Comment>();
 		repostList = new ArrayList<Repost>();
-		commentAdapter = new CommentListAdapter(this);
-		repostAdapter = new RepostListAdapter(this);
+		commentAdapter = new CommentAdapter(this);
+		repostAdapter = new RepostAdapter(this);
 
 		mListener = new RequestListener() {
 			@Override

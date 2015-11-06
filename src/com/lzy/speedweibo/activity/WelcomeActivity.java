@@ -1,14 +1,9 @@
 package com.lzy.speedweibo.activity;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
