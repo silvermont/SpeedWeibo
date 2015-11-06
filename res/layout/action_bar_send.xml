@@ -27,4 +27,19 @@
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
+    <RelativeLayout
+        android:id="@+id/send"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/selector_action_bar_button"
+        android:clickable="true" >
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_action_send" />
+    </RelativeLayout>
+
 </RelativeLayout>

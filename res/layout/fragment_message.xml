@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@android:color/white" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="179dp"
+        android:layout_height="28dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp" >
+
+        <TextView
+            android:id="@+id/atMe"
+            android:layout_width="90dp"
+            android:layout_height="28dp"
+            android:background="@drawable/button_at_me_press"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="at我的"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/commentToMe"
+            android:layout_width="90dp"
+            android:layout_height="28dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_comment_to_me_normal"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="评论"
+            android:textColor="@color/text_black"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="fragment_message" />
+        android:layout_below="@+id/relativeLayout"
+        android:layout_marginTop="3dp"
+        android:scrollbars="none" >
+    </ListView>
 
-</LinearLayout>
+</RelativeLayout>

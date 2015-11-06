@@ -172,7 +172,8 @@ public class WeiboActivity extends BaseActivity {
 						if (comments != null && comments.total_number > 0) {
 							handleComments(comments.commentList);
 						}
-					} else if (response.contains("reposts")) {
+					}
+					if (response.contains("reposts")) {
 						RepostList reposts = RepostList.parse(response);
 						if (reposts != null && reposts.total_number > 0) {
 							handleReposts(reposts.repostList);
@@ -408,6 +409,11 @@ public class WeiboActivity extends BaseActivity {
 			} else {
 				loadMore.setText("加载更多");
 			}
+		} else {
+			Intent intent = new Intent(WeiboActivity.this, EditActivity.class);
+			intent.putExtra("action", "转发");
+			intent.putExtra("id", status.id);
+			startActivity(intent);
 		}
 	}
 
@@ -427,6 +433,11 @@ public class WeiboActivity extends BaseActivity {
 			} else {
 				loadMore.setText("加载更多");
 			}
+		} else {
+			Intent intent = new Intent(WeiboActivity.this, EditActivity.class);
+			intent.putExtra("action", "评论");
+			intent.putExtra("id", status.id);
+			startActivity(intent);
 		}
 	}
 }
