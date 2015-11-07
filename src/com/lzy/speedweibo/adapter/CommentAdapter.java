@@ -69,15 +69,15 @@ public class CommentAdapter extends BaseAdapter {
 		}
 
 		holder.text.setMText(commentList.get(position).text);
+		holder.text.setTextColor(context.getResources().getColor(
+				R.color.text_black));
+		holder.text.invalidate();
+
 		holder.userName.setText(commentList.get(position).user.screen_name);
 		holder.source
 				.setText(Utils.transformSource(commentList.get(position).source));
 		holder.time
 				.setText(Utils.transformTime(commentList.get(position).created_at));
-
-		holder.text.setTextColor(context.getResources().getColor(
-				R.color.text_black));
-		holder.text.invalidate();
 
 		MyApplication.asyncLoadImage(
 				commentList.get(position).user.profile_image_url,

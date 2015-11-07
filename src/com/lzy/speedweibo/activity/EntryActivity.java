@@ -31,13 +31,7 @@ import com.lzy.speedweibo.fragment.MessageFragment;
 
 public class EntryActivity extends FragmentActivity {
 
-	// private ViewPager viewPager;
-	// private HomeFragment homeFragment;
-	// private MessageFragment messageFragment;
-	// private MeFragment meFragment;
-	// private ArrayList<Fragment> fragmentList;
 	private long pressTime = 0;
-	// private LinearLayout topBar;
 	private TextView homeTv, messageTv, meTv;
 	private View homeLine, messageLine, meLine;
 

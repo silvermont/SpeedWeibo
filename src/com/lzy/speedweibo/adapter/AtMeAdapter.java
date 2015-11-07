@@ -86,6 +86,7 @@ public class AtMeAdapter extends BaseAdapter {
 
 		if (null != statusList.get(position).retweeted_status) {
 			holder.retweetedLayout.setVisibility(View.VISIBLE);
+			
 			holder.retweetedText
 					.setMText(statusList.get(position).retweeted_status.user.screen_name
 							+ "："
@@ -95,7 +96,6 @@ public class AtMeAdapter extends BaseAdapter {
 			holder.retweetedText.invalidate();
 		} else {
 			holder.retweetedLayout.setVisibility(View.GONE);
-
 		}
 
 		MyApplication.asyncLoadImage(

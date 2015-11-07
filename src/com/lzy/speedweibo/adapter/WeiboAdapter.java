@@ -134,6 +134,10 @@ public class WeiboAdapter extends BaseAdapter {
 		}
 
 		holder.text.setMText(statusList.get(position).text);
+		holder.text.setTextColor(context.getResources().getColor(
+				R.color.text_black));
+		holder.text.invalidate();
+
 		holder.userName.setText(statusList.get(position).user.screen_name);
 		holder.source
 				.setText(Utils.transformSource(statusList.get(position).source));
@@ -143,15 +147,11 @@ public class WeiboAdapter extends BaseAdapter {
 				statusList.get(position).reposts_count,
 				statusList.get(position).comments_count));
 
-		holder.text.setTextColor(context.getResources().getColor(
-				R.color.text_black));
-		holder.text.invalidate();
-
 		MyApplication.asyncLoadImage(
 				statusList.get(position).user.profile_image_url,
 				holder.userHead);
 
-		if (statusList.get(position).pic_urls.size() == 0) {
+		if (null == statusList.get(position).pic_urls) {
 			holder.picture.setVisibility(View.GONE);
 			for (int i = 0; i < 9; i++) {
 				holder.pictureArray[i].setVisibility(View.GONE);
@@ -185,7 +185,52 @@ public class WeiboAdapter extends BaseAdapter {
 			}
 		}
 
-		if (statusList.get(position).retweeted_status.id.equals("0")) {
+		holder.wholeLayout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				MyApplication.setStatus(statusList.get(position));
+				Intent intent = new Intent(context, WeiboActivity.class);
+				context.startActivity(intent);
+			}
+		});
+
+		holder.wholeLayout.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				builder.setItems(new String[] { "转发", "评论" },
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Intent intent = new Intent(context,
+										EditActivity.class);
+								intent.putExtra("id",
+										statusList.get(position).id);
+								switch (which) {
+								case 0:
+									intent.putExtra("action", "转发");
+									context.startActivity(intent);
+									break;
+								case 1:
+									intent.putExtra("action", "评论");
+									context.startActivity(intent);
+									break;
+								default:
+									break;
+								}
+							}
+
+						});
+				builder.show();
+				return true;
+			}
+		});
+
+		if (null == statusList.get(position).retweeted_status) {
 			holder.retweetedLayout.setVisibility(View.GONE);
 		} else {
 			holder.retweetedLayout.setVisibility(View.VISIBLE);
@@ -251,7 +296,8 @@ public class WeiboAdapter extends BaseAdapter {
 			holder.retweetedRepostsCount.setText(Utils.transformRepostsCount(
 					statusList.get(position).retweeted_status.reposts_count,
 					statusList.get(position).retweeted_status.comments_count));
-			if (statusList.get(position).retweeted_status.pic_urls.size() == 0) {
+
+			if (null == statusList.get(position).retweeted_status.pic_urls) {
 				holder.retweetedPicture.setVisibility(View.GONE);
 				for (int i = 0; i < 9; i++) {
 					holder.retweetedPictureArray[i].setVisibility(View.GONE);
@@ -292,51 +338,6 @@ public class WeiboAdapter extends BaseAdapter {
 				}
 			}
 		}
-
-		holder.wholeLayout.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				MyApplication.setStatus(statusList.get(position));
-				Intent intent = new Intent(context, WeiboActivity.class);
-				context.startActivity(intent);
-			}
-		});
-
-		holder.wholeLayout.setOnLongClickListener(new OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(context);
-				builder.setItems(new String[] { "转发", "评论" },
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								Intent intent = new Intent(context,
-										EditActivity.class);
-								intent.putExtra("id",
-										statusList.get(position).id);
-								switch (which) {
-								case 0:
-									intent.putExtra("action", "转发");
-									context.startActivity(intent);
-									break;
-								case 1:
-									intent.putExtra("action", "评论");
-									context.startActivity(intent);
-									break;
-								default:
-									break;
-								}
-							}
-
-						});
-				builder.show();
-				return true;
-			}
-		});
 
 		return convertView;
 	}

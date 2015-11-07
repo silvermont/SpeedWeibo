@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.adapter.CommentAdapter;
 import com.lzy.speedweibo.adapter.RepostAdapter;
-import com.lzy.speedweibo.core.Constants;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
@@ -154,8 +153,8 @@ public class WeiboActivity extends BaseActivity {
 
 		status = MyApplication.getStatus();
 		imageWidth = MyApplication.getImageWidth();
-		mCommentsAPI = MyApplication.getCommentsAPI();
-		mStatusesAPI = MyApplication.getStatusesAPI();
+		mCommentsAPI = MyApplication.getCommentsAPI(this);
+		mStatusesAPI = MyApplication.getStatusesAPI(this);
 		commentList = new ArrayList<Comment>();
 		repostList = new ArrayList<Repost>();
 		commentAdapter = new CommentAdapter(this);
@@ -165,13 +164,13 @@ public class WeiboActivity extends BaseActivity {
 			@Override
 			public void onComplete(String response) {
 				if (!TextUtils.isEmpty(response)) {
-					if (response.contains("comments")) {
+					if (response.substring(2).startsWith("comments")) {
 						CommentList comments = CommentList.parse(response);
 						if (comments != null && comments.total_number > 0) {
 							handleComments(comments.commentList);
 						}
 					}
-					if (response.contains("reposts")) {
+					if (response.substring(2).startsWith("reposts")) {
 						RepostList reposts = RepostList.parse(response);
 						if (reposts != null && reposts.total_number > 0) {
 							handleReposts(reposts.repostList);
@@ -198,10 +197,10 @@ public class WeiboActivity extends BaseActivity {
 			public void onClick(View v) {
 				if (isShowComments) {
 					mCommentsAPI.show(Long.parseLong(status.id), 0,
-							maxCommentID, 5, 1, 0, mListener);
+							maxCommentID, 50, 1, 0, mListener);
 				} else {
 					mStatusesAPI.repostTimeline(Long.parseLong(status.id), 0,
-							maxRepostID, 5, 1, 0, mListener);
+							maxRepostID, 50, 1, 0, mListener);
 				}
 			}
 		});
@@ -209,18 +208,18 @@ public class WeiboActivity extends BaseActivity {
 		initActionBar();
 
 		text.setMText(status.text);
+		text.setTextColor(getResources().getColor(R.color.text_black));
+		text.invalidate();
+
 		userName.setText(status.user.screen_name);
 		source.setText(Utils.transformSource(status.source));
 		time.setText(Utils.transformTime(status.created_at));
 		retweetedTv.setText("转发 " + status.reposts_count);
 		commentTv.setText("评论 " + status.comments_count);
 
-		text.setTextColor(getResources().getColor(R.color.text_black));
-		text.invalidate();
-
 		MyApplication.asyncLoadImage(status.user.profile_image_url, userHead);
 
-		if (status.pic_urls.size() == 0) {
+		if (null == status.pic_urls) {
 			picture.setVisibility(View.GONE);
 			for (int i = 0; i < 9; i++) {
 				pictureArray[i].setVisibility(View.GONE);
@@ -252,10 +251,11 @@ public class WeiboActivity extends BaseActivity {
 			}
 		}
 
-		if (status.retweeted_status.id.equals("0")) {
+		if (null == status.retweeted_status) {
 			retweetedLayout.setVisibility(View.GONE);
 		} else {
 			retweetedLayout.setVisibility(View.VISIBLE);
+
 			retweetedLayout.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -278,7 +278,7 @@ public class WeiboActivity extends BaseActivity {
 					status.retweeted_status.reposts_count,
 					status.retweeted_status.comments_count));
 
-			if (status.retweeted_status.pic_urls.size() == 0) {
+			if (null == status.retweeted_status.pic_urls) {
 				retweetedPicture.setVisibility(View.GONE);
 				for (int i = 0; i < 9; i++) {
 					retweetedPictureArray[i].setVisibility(View.GONE);
@@ -338,7 +338,7 @@ public class WeiboActivity extends BaseActivity {
 	}
 
 	private void handleComments(List<Comment> list) {
-		boolean isNewlyAdded = false;
+		boolean isDataChanged = false;
 
 		if (commentList.size() == 0) {
 			commentList = list;
@@ -346,10 +346,10 @@ public class WeiboActivity extends BaseActivity {
 			for (int i = 0; i < list.size(); i++) {
 				if (Long.valueOf(list.get(i).id) < maxCommentID) {
 					commentList.add(list.get(i));
-					isNewlyAdded = true;
+					isDataChanged = true;
 				}
 			}
-			if (!isNewlyAdded) {
+			if (!isDataChanged) {
 				Toast.makeText(this, "没有更多评论", Toast.LENGTH_SHORT).show();
 				return;
 			}
@@ -366,7 +366,7 @@ public class WeiboActivity extends BaseActivity {
 	}
 
 	private void handleReposts(List<Repost> responseList) {
-		boolean isNewlyAdded = false;
+		boolean isDataChanged = false;
 
 		if (repostList.size() == 0) {
 			repostList = responseList;
@@ -374,10 +374,10 @@ public class WeiboActivity extends BaseActivity {
 			for (int i = 0; i < responseList.size(); i++) {
 				if (Long.valueOf(responseList.get(i).id) < maxRepostID) {
 					repostList.add(responseList.get(i));
-					isNewlyAdded = true;
+					isDataChanged = true;
 				}
 			}
-			if (!isNewlyAdded) {
+			if (!isDataChanged) {
 				Toast.makeText(this, "没有更多转发", Toast.LENGTH_SHORT).show();
 				return;
 			}
@@ -395,8 +395,9 @@ public class WeiboActivity extends BaseActivity {
 	public void showReposts(View view) {
 		if (isShowComments) {
 			retweetedTv.setTextColor(getResources().getColor(R.color.blue));
-			commentTv.setTextColor(getResources().getColor(R.color.text_gray));
 			retweetedLine.setVisibility(View.VISIBLE);
+
+			commentTv.setTextColor(getResources().getColor(R.color.text_gray));
 			commentLine.setVisibility(View.GONE);
 
 			listView.setAdapter(repostAdapter);
@@ -418,9 +419,10 @@ public class WeiboActivity extends BaseActivity {
 	public void showComments(View view) {
 		if (!isShowComments) {
 			commentTv.setTextColor(getResources().getColor(R.color.blue));
+			commentLine.setVisibility(View.VISIBLE);
+
 			retweetedTv
 					.setTextColor(getResources().getColor(R.color.text_gray));
-			commentLine.setVisibility(View.VISIBLE);
 			retweetedLine.setVisibility(View.GONE);
 
 			listView.setAdapter(commentAdapter);

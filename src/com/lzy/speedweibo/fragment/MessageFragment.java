@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.adapter.AtMeAdapter;
 import com.lzy.speedweibo.adapter.CommentToMeAdapter;
-import com.lzy.speedweibo.core.Constants;
 import com.lzy.speedweibo.core.MyApplication;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
@@ -33,7 +32,6 @@ import com.sina.weibo.sdk.openapi.models.StatusList;
 public class MessageFragment extends Fragment {
 	private TextView atMe;
 	private TextView commentToMe;
-	private boolean isShowAtMe = true;
 	private ListView listView;
 	private RelativeLayout footerView;
 	private TextView loadMore;
@@ -59,8 +57,8 @@ public class MessageFragment extends Fragment {
 				R.layout.view_footer, null);
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
 
-		mCommentsAPI = MyApplication.getCommentsAPI();
-		mStatusesAPI = MyApplication.getStatusesAPI();
+		mCommentsAPI = MyApplication.getCommentsAPI(getActivity());
+		mStatusesAPI = MyApplication.getStatusesAPI(getActivity());
 
 		commentAdapter = new CommentToMeAdapter(getActivity());
 		atMeAdapter = new AtMeAdapter(getActivity());
@@ -92,8 +90,7 @@ public class MessageFragment extends Fragment {
 			}
 		};
 
-		listView.setAdapter(commentAdapter);
-		loadMore.setText("暂时没有转发");
+		loadMore.setText("暂时没有评论");
 		listView.addFooterView(footerView);
 		listView.setAdapter(commentAdapter);
 
@@ -102,10 +99,10 @@ public class MessageFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				if (isShowComments) {
-					mCommentsAPI.toME(0, maxCommentID, 5, 1, 0, 0, mListener);
+					mCommentsAPI.toME(0, maxCommentID, 50, 1, 0, 0, mListener);
 				} else {
-					mStatusesAPI.mentions(0, maxStatusID, 5, 1, 0, 0, 0, false,
-							mListener);
+					mStatusesAPI.mentions(0, maxStatusID, 50, 1, 0, 0, 0,
+							false, mListener);
 				}
 			}
 		});
@@ -114,13 +111,15 @@ public class MessageFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				if (!isShowAtMe) {
-					isShowAtMe = true;
+				if (isShowComments) {
+					isShowComments = false;
+
 					atMe.setTextColor(Color.WHITE);
-					commentToMe.setTextColor(getResources().getColor(
-							R.color.text_black));
 					atMe.setBackground(getResources().getDrawable(
 							R.drawable.button_at_me_press));
+
+					commentToMe.setTextColor(getResources().getColor(
+							R.color.text_black));
 					commentToMe.setBackground(getResources().getDrawable(
 							R.drawable.button_comment_to_me_normal));
 
@@ -139,13 +138,15 @@ public class MessageFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				if (isShowAtMe) {
-					isShowAtMe = false;
+				if (!isShowComments) {
+					isShowComments = true;
+
 					atMe.setTextColor(getResources().getColor(
 							R.color.text_black));
-					commentToMe.setTextColor(Color.WHITE);
 					atMe.setBackground(getResources().getDrawable(
 							R.drawable.button_at_me_normal));
+
+					commentToMe.setTextColor(Color.WHITE);
 					commentToMe.setBackground(getResources().getDrawable(
 							R.drawable.button_comment_to_me_press));
 
@@ -167,7 +168,7 @@ public class MessageFragment extends Fragment {
 	}
 
 	private void handleComments(List<Comment> list) {
-		boolean isNewlyAdded = false;
+		boolean isDataChanged = false;
 
 		if (commentList.size() == 0) {
 			commentList = list;
@@ -175,10 +176,10 @@ public class MessageFragment extends Fragment {
 			for (int i = 0; i < list.size(); i++) {
 				if (Long.valueOf(list.get(i).id) < maxCommentID) {
 					commentList.add(list.get(i));
-					isNewlyAdded = true;
+					isDataChanged = true;
 				}
 			}
-			if (!isNewlyAdded) {
+			if (!isDataChanged) {
 				Toast.makeText(getActivity(), "没有更多评论", Toast.LENGTH_SHORT)
 						.show();
 				return;
@@ -196,17 +197,18 @@ public class MessageFragment extends Fragment {
 	}
 
 	private void handleStatuses(List<Status> list) {
-		boolean isNewlyAdded = false;
+		boolean isDataChanged = false;
+
 		if (statusList.size() == 0) {
 			statusList = list;
 		} else {
 			for (int i = 0; i < list.size(); i++) {
 				if (Long.valueOf(list.get(i).id) < maxStatusID) {
 					statusList.add(list.get(i));
-					isNewlyAdded = true;
+					isDataChanged = true;
 				}
 			}
-			if (!isNewlyAdded) {
+			if (!isDataChanged) {
 				Toast.makeText(getActivity(), "没有更多转发", Toast.LENGTH_SHORT)
 						.show();
 				return;

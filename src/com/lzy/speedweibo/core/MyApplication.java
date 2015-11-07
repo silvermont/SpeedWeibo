@@ -1,6 +1,7 @@
 package com.lzy.speedweibo.core;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
@@ -30,11 +31,6 @@ public class MyApplication extends Application {
 
 		configuration = ImageLoaderConfiguration.createDefault(this);
 		ImageLoader.getInstance().init(configuration);
-
-		mCommentsAPI = new CommentsAPI(this, Constants.APP_KEY,
-				MyApplication.getmAccessToken());
-		mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY,
-				MyApplication.getmAccessToken());
 
 		options = new DisplayImageOptions.Builder()
 				.showImageOnLoading(R.drawable.blank)
@@ -68,11 +64,19 @@ public class MyApplication extends Application {
 		return imageWidth;
 	}
 
-	public static CommentsAPI getCommentsAPI() {
+	public static CommentsAPI getCommentsAPI(Context context) {
+		if (mCommentsAPI == null) {
+			mCommentsAPI = new CommentsAPI(context, Constants.APP_KEY,
+					MyApplication.getmAccessToken());
+		}
 		return mCommentsAPI;
 	}
 
-	public static StatusesAPI getStatusesAPI() {
+	public static StatusesAPI getStatusesAPI(Context context) {
+		if (mStatusesAPI == null) {
+			mStatusesAPI = new StatusesAPI(context, Constants.APP_KEY,
+					MyApplication.getmAccessToken());
+		}
 		return mStatusesAPI;
 	}
 

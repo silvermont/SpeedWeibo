@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.core.Constants;
 import com.lzy.speedweibo.core.MyApplication;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
@@ -33,14 +32,14 @@ public class EditActivity extends BaseActivity {
 
 		text = (EditText) findViewById(R.id.text);
 
-		mCommentsAPI = MyApplication.getCommentsAPI();
-		mStatusesAPI = MyApplication.getStatusesAPI();
+		mCommentsAPI = MyApplication.getCommentsAPI(this);
+		mStatusesAPI = MyApplication.getStatusesAPI(this);
 		mListener = new RequestListener() {
 
 			@Override
 			public void onWeiboException(WeiboException arg0) {
 				arg0.printStackTrace();
-				Toast.makeText(EditActivity.this, "操作失敗", Toast.LENGTH_SHORT)
+				Toast.makeText(EditActivity.this, "操作失败", Toast.LENGTH_SHORT)
 						.show();
 			}
 

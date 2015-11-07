@@ -69,15 +69,15 @@ public class RepostAdapter extends BaseAdapter {
 		}
 
 		holder.text.setMText(repostList.get(position).text);
+		holder.text.setTextColor(context.getResources().getColor(
+				R.color.text_black));
+		holder.text.invalidate();
+
 		holder.userName.setText(repostList.get(position).user.screen_name);
 		holder.source
 				.setText(Utils.transformSource(repostList.get(position).source));
 		holder.time
 				.setText(Utils.transformTime(repostList.get(position).created_at));
-
-		holder.text.setTextColor(context.getResources().getColor(
-				R.color.text_black));
-		holder.text.invalidate();
 
 		MyApplication.asyncLoadImage(
 				repostList.get(position).user.profile_image_url,

@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.adapter.WeiboAdapter;
-import com.lzy.speedweibo.core.Constants;
 import com.lzy.speedweibo.core.MyApplication;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
@@ -48,12 +47,9 @@ public class HomeFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		statusList = new ArrayList<Status>();
-		lvAdapter = new com.lzy.speedweibo.adapter.WeiboAdapter(
-				getActivity(), statusList);
-
-		// Oauth2AccessToken mAccessToken = AccessTokenKeFeper
-		// .readAccessToken(getActivity());
-		mStatusesAPI = MyApplication.getStatusesAPI();
+		lvAdapter = new com.lzy.speedweibo.adapter.WeiboAdapter(getActivity(),
+				statusList);
+		mStatusesAPI = MyApplication.getStatusesAPI(getActivity());
 		mListener = new RequestListener() {
 
 			@Override
@@ -70,7 +66,7 @@ public class HomeFragment extends Fragment {
 								.parse(response);
 						if (responseStatuses != null
 								&& responseStatuses.total_number > 0) {
-							handleResponseStatus(responseStatuses.statusList);
+							handleStatuses(responseStatuses.statusList);
 						}
 					}
 				}
@@ -158,27 +154,27 @@ public class HomeFragment extends Fragment {
 	 * 
 	 * @param statuses
 	 */
-	private void handleResponseStatus(ArrayList<Status> newStatusList) {
-		int newlyAddedCount = 0;
+	private void handleStatuses(ArrayList<Status> list) {
+		int comingNumber = 0;
 		if (isRequestLatestWeibo) {
-			statusList = newStatusList;
+			statusList = list;
 			for (int i = 0; i < statusList.size(); i++) {
 				if (Long.parseLong(statusList.get(i).id) > maxWeiboID) {
-					newlyAddedCount++;
+					comingNumber++;
 				} else {
 					break;
 				}
 			}
 
 		} else {
-			newlyAddedCount = newStatusList.size() - 1;
-			for (int i = 1; i < newStatusList.size(); i++) {
-				statusList.add(newStatusList.get(i));
+			comingNumber = list.size() - 1;
+			for (int i = 1; i < list.size(); i++) {
+				statusList.add(list.get(i));
 			}
 		}
 
-		if (newlyAddedCount > 0) {
-			Toast.makeText(getActivity(), "来了" + newlyAddedCount + "条新微博",
+		if (comingNumber > 0) {
+			Toast.makeText(getActivity(), "来了" + comingNumber + "条新微博",
 					Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(getActivity(), "没有新微博", Toast.LENGTH_SHORT).show();
