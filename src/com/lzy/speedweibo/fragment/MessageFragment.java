@@ -92,7 +92,7 @@ public class MessageFragment extends Fragment {
 			}
 		};
 
-		listView.setAdapter(atMeAdapter);
+		listView.setAdapter(commentAdapter);
 		loadMore.setText("暂时没有转发");
 		listView.addFooterView(footerView);
 		listView.setAdapter(commentAdapter);
