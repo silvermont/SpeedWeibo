@@ -3,7 +3,10 @@ package com.lzy.speedweibo.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
+import com.lzy.speedweibo.activity.EditActivity;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
@@ -87,7 +91,41 @@ public class CommentAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				builder.setItems(new String[] { "回复", "转发" },
+						new DialogInterface.OnClickListener() {
 
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Intent intent = new Intent(context,
+										EditActivity.class);
+								intent.putExtra("id",
+										commentList.get(position).id);
+								intent.putExtra("statusID",
+										commentList.get(position).status.id);
+								switch (which) {
+								case 0:
+									intent.putExtra("action", "回复评论");
+									context.startActivity(intent);
+									break;
+								case 1:
+									intent.putExtra("action", "转发评论");
+									intent.putExtra(
+											"commentText",
+											" //@"
+													+ commentList.get(position).user.screen_name
+													+ "："
+													+ commentList.get(position).text);
+									context.startActivity(intent);
+									break;
+								default:
+									break;
+								}
+							}
+
+						});
+				builder.show();
 			}
 		});
 
