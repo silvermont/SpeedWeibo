@@ -412,6 +412,10 @@ public class WeiboActivity extends BaseActivity {
 			Intent intent = new Intent(WeiboActivity.this, EditActivity.class);
 			intent.putExtra("action", "转发");
 			intent.putExtra("id", status.id);
+			if (null != status.retweeted_status) {
+				intent.putExtra("text", "//@" + status.user.screen_name + "："
+						+ status.text);
+			}
 			startActivity(intent);
 		}
 	}

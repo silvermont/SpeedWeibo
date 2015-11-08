@@ -23,7 +23,7 @@ public class EditActivity extends BaseActivity {
 	private StatusesAPI mStatusesAPI;
 	private long id;
 	private long statusID;
-	private String commentText;
+	private String extraContent;
 	private String action;
 	private RequestListener mListener;
 
@@ -62,8 +62,11 @@ public class EditActivity extends BaseActivity {
 			statusID = Long.parseLong(intent.getStringExtra("statusID"));
 		}
 		if (action.equals("转发评论")) {
-			commentText = intent.getStringExtra("commentText");
+			extraContent = intent.getStringExtra("text");
 			statusID = Long.parseLong(intent.getStringExtra("statusID"));
+		}
+		if (action.equals("转发")) {
+			extraContent = intent.getStringExtra("text");
 		}
 
 		initActionBar();
@@ -103,14 +106,20 @@ public class EditActivity extends BaseActivity {
 				if (action.equals("评论")) {
 					mCommentsAPI.create(content, id, false, mListener);
 				} else if (action.equals("转发")) {
-					mStatusesAPI.repost(id, content, 0, mListener);
+					if (null != extraContent) {
+						mStatusesAPI.repost(id, content + extraContent, 0,
+								mListener);
+					} else {
+						mStatusesAPI.repost(id, content, 0, mListener);
+					}
+
 				} else if (action.equals("发表新微博")) {
 					mStatusesAPI.update(content, "0", "0", mListener);
 				} else if (action.equals("回复评论")) {
 					mCommentsAPI.reply(id, statusID, content, false, false,
 							mListener);
 				} else if (action.equals("转发评论")) {
-					mStatusesAPI.repost(statusID, content + commentText, 0,
+					mStatusesAPI.repost(statusID, content + extraContent, 0,
 							mListener);
 				}
 			}

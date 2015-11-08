@@ -112,8 +112,8 @@ public class CommentAdapter extends BaseAdapter {
 								case 1:
 									intent.putExtra("action", "转发评论");
 									intent.putExtra(
-											"commentText",
-											" //@"
+											"text",
+											"//@"
 													+ commentList.get(position).user.screen_name
 													+ "："
 													+ commentList.get(position).text);

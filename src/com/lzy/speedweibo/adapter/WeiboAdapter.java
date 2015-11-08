@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -212,6 +213,16 @@ public class WeiboAdapter extends BaseAdapter {
 										statusList.get(position).id);
 								switch (which) {
 								case 0:
+									if (null != statusList.get(position).retweeted_status) {
+										intent.putExtra(
+												"text",
+												"//@"
+														+ statusList
+																.get(position).user.screen_name
+														+ "："
+														+ statusList
+																.get(position).text);
+									}
 									intent.putExtra("action", "转发");
 									context.startActivity(intent);
 									break;
@@ -264,6 +275,7 @@ public class WeiboAdapter extends BaseAdapter {
 											intent.putExtra(
 													"id",
 													statusList.get(position).retweeted_status.id);
+
 											switch (which) {
 											case 0:
 												intent.putExtra("action", "转发");
