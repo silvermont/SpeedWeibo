@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.activity.EditActivity;
+import com.lzy.speedweibo.activity.WeiboActivity;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
@@ -108,20 +109,34 @@ public class CommentToMeAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
-				builder.setItems(new String[] { "回复" },
+				builder.setItems(new String[] { "回复", "查看原微博" },
 						new DialogInterface.OnClickListener() {
 
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								Intent intent = new Intent(context,
-										EditActivity.class);
-								intent.putExtra("id",
-										commentList.get(position).id);
-								intent.putExtra("statusID",
-										commentList.get(position).status.id);
-								intent.putExtra("action", "回复评论");
-								context.startActivity(intent);
+								switch (which) {
+								case 0:
+									Intent intent = new Intent(context,
+											EditActivity.class);
+									intent.putExtra("id",
+											commentList.get(position).id);
+									intent.putExtra("statusID",
+											commentList.get(position).status.id);
+									intent.putExtra("action", "回复评论");
+									context.startActivity(intent);
+									break;
+								case 1:
+									Intent newIntent = new Intent(context,
+											WeiboActivity.class);
+									MyApplication.setStatus(commentList
+											.get(position).status);
+									context.startActivity(newIntent);
+									break;
+								default:
+									break;
+								}
+
 							}
 						});
 				builder.show();

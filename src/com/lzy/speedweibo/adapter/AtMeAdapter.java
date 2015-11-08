@@ -3,7 +3,10 @@ package com.lzy.speedweibo.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
+import com.lzy.speedweibo.activity.EditActivity;
+import com.lzy.speedweibo.activity.WeiboActivity;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
 import com.lzy.speedweibo.core.Utils;
@@ -86,7 +91,7 @@ public class AtMeAdapter extends BaseAdapter {
 
 		if (null != statusList.get(position).retweeted_status) {
 			holder.retweetedLayout.setVisibility(View.VISIBLE);
-			
+
 			holder.retweetedText
 					.setMText(statusList.get(position).retweeted_status.user.screen_name
 							+ "："
@@ -106,7 +111,20 @@ public class AtMeAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-
+				// AlertDialog.Builder builder = new
+				// AlertDialog.Builder(context);
+				// builder.setItems(new String[] { "查看原微博" },
+				// new DialogInterface.OnClickListener() {
+				//
+				// @Override
+				// public void onClick(DialogInterface dialog,
+				// int which) {
+				Intent intent = new Intent(context, WeiboActivity.class);
+				MyApplication.setStatus(statusList.get(position));
+				context.startActivity(intent);
+				// }
+				// });
+				// builder.show();
 			}
 		});
 
