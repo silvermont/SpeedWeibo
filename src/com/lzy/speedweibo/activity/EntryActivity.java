@@ -69,38 +69,36 @@ public class EntryActivity extends FragmentActivity {
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.action_bar_entry);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-
-		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()
-				.findViewById(R.id.operate);
-		operate.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						EntryActivity.this);
-				builder.setItems(new String[] { "设置" },
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								switch (which) {
-								case 0:
-									Intent intent = new Intent(
-											EntryActivity.this,
-											SettingActivity.class);
-									startActivity(intent);
-									break;
-
-								default:
-									break;
-								}
-							}
-						});
-				builder.show();
-			}
-		});
-
+		// RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()
+		// .findViewById(R.id.operate);
+		// operate.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// AlertDialog.Builder builder = new AlertDialog.Builder(
+		// EntryActivity.this);
+		// builder.setItems(new String[] { "设置" },
+		// new DialogInterface.OnClickListener() {
+		//
+		// @Override
+		// public void onClick(DialogInterface dialog,
+		// int which) {
+		// switch (which) {
+		// case 0:
+		// Intent intent = new Intent(
+		// EntryActivity.this,
+		// SettingActivity.class);
+		// startActivity(intent);
+		// break;
+		//
+		// default:
+		// break;
+		// }
+		// }
+		// });
+		// builder.show();
+		// }
+		// });
 		RelativeLayout create = (RelativeLayout) actionBar.getCustomView()
 				.findViewById(R.id.create);
 		create.setOnClickListener(new OnClickListener() {
