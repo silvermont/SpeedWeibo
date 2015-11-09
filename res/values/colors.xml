@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="divider_gray">#E7E7E7</color>
-    <color name="retweeted_layout_gray">#F7F7F7</color>
+    <!-- 分割线 -->
+    <color name="divider_gray">#EAEAEA</color>
+    <!-- 转发布局背景 -->
+    <color name="repost_gray">#F7F7F7</color>
+    <!-- 来源及普通灰色文字 -->
     <color name="text_gray">#888888</color>
+    <!-- 转发文本 -->
+    <color name="text_black_light">#5F5F5F</color>
+    <!-- 用户名、微博文本及普通黑色文字 -->
     <color name="text_black">#333333</color>
+    <!-- 微博中的用户名 -->
+    <color name="text_blue">#5380B1</color>
     <color name="blue">#0089E4</color>
     <color name="light_blue">#5BBAFA</color>
 

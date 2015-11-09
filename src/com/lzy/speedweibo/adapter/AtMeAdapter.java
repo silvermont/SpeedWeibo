@@ -3,9 +3,7 @@ package com.lzy.speedweibo.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.activity.EditActivity;
 import com.lzy.speedweibo.activity.WeiboActivity;
 import com.lzy.speedweibo.core.MyApplication;
 import com.lzy.speedweibo.core.SmartTextView;
@@ -97,7 +94,7 @@ public class AtMeAdapter extends BaseAdapter {
 							+ "："
 							+ statusList.get(position).retweeted_status.text);
 			holder.retweetedText.setTextColor(context.getResources().getColor(
-					R.color.text_black));
+					R.color.text_black_light));
 			holder.retweetedText.invalidate();
 		} else {
 			holder.retweetedLayout.setVisibility(View.GONE);

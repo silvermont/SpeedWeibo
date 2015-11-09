@@ -69,7 +69,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="5dp"
-        android:background="@color/retweeted_layout_gray" >
+        android:background="@color/repost_gray" >
 
         <com.lzy.speedweibo.core.SmartTextView
             android:id="@+id/retweetedText"
@@ -78,7 +78,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="retweeted"
-            android:textColor="@color/text_black"
+            android:textColor="@color/text_black_light"
             android:textSize="16sp" />
     </RelativeLayout>
 

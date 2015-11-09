@@ -7,7 +7,6 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -272,7 +271,7 @@ public class WeiboActivity extends BaseActivity {
 					+ status.retweeted_status.user.screen_name + ":"
 					+ status.retweeted_status.text);
 			retweetedText.setTextColor(getResources().getColor(
-					R.color.text_black));
+					R.color.text_black_light));
 			retweetedText.invalidate();
 
 			retweetedRepostsCount.setText(Utils.transformRepostsCount(

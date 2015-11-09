@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -302,7 +301,7 @@ public class WeiboAdapter extends BaseAdapter {
 							+ ":"
 							+ statusList.get(position).retweeted_status.text);
 			holder.retweetedText.setTextColor(context.getResources().getColor(
-					R.color.text_black));
+					R.color.text_black_light));
 			holder.retweetedText.invalidate();
 
 			holder.retweetedRepostsCount.setText(Utils.transformRepostsCount(

@@ -97,7 +97,7 @@ public class CommentToMeAdapter extends BaseAdapter {
 					+ commentList.get(position).status.text);
 		}
 		holder.retweetedText.setTextColor(context.getResources().getColor(
-				R.color.text_black));
+				R.color.text_black_light));
 		holder.retweetedText.invalidate();
 
 		MyApplication.asyncLoadImage(
