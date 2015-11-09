@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.openapi.CommentsAPI;
+import com.sina.weibo.sdk.openapi.UsersAPI;
 import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 import com.sina.weibo.sdk.openapi.models.Status;
 
@@ -23,6 +24,7 @@ public class MyApplication extends Application {
 	private static Oauth2AccessToken mAccessToken;
 	private static CommentsAPI mCommentsAPI;
 	private static StatusesAPI mStatusesAPI;
+	private static UsersAPI mUsersAPI;
 	private static int imageWidth;
 
 	@Override
@@ -78,6 +80,14 @@ public class MyApplication extends Application {
 					MyApplication.getmAccessToken());
 		}
 		return mStatusesAPI;
+	}
+
+	public static UsersAPI getUsersAPI(Context context) {
+		if (mUsersAPI == null) {
+			mUsersAPI = new UsersAPI(context, Constants.APP_KEY,
+					MyApplication.getmAccessToken());
+		}
+		return mUsersAPI;
 	}
 
 	public static void setStatus(Status status) {

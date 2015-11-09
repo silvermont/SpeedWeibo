@@ -8,25 +8,26 @@
     <RelativeLayout
         android:id="@+id/user"
         android:layout_width="match_parent"
-        android:layout_height="70dp" >
+        android:layout_height="78dp"
+        android:clickable="true" >
 
         <ImageView
-            android:id="@+id/userHead"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/head"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:src="@drawable/head" />
 
         <TextView
-            android:id="@+id/userName"
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/userHead"
-            android:layout_marginLeft="12dp"
+            android:layout_alignTop="@+id/head"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="3dp"
-            android:layout_toRightOf="@+id/userHead"
-            android:text="laizhiyihdu"
+            android:layout_toRightOf="@+id/head"
+            android:text="name"
             android:textColor="@color/text_black"
             android:textSize="16sp" />
 
@@ -34,15 +35,14 @@
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/userHead"
-            android:layout_alignLeft="@+id/userName"
-            android:layout_marginBottom="4dp"
-            android:text="简介：暂无介绍"
+            android:layout_alignBottom="@+id/head"
+            android:layout_alignLeft="@+id/name"
+            android:layout_marginBottom="5dp"
+            android:text="description"
             android:textColor="@color/text_gray"
             android:textSize="12sp" />
 
         <ImageView
-            android:id="@+id/forward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -53,7 +53,102 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="4px"
+        android:layout_height="2px"
+        android:background="@color/divider_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/weibo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true" >
+
+            <TextView
+                android:id="@+id/weiboNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:text="0"
+                android:textColor="@color/text_black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="7dp"
+                android:text="微博"
+                android:textColor="@color/text_gray"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/follow"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true" >
+
+            <TextView
+                android:id="@+id/followNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:text="0"
+                android:textColor="@color/text_black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="7dp"
+                android:text="关注"
+                android:textColor="@color/text_gray"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/follower"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true" >
+
+            <TextView
+                android:id="@+id/followerNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:text="0"
+                android:textColor="@color/text_black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="7dp"
+                android:text="粉丝"
+                android:textColor="@color/text_gray"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
         android:background="@color/divider_gray" />
 
 </LinearLayout>
