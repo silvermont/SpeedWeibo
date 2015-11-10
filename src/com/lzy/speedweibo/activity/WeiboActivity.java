@@ -34,14 +34,17 @@ import com.sina.weibo.sdk.openapi.models.Status;
 
 public class WeiboActivity extends BaseActivity {
 	private Status status;
+	private RelativeLayout headLayout;
 	private RelativeLayout weiboLayout;
-	private ImageView userHead;
+	private ImageView head;
 	private ImageView picture;
-	private TextView userName;
+	private TextView name;
 	private SmartTextView text;
 	private TextView source;
 	private TextView time;
 	private SmartTextView retweetedText;
+	private RelativeLayout pictureLayout;
+	private RelativeLayout retweetedPictureLayout;
 	private ImageView picture1;
 	private ImageView picture2;
 	private ImageView picture3;
@@ -62,6 +65,7 @@ public class WeiboActivity extends BaseActivity {
 	private ImageView retweetedPicture9;
 	private ImageView[] pictureArray;
 	private ImageView[] retweetedPictureArray;
+	private TextView repostsCount;
 	private TextView retweetedTv;
 	private TextView commentTv;
 	private View retweetedLine;
@@ -93,23 +97,24 @@ public class WeiboActivity extends BaseActivity {
 				null);
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
 
-		weiboLayout = (RelativeLayout) View.inflate(this,
-				R.layout.layout_weibo_for_comment_activity, null);
-		userHead = (ImageView) weiboLayout.findViewById(R.id.userHead);
-		picture = (ImageView) weiboLayout.findViewById(R.id.picture);
-		userName = (TextView) weiboLayout.findViewById(R.id.userName);
-		text = (SmartTextView) weiboLayout.findViewById(R.id.text);
-		source = (TextView) weiboLayout.findViewById(R.id.source);
-		time = (TextView) weiboLayout.findViewById(R.id.time);
+		weiboLayout = (RelativeLayout) findViewById(R.id.weiboLayout);
+		headLayout = (RelativeLayout) weiboLayout.findViewById(R.id.headLayout);
+		head = (ImageView) headLayout.findViewById(R.id.head);
+		name = (TextView) headLayout.findViewById(R.id.name);
+		text = (SmartTextView) headLayout.findViewById(R.id.text);
+		source = (TextView) headLayout.findViewById(R.id.source);
+		time = (TextView) headLayout.findViewById(R.id.time);
 		retweetedText = (SmartTextView) weiboLayout
 				.findViewById(R.id.retweetedText);
 		retweetedLayout = (RelativeLayout) weiboLayout
 				.findViewById(R.id.retweetedLayout);
-		retweetedPicture = (ImageView) weiboLayout
-				.findViewById(R.id.retweetedPicture);
 		retweetedRepostsCount = (TextView) weiboLayout
 				.findViewById(R.id.retweetedRepostsCount);
-
+		pictureLayout = (RelativeLayout) weiboLayout
+				.findViewById(R.id.pictureLayout);
+		retweetedPictureLayout = (RelativeLayout) weiboLayout
+				.findViewById(R.id.retweetedPictureLayout);
+		picture = (ImageView) weiboLayout.findViewById(R.id.picture);
 		picture1 = (ImageView) weiboLayout.findViewById(R.id.picture1);
 		picture2 = (ImageView) weiboLayout.findViewById(R.id.picture2);
 		picture3 = (ImageView) weiboLayout.findViewById(R.id.picture3);
@@ -121,6 +126,8 @@ public class WeiboActivity extends BaseActivity {
 		picture9 = (ImageView) weiboLayout.findViewById(R.id.picture9);
 		pictureArray = new ImageView[] { picture1, picture2, picture3,
 				picture4, picture5, picture6, picture7, picture8, picture9 };
+		retweetedPicture = (ImageView) weiboLayout
+				.findViewById(R.id.retweetedPicture);
 		retweetedPicture1 = (ImageView) weiboLayout
 				.findViewById(R.id.retweetedPicture1);
 		retweetedPicture2 = (ImageView) weiboLayout
@@ -143,11 +150,12 @@ public class WeiboActivity extends BaseActivity {
 				retweetedPicture2, retweetedPicture3, retweetedPicture4,
 				retweetedPicture5, retweetedPicture6, retweetedPicture7,
 				retweetedPicture8, retweetedPicture9 };
+		repostsCount = (TextView) weiboLayout.findViewById(R.id.repostsCount);
 
-		retweetedTv = (TextView) weiboLayout.findViewById(R.id.retweetedTv);
-		commentTv = (TextView) weiboLayout.findViewById(R.id.commentTv);
-		retweetedLine = weiboLayout.findViewById(R.id.retweetedLine);
-		commentLine = weiboLayout.findViewById(R.id.commentLine);
+		retweetedTv = (TextView) findViewById(R.id.retweetedTv);
+		commentTv = (TextView) findViewById(R.id.commentTv);
+		retweetedLine = findViewById(R.id.retweetedLine);
+		commentLine = findViewById(R.id.commentLine);
 
 		listView = (ListView) findViewById(R.id.retweetedLv);
 
@@ -187,7 +195,7 @@ public class WeiboActivity extends BaseActivity {
 		};
 
 		loadMore.setText("暂时没有评论");
-		listView.addHeaderView(weiboLayout);
+		
 		listView.addFooterView(footerView);
 		listView.setAdapter(commentAdapter);
 
@@ -211,13 +219,15 @@ public class WeiboActivity extends BaseActivity {
 		text.setTextColor(getResources().getColor(R.color.text_black));
 		text.invalidate();
 
-		userName.setText(status.user.screen_name);
+		name.setText(status.user.screen_name);
 		source.setText(Utils.transformSource(status.source));
 		time.setText(Utils.transformTime(status.created_at));
-		retweetedTv.setText("转发 " + status.reposts_count);
-		commentTv.setText("评论 " + status.comments_count);
+		// retweetedTv.setText("转发 " + status.reposts_count);
+		// commentTv.setText("评论 " + status.comments_count);
+		repostsCount.setText(Utils.transformRepostsCount(status.reposts_count,
+				status.comments_count));
 
-		MyApplication.asyncLoadImage(status.user.profile_image_url, userHead);
+		MyApplication.asyncLoadImage(status.user.profile_image_url, head);
 
 		if (null == status.pic_urls) {
 			picture.setVisibility(View.GONE);
@@ -255,62 +265,75 @@ public class WeiboActivity extends BaseActivity {
 			retweetedLayout.setVisibility(View.GONE);
 		} else {
 			retweetedLayout.setVisibility(View.VISIBLE);
+			if (null == status.retweeted_status.user) {
+				// 针对转发的原微博已被删除的情况
+				retweetedText.setMText("该微博已被删除");
+				retweetedText.setTextColor(getResources().getColor(
+						R.color.text_black_light));
+				retweetedText.invalidate();
 
-			retweetedLayout.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					MyApplication.setStatus(status.retweeted_status);
-					Intent intent = new Intent(WeiboActivity.this,
-							WeiboActivity.class);
-					startActivity(intent);
-				}
-			});
-
-			retweetedText.setMText("@"
-					+ status.retweeted_status.user.screen_name + ":"
-					+ status.retweeted_status.text);
-			retweetedText.setTextColor(getResources().getColor(
-					R.color.text_black_light));
-			retweetedText.invalidate();
-
-			retweetedRepostsCount.setText(Utils.transformRepostsCount(
-					status.retweeted_status.reposts_count,
-					status.retweeted_status.comments_count));
-
-			if (null == status.retweeted_status.pic_urls) {
-				retweetedPicture.setVisibility(View.GONE);
-				for (int i = 0; i < 9; i++) {
-					retweetedPictureArray[i].setVisibility(View.GONE);
-				}
-			} else if (status.retweeted_status.pic_urls.size() == 1) {
-				retweetedPicture.setVisibility(View.VISIBLE);
-				for (int i = 0; i < 9; i++) {
-					retweetedPictureArray[i].setVisibility(View.GONE);
-				}
-				MyApplication.asyncLoadImage(
-						status.retweeted_status.bmiddle_pic, retweetedPicture);
+				retweetedRepostsCount.setVisibility(View.GONE);
+				retweetedPictureLayout.setVisibility(View.GONE);
 			} else {
-				retweetedPicture.setVisibility(View.GONE);
-				int imageCount = status.retweeted_status.pic_urls.size();
-				for (int i = 0; i < 9; i++) {
-					if (i < imageCount) {
-						retweetedPictureArray[i].setVisibility(View.VISIBLE);
-						LayoutParams params = (LayoutParams) retweetedPictureArray[i]
-								.getLayoutParams();
-						params.width = imageWidth;
-						params.height = imageWidth;
-						retweetedPictureArray[i].setLayoutParams(params);
-						retweetedPictureArray[i]
-								.setScaleType(ImageView.ScaleType.CENTER_CROP);
-						MyApplication.asyncLoadImage(
-								status.retweeted_status.pic_urls.get(i),
-								retweetedPictureArray[i]);
-					} else {
+				retweetedLayout.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						MyApplication.setStatus(status.retweeted_status);
+						Intent intent = new Intent(WeiboActivity.this,
+								WeiboActivity.class);
+						startActivity(intent);
+					}
+				});
+
+				retweetedText.setMText("@"
+						+ status.retweeted_status.user.screen_name + ":"
+						+ status.retweeted_status.text);
+				retweetedText.setTextColor(getResources().getColor(
+						R.color.text_black_light));
+				retweetedText.invalidate();
+
+				retweetedRepostsCount.setText(Utils.transformRepostsCount(
+						status.retweeted_status.reposts_count,
+						status.retweeted_status.comments_count));
+
+				if (null == status.retweeted_status.pic_urls) {
+					retweetedPicture.setVisibility(View.GONE);
+					for (int i = 0; i < 9; i++) {
 						retweetedPictureArray[i].setVisibility(View.GONE);
+					}
+				} else if (status.retweeted_status.pic_urls.size() == 1) {
+					retweetedPicture.setVisibility(View.VISIBLE);
+					for (int i = 0; i < 9; i++) {
+						retweetedPictureArray[i].setVisibility(View.GONE);
+					}
+					MyApplication.asyncLoadImage(
+							status.retweeted_status.bmiddle_pic,
+							retweetedPicture);
+				} else {
+					retweetedPicture.setVisibility(View.GONE);
+					int imageCount = status.retweeted_status.pic_urls.size();
+					for (int i = 0; i < 9; i++) {
+						if (i < imageCount) {
+							retweetedPictureArray[i]
+									.setVisibility(View.VISIBLE);
+							LayoutParams params = (LayoutParams) retweetedPictureArray[i]
+									.getLayoutParams();
+							params.width = imageWidth;
+							params.height = imageWidth;
+							retweetedPictureArray[i].setLayoutParams(params);
+							retweetedPictureArray[i]
+									.setScaleType(ImageView.ScaleType.CENTER_CROP);
+							MyApplication.asyncLoadImage(
+									status.retweeted_status.pic_urls.get(i),
+									retweetedPictureArray[i]);
+						} else {
+							retweetedPictureArray[i].setVisibility(View.GONE);
+						}
 					}
 				}
 			}
+
 		}
 
 		mCommentsAPI.show(Long.parseLong(status.id), 0, 0, 50, 1, 0, mListener);

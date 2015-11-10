@@ -2,70 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/wholeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:clickable="true" >
 
-    <ImageView
-        android:id="@+id/userHead"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="11dp"
-        android:src="@drawable/ic_launcher" />
-
-    <TextView
-        android:id="@+id/userName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/userHead"
-        android:includeFontPadding="false"
-        android:text="name"
-        android:textColor="@color/text_black"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/source"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/userName"
-        android:layout_marginTop="33dp"
-        android:includeFontPadding="false"
-        android:text="source"
-        android:textColor="@color/text_gray"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="18dp"
-        android:text="time"
-        android:textColor="@color/text_gray"
-        android:textSize="12sp" />
-
-    <com.lzy.speedweibo.core.SmartTextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/userHead"
-        android:layout_below="@+id/userHead"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="8dp"
-        android:text="text"
-        android:textColor="@color/text_black"
-        android:textSize="16sp" />
+    <include
+        android:id="@+id/headLayout"
+        layout="@layout/layout_head" />
 
     <RelativeLayout
         android:id="@+id/retweetedLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/userHead"
-        android:layout_below="@+id/text"
+        android:layout_below="@+id/headLayout"
+        android:layout_marginLeft="11dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/repost_gray"
@@ -95,8 +45,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:adjustViewBounds="true"
-                android:maxHeight="240dp"
-                android:maxWidth="240dp"
                 android:src="@drawable/ic_launcher" />
 
             <ImageView
@@ -193,11 +141,11 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/layout_iv_photo"
+        android:id="@+id/pictureLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/userHead"
         android:layout_below="@+id/retweetedLayout"
+        android:layout_marginLeft="11dp"
         android:layout_marginRight="8dp" >
 
         <ImageView
@@ -206,8 +154,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:adjustViewBounds="true"
-            android:maxHeight="240dp"
-            android:maxWidth="240dp"
             android:src="@drawable/ic_launcher" />
 
         <ImageView
@@ -295,11 +241,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/layout_iv_photo"
+        android:layout_below="@+id/pictureLayout"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:text="reposts_count"
+        android:text="repostsCount"
         android:textColor="@color/text_gray"
         android:textSize="12sp" />
 
