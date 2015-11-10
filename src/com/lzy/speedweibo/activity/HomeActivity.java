@@ -1,20 +1,22 @@
-package com.lzy.speedweibo.fragment;
+package com.lzy.speedweibo.activity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +31,8 @@ import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 
-public class HomeFragment extends Fragment {
+public class HomeActivity extends BaseActivity {
+	private long pressTime = 0;
 	private ListView weiboLv;
 	private SwipeRefreshLayout refreshLayout;
 	private WeiboAdapter lvAdapter;
@@ -43,13 +46,29 @@ public class HomeFragment extends Fragment {
 	private ProgressDialog progressDialog;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_home);
+
+		weiboLv = (ListView) findViewById(R.id.weiboLv);
+		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
+		ImageButton scrollToTop = (ImageButton) findViewById(R.id.scrollToTop);
+
+		View emptyView = View.inflate(this, R.layout.view_empty, null);
+		View footerView = View.inflate(this, R.layout.view_footer, null);
+		TextView loadMore = (TextView) footerView.findViewById(R.id.loadMore);
+		loadMore.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				requestPreviousWeibo();
+			}
+		});
 
 		statusList = new ArrayList<Status>();
-		lvAdapter = new com.lzy.speedweibo.adapter.WeiboAdapter(getActivity(),
+		lvAdapter = new com.lzy.speedweibo.adapter.WeiboAdapter(this,
 				statusList);
-		mStatusesAPI = MyApplication.getStatusesAPI(getActivity());
+		mStatusesAPI = MyApplication.getStatusesAPI(this);
 		mListener = new RequestListener() {
 
 			@Override
@@ -72,32 +91,10 @@ public class HomeFragment extends Fragment {
 				}
 			}
 		};
-	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.activity_home, container, false);
+		initActionBar();
 
-		weiboLv = (ListView) view.findViewById(R.id.weiboLv);
-		refreshLayout = (SwipeRefreshLayout) view
-				.findViewById(R.id.refreshLayout);
-		ImageButton scrollToTop = (ImageButton) view
-				.findViewById(R.id.scrollToTop);
-
-		View emptyView = View.inflate(getActivity(), R.layout.view_empty, null);
-		View footerView = View.inflate(getActivity(), R.layout.view_footer,
-				null);
-		TextView loadMore = (TextView) footerView.findViewById(R.id.loadMore);
-		loadMore.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				requestPreviousWeibo();
-			}
-		});
-
-		progressDialog = new ProgressDialog(getActivity());
+		progressDialog = new ProgressDialog(this);
 		progressDialog.setMessage("正在加载");
 
 		refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
@@ -127,7 +124,45 @@ public class HomeFragment extends Fragment {
 
 		requestLatestWeibo();
 
-		return view;
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (System.currentTimeMillis() - pressTime < 2000) {
+			super.onBackPressed();
+		} else {
+			pressTime = System.currentTimeMillis();
+			Toast.makeText(HomeActivity.this, "再按一次退出", Toast.LENGTH_SHORT)
+					.show();
+		}
+	}
+
+	private void initActionBar() {
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setCustomView(R.layout.action_bar_entry);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()
+				.findViewById(R.id.operate);
+		operate.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(HomeActivity.this, MeActivity.class);
+				startActivity(intent);
+			}
+		});
+		RelativeLayout create = (RelativeLayout) actionBar.getCustomView()
+				.findViewById(R.id.create);
+		create.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(HomeActivity.this,
+						EditActivity.class);
+				intent.putExtra("action", "发表新微博");
+				startActivity(intent);
+			}
+		});
 	}
 
 	/**
@@ -174,10 +209,10 @@ public class HomeFragment extends Fragment {
 		}
 
 		if (comingNumber > 0) {
-			Toast.makeText(getActivity(), "来了" + comingNumber + "条新微博",
+			Toast.makeText(this, "来了" + comingNumber + "条新微博",
 					Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(getActivity(), "没有新微博", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "没有新微博", Toast.LENGTH_SHORT).show();
 		}
 
 		refreshWeiboID(statusList);

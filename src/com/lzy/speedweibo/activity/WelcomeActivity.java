@@ -43,7 +43,7 @@ public class WelcomeActivity extends BaseActivity {
 			MyApplication.setmAccessToken(mAccessToken);
 			// 已认证则跳转到主界面
 			Intent intent = new Intent(WelcomeActivity.this,
-					EntryActivity.class);
+					HomeActivity.class);
 			startActivity(intent);
 			finish();
 		} else {
@@ -86,7 +86,7 @@ public class WelcomeActivity extends BaseActivity {
 
 				// 已认证则跳转到主界面
 				Intent intent = new Intent(WelcomeActivity.this,
-						EntryActivity.class);
+						HomeActivity.class);
 				startActivity(intent);
 				finish();
 			} else {

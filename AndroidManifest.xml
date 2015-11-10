@@ -34,6 +34,14 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".activity.HomeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.MeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".activity.SettingActivity"
             android:screenOrientation="portrait" >
         </activity>

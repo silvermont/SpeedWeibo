@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.lzy.speedweibo.R;
 import com.lzy.speedweibo.core.SystemBarTintManager;
 import com.lzy.speedweibo.fragment.HomeFragment;
-import com.lzy.speedweibo.fragment.MeFragment;
 import com.lzy.speedweibo.fragment.MessageFragment;
 
 public class EntryActivity extends FragmentActivity {
@@ -128,11 +127,11 @@ public class EntryActivity extends FragmentActivity {
 
 		HomeFragment homeFragment = new HomeFragment();
 		MessageFragment messageFragment = new MessageFragment();
-		MeFragment meFragment = new MeFragment();
+		MeActivity meFragment = new MeActivity();
 
 		fragmentList.add(homeFragment);
 		fragmentList.add(messageFragment);
-		fragmentList.add(meFragment);
+		//fragmentList.add(meFragment);
 
 		viewPager.setOffscreenPageLimit(2);
 		viewPager.setAdapter(new MyFragmentPagerAdapter(
