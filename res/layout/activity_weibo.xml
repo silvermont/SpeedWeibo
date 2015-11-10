@@ -1,103 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical" >
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none" >
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/weiboLayout"
+            layout="@layout/item_weibo" />
 
         <LinearLayout
+            android:id="@+id/retweetedCountRootLayout"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:id="@+id/retweetedCountLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="showReposts" >
+
+                <TextView
+                    android:id="@+id/retweetedTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="转发"
+                    android:textColor="@color/text_gray"
+                    android:textSize="16sp" />
+
+                <View
+                    android:id="@+id/retweetedLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="4px"
+                    android:layout_above="@+id/retweetedDivider"
+                    android:background="@color/blue"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/retweetedDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/divider_gray" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/commentCountLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="showComments" >
+
+                <TextView
+                    android:id="@+id/commentTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="评论"
+                    android:textColor="@color/blue"
+                    android:textSize="16sp" />
+
+                <View
+                    android:id="@+id/commentLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="4px"
+                    android:layout_above="@+id/commentDivider"
+                    android:background="@color/blue"
+                    android:visibility="visible" />
+
+                <View
+                    android:id="@+id/commentDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/divider_gray" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <com.lzy.speedweibo.core.MyListView
+            android:id="@+id/retweetedLv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:scrollbars="none" >
+        </com.lzy.speedweibo.core.MyListView>
+    </LinearLayout>
 
-            <include
-                android:id="@+id/weiboLayout"
-                layout="@layout/item_weibo" />
-
-            <LinearLayout
-                android:id="@+id/retweetedCountRootLayout"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="@android:color/white"
-                android:orientation="horizontal" >
-
-                <RelativeLayout
-                    android:id="@+id/retweetedCountLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:onClick="showReposts" >
-
-                    <TextView
-                        android:id="@+id/retweetedTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="转发"
-                        android:textColor="@color/text_gray"
-                        android:textSize="16sp" />
-
-                    <View
-                        android:id="@+id/retweetedLine"
-                        android:layout_width="match_parent"
-                        android:layout_height="4px"
-                        android:layout_above="@+id/retweetedDivider"
-                        android:background="@color/blue"
-                        android:visibility="gone" />
-
-                    <View
-                        android:id="@+id/retweetedDivider"
-                        android:layout_width="match_parent"
-                        android:layout_height="2px"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/divider_gray" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/commentCountLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:onClick="showComments" >
-
-                    <TextView
-                        android:id="@+id/commentTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="评论"
-                        android:textColor="@color/blue"
-                        android:textSize="16sp" />
-
-                    <View
-                        android:id="@+id/commentLine"
-                        android:layout_width="match_parent"
-                        android:layout_height="4px"
-                        android:layout_above="@+id/commentDivider"
-                        android:background="@color/blue"
-                        android:visibility="visible" />
-
-                    <View
-                        android:id="@+id/commentDivider"
-                        android:layout_width="match_parent"
-                        android:layout_height="2px"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/divider_gray" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <com.lzy.speedweibo.core.MyListView
-                android:id="@+id/retweetedLv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none" >
-            </com.lzy.speedweibo.core.MyListView>
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+</ScrollView>
