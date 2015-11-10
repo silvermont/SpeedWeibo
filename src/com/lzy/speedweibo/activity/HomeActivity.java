@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,15 +30,17 @@ import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 
 public class HomeActivity extends BaseActivity {
-	private long pressTime = 0;
-	private ListView weiboLv;
+
+	private ListView listView;
 	private SwipeRefreshLayout refreshLayout;
-	private WeiboAdapter lvAdapter;
+	private ImageButton scrollToTop;
+	private WeiboAdapter adapter;
 	private List<Status> statusList;
 	private long maxWeiboID;
 	private long minWeiboID;
 	private boolean isFirstRefresh = true;
 	private boolean isRequestLatestWeibo = true;
+	private long pressTime = 0;
 	private RequestListener mListener;
 	private StatusesAPI mStatusesAPI;
 	private ProgressDialog progressDialog;
@@ -50,9 +50,9 @@ public class HomeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
-		weiboLv = (ListView) findViewById(R.id.weiboLv);
+		listView = (ListView) findViewById(R.id.weiboLv);
 		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
-		ImageButton scrollToTop = (ImageButton) findViewById(R.id.scrollToTop);
+		scrollToTop = (ImageButton) findViewById(R.id.scrollToTop);
 
 		View emptyView = View.inflate(this, R.layout.view_empty, null);
 		View footerView = View.inflate(this, R.layout.view_footer, null);
@@ -66,8 +66,7 @@ public class HomeActivity extends BaseActivity {
 		});
 
 		statusList = new ArrayList<Status>();
-		lvAdapter = new com.lzy.speedweibo.adapter.WeiboAdapter(this,
-				statusList);
+		adapter = new com.lzy.speedweibo.adapter.WeiboAdapter(this);
 		mStatusesAPI = MyApplication.getStatusesAPI(this);
 		mListener = new RequestListener() {
 
@@ -112,18 +111,17 @@ public class HomeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				weiboLv.smoothScrollToPosition(0);
+				listView.smoothScrollToPosition(0);
 			}
 		});
-		weiboLv.addFooterView(footerView);
-		weiboLv.setEmptyView(emptyView);
-		weiboLv.setAdapter(lvAdapter);
+		listView.addFooterView(footerView);
+		listView.setEmptyView(emptyView);
+		listView.setAdapter(adapter);
 
-		weiboLv.setOnScrollListener(new PauseOnScrollListener(ImageLoader
+		listView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
 				.getInstance(), true, true));
 
 		requestLatestWeibo();
-
 	}
 
 	@Override
@@ -141,6 +139,7 @@ public class HomeActivity extends BaseActivity {
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.action_bar_entry);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
 		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()
 				.findViewById(R.id.operate);
 		operate.setOnClickListener(new OnClickListener() {
@@ -151,6 +150,7 @@ public class HomeActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+
 		RelativeLayout create = (RelativeLayout) actionBar.getCustomView()
 				.findViewById(R.id.create);
 		create.setOnClickListener(new OnClickListener() {
@@ -217,8 +217,8 @@ public class HomeActivity extends BaseActivity {
 
 		refreshWeiboID(statusList);
 
-		lvAdapter.setStatusList(statusList);
-		lvAdapter.notifyDataSetChanged();
+		adapter.setStatusList(statusList);
+		adapter.notifyDataSetChanged();
 
 		if (progressDialog.isShowing()) {
 			progressDialog.dismiss();

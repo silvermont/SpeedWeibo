@@ -1,5 +1,6 @@
 package com.lzy.speedweibo.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -30,10 +31,10 @@ public class WeiboAdapter extends BaseAdapter {
 	private Context context;
 	private Holder holder;
 
-	public WeiboAdapter(Context context, List<Status> statusList) {
+	public WeiboAdapter(Context context) {
 		super();
 		this.context = context;
-		this.statusList = statusList;
+		this.statusList = new ArrayList<Status>();
 		this.imageWidth = MyApplication.getImageWidth();
 	}
 

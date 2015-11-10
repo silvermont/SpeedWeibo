@@ -47,8 +47,7 @@ public class HomeFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		statusList = new ArrayList<Status>();
-		lvAdapter = new com.lzy.speedweibo.adapter.WeiboAdapter(getActivity(),
-				statusList);
+		lvAdapter = new com.lzy.speedweibo.adapter.WeiboAdapter(getActivity());
 		mStatusesAPI = MyApplication.getStatusesAPI(getActivity());
 		mListener = new RequestListener() {
 
