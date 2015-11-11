@@ -61,13 +61,15 @@ public class CommentToMeAdapter extends BaseAdapter {
 					null);
 			holder.wholeLayout = (RelativeLayout) convertView
 					.findViewById(R.id.wholeLayout);
-			holder.userHead = (ImageView) convertView
-					.findViewById(R.id.userHead);
-			holder.userName = (TextView) convertView
-					.findViewById(R.id.userName);
-			holder.text = (SmartTextView) convertView.findViewById(R.id.text);
-			holder.source = (TextView) convertView.findViewById(R.id.source);
-			holder.time = (TextView) convertView.findViewById(R.id.time);
+			holder.headLayout = (RelativeLayout) convertView
+					.findViewById(R.id.headLayout);
+			holder.head = (ImageView) holder.headLayout.findViewById(R.id.head);
+			holder.name = (TextView) holder.headLayout.findViewById(R.id.name);
+			holder.text = (SmartTextView) holder.headLayout
+					.findViewById(R.id.text);
+			holder.source = (TextView) holder.headLayout
+					.findViewById(R.id.source);
+			holder.time = (TextView) holder.headLayout.findViewById(R.id.time);
 			holder.retweetedLayout = (RelativeLayout) convertView
 					.findViewById(R.id.retweetedLayout);
 			holder.retweetedText = (SmartTextView) convertView
@@ -83,7 +85,7 @@ public class CommentToMeAdapter extends BaseAdapter {
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.userName.setText(commentList.get(position).user.screen_name);
+		holder.name.setText(commentList.get(position).user.screen_name);
 		holder.source
 				.setText(Utils.transformSource(commentList.get(position).source));
 		holder.time
@@ -101,8 +103,7 @@ public class CommentToMeAdapter extends BaseAdapter {
 		holder.retweetedText.invalidate();
 
 		MyApplication.asyncLoadImage(
-				commentList.get(position).user.profile_image_url,
-				holder.userHead);
+				commentList.get(position).user.profile_image_url, holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
 
@@ -149,8 +150,9 @@ public class CommentToMeAdapter extends BaseAdapter {
 
 	class Holder {
 		RelativeLayout wholeLayout;
-		ImageView userHead;
-		TextView userName;
+		RelativeLayout headLayout;
+		ImageView head;
+		TextView name;
 		SmartTextView text;
 		TextView source;
 		TextView time;

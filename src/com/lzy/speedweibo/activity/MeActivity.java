@@ -106,10 +106,9 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// Intent intent=new
-				// Intent(MeActivity.this,WeiboListActivity.class);
-				// intent.putExtra("action", "查看评论");
-				// startActivity(intent);
+				Intent intent = new Intent(MeActivity.this,
+						CommentListActivity.class);
+				startActivity(intent);
 			}
 		});
 
