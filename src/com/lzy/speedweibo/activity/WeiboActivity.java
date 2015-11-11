@@ -195,7 +195,7 @@ public class WeiboActivity extends BaseActivity {
 		};
 
 		loadMore.setText("暂时没有评论");
-		
+
 		listView.addFooterView(footerView);
 		listView.setAdapter(commentAdapter);
 
@@ -230,17 +230,16 @@ public class WeiboActivity extends BaseActivity {
 		MyApplication.asyncLoadImage(status.user.profile_image_url, head);
 
 		if (null == status.pic_urls) {
-			picture.setVisibility(View.GONE);
-			for (int i = 0; i < 9; i++) {
-				pictureArray[i].setVisibility(View.GONE);
-			}
+			pictureLayout.setVisibility(View.GONE);
 		} else if (status.pic_urls.size() == 1) {
+			pictureLayout.setVisibility(View.VISIBLE);
 			picture.setVisibility(View.VISIBLE);
 			for (int i = 0; i < 9; i++) {
 				pictureArray[i].setVisibility(View.GONE);
 			}
 			MyApplication.asyncLoadImage(status.bmiddle_pic, picture);
 		} else {
+			pictureLayout.setVisibility(View.VISIBLE);
 			picture.setVisibility(View.GONE);
 			int imageCount = status.pic_urls.size();
 			for (int i = 0; i < 9; i++) {
@@ -298,11 +297,9 @@ public class WeiboActivity extends BaseActivity {
 						status.retweeted_status.comments_count));
 
 				if (null == status.retweeted_status.pic_urls) {
-					retweetedPicture.setVisibility(View.GONE);
-					for (int i = 0; i < 9; i++) {
-						retweetedPictureArray[i].setVisibility(View.GONE);
-					}
+					retweetedPictureLayout.setVisibility(View.GONE);
 				} else if (status.retweeted_status.pic_urls.size() == 1) {
+					retweetedPictureLayout.setVisibility(View.VISIBLE);
 					retweetedPicture.setVisibility(View.VISIBLE);
 					for (int i = 0; i < 9; i++) {
 						retweetedPictureArray[i].setVisibility(View.GONE);
@@ -311,6 +308,7 @@ public class WeiboActivity extends BaseActivity {
 							status.retweeted_status.bmiddle_pic,
 							retweetedPicture);
 				} else {
+					retweetedPictureLayout.setVisibility(View.VISIBLE);
 					retweetedPicture.setVisibility(View.GONE);
 					int imageCount = status.retweeted_status.pic_urls.size();
 					for (int i = 0; i < 9; i++) {
