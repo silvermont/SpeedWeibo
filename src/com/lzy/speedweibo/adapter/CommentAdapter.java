@@ -59,10 +59,8 @@ public class CommentAdapter extends BaseAdapter {
 			convertView = View.inflate(context, R.layout.item_comment, null);
 			holder.wholeLayout = (RelativeLayout) convertView
 					.findViewById(R.id.wholeLayout);
-			holder.userHead = (ImageView) convertView
-					.findViewById(R.id.userHead);
-			holder.userName = (TextView) convertView
-					.findViewById(R.id.userName);
+			holder.head = (ImageView) convertView.findViewById(R.id.head);
+			holder.name = (TextView) convertView.findViewById(R.id.name);
 			holder.text = (SmartTextView) convertView.findViewById(R.id.text);
 			holder.source = (TextView) convertView.findViewById(R.id.source);
 			holder.time = (TextView) convertView.findViewById(R.id.time);
@@ -77,15 +75,14 @@ public class CommentAdapter extends BaseAdapter {
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.userName.setText(commentList.get(position).user.screen_name);
+		holder.name.setText(commentList.get(position).user.screen_name);
 		holder.source
 				.setText(Utils.transformSource(commentList.get(position).source));
 		holder.time
 				.setText(Utils.transformTime(commentList.get(position).created_at));
 
 		MyApplication.asyncLoadImage(
-				commentList.get(position).user.profile_image_url,
-				holder.userHead);
+				commentList.get(position).user.profile_image_url, holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
 
@@ -134,8 +131,8 @@ public class CommentAdapter extends BaseAdapter {
 
 	class Holder {
 		RelativeLayout wholeLayout;
-		ImageView userHead;
-		TextView userName;
+		ImageView head;
+		TextView name;
 		SmartTextView text;
 		TextView source;
 		TextView time;

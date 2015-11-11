@@ -147,8 +147,8 @@ int layout item_at_me 0x7f03000d
 int layout item_comment 0x7f03000e
 int layout item_comment_to_me 0x7f03000f
 int layout item_weibo 0x7f030010
-int layout layout_head 0x7f030011
-int layout layout_weibo_for_comment_activity 0x7f030012
+int layout layout_weibo_for_comment_activity 0x7f030011
+int layout layout_weibo_head 0x7f030012
 int layout view_empty 0x7f030013
 int layout view_footer 0x7f030014
 int menu base 0x7f080000

@@ -2,12 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/wholeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:clickable="true" >
+    android:layout_height="wrap_content"
+    android:background="@android:color/white" >
 
     <ImageView
-        android:id="@+id/userHead"
+        android:id="@+id/head"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginLeft="11dp"
@@ -15,12 +14,12 @@
         android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/userName"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="11dp"
         android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/userHead"
+        android:layout_toRightOf="@+id/head"
         android:includeFontPadding="false"
         android:text="name"
         android:textColor="@color/text_black"
@@ -30,12 +29,12 @@
         android:id="@+id/source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/userName"
+        android:layout_alignLeft="@+id/name"
         android:layout_marginTop="33dp"
         android:includeFontPadding="false"
         android:text="source"
         android:textColor="@color/text_gray"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
     <TextView
         android:id="@+id/time"
@@ -46,14 +45,14 @@
         android:layout_marginTop="18dp"
         android:text="time"
         android:textColor="@color/text_gray"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
     <com.lzy.speedweibo.core.SmartTextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/userHead"
-        android:layout_below="@+id/userHead"
+        android:layout_alignLeft="@+id/head"
+        android:layout_below="@+id/head"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="8dp"

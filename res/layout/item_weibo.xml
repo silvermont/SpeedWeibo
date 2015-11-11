@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/headLayout"
-        layout="@layout/layout_head" />
+        layout="@layout/layout_weibo_head" />
 
     <RelativeLayout
         android:id="@+id/retweetedLayout"
