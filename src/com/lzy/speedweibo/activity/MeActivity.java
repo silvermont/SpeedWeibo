@@ -1,7 +1,6 @@
 package com.lzy.speedweibo.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,6 +23,8 @@ public class MeActivity extends BaseActivity {
 	private RelativeLayout weibo;
 	private RelativeLayout follow;
 	private RelativeLayout follower;
+	private RelativeLayout showComments;
+	private RelativeLayout showAt;
 	private ImageView head;
 	private TextView name;
 	private TextView description;
@@ -41,6 +42,8 @@ public class MeActivity extends BaseActivity {
 		weibo = (RelativeLayout) findViewById(R.id.weibo);
 		follow = (RelativeLayout) findViewById(R.id.follow);
 		follower = (RelativeLayout) findViewById(R.id.follower);
+		showComments = (RelativeLayout) findViewById(R.id.showComments);
+		showAt = (RelativeLayout) findViewById(R.id.showAt);
 		head = (ImageView) findViewById(R.id.head);
 		name = (TextView) findViewById(R.id.name);
 		description = (TextView) findViewById(R.id.description);
@@ -99,15 +102,41 @@ public class MeActivity extends BaseActivity {
 			}
 		});
 
+		showComments.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// Intent intent=new
+				// Intent(MeActivity.this,WeiboListActivity.class);
+				// intent.putExtra("action", "查看评论");
+				// startActivity(intent);
+			}
+		});
+
+		showAt.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MeActivity.this,
+						WeiboListActivity.class);
+				intent.putExtra("action", "查看@");
+				startActivity(intent);
+			}
+		});
+
 		mUsersAPI.show(Long.parseLong(AccessTokenKeeper.readAccessToken(this)
 				.getUid()), mListener);
-
 	}
 
 	private void initActionBar() {
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.action_bar_back);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+		TextView title = (TextView) actionBar.getCustomView().findViewById(
+				R.id.title);
+		title.setText("个人设置");
+
 		RelativeLayout back = (RelativeLayout) actionBar.getCustomView()
 				.findViewById(R.id.back);
 		back.setOnClickListener(new OnClickListener() {

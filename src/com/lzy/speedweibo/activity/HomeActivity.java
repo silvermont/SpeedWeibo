@@ -217,7 +217,7 @@ public class HomeActivity extends BaseActivity {
 
 		refreshWeiboID(statusList);
 
-		adapter.setStatusList(statusList);
+		adapter.setData(statusList);
 		adapter.notifyDataSetChanged();
 
 		if (progressDialog.isShowing()) {

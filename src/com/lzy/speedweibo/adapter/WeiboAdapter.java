@@ -38,7 +38,7 @@ public class WeiboAdapter extends BaseAdapter {
 		this.imageWidth = MyApplication.getImageWidth();
 	}
 
-	public void setStatusList(List<Status> statusList) {
+	public void setData(List<Status> statusList) {
 		this.statusList = statusList;
 	}
 

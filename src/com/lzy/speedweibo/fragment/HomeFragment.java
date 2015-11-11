@@ -181,7 +181,7 @@ public class HomeFragment extends Fragment {
 
 		refreshWeiboID(statusList);
 
-		lvAdapter.setStatusList(statusList);
+		lvAdapter.setData(statusList);
 		lvAdapter.notifyDataSetChanged();
 
 		if (progressDialog.isShowing()) {
