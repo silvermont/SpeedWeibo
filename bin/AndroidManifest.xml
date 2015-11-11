@@ -72,6 +72,10 @@
             android:name=".activity.CommentListActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".activity.UserListActivity"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

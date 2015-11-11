@@ -93,7 +93,10 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-
+				Intent intent = new Intent(MeActivity.this,
+						UserListActivity.class);
+				intent.putExtra("action", "follow");
+				startActivity(intent);
 			}
 		});
 
@@ -101,7 +104,10 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-
+				Intent intent = new Intent(MeActivity.this,
+						UserListActivity.class);
+				intent.putExtra("action", "follower");
+				startActivity(intent);
 			}
 		});
 
