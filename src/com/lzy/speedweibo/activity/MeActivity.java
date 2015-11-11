@@ -82,7 +82,10 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-
+				Intent intent = new Intent(MeActivity.this,
+						WeiboListActivity.class);
+				intent.putExtra("action", "微博");
+				startActivity(intent);
 			}
 		});
 

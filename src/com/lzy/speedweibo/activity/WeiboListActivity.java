@@ -82,12 +82,17 @@ public class WeiboListActivity extends BaseActivity {
 				if (action.equals("查看@")) {
 					mStatusesAPI.mentions(0, maxStatusID, 50, 1, 0, 0, 0,
 							false, mListener);
+				} else if (action.equals("微博")) {
+					mStatusesAPI.userTimeline(0, maxStatusID, 50, 1, false, 0,
+							false, mListener);
 				}
 			}
 		});
 
 		if (action.equals("查看@")) {
 			mStatusesAPI.mentions(0, 0, 50, 1, 0, 0, 0, false, mListener);
+		} else if (action.equals("微博")) {
+			mStatusesAPI.userTimeline(0, 0, 50, 1, false, 0, false, mListener);
 		}
 
 		initActionBar();
