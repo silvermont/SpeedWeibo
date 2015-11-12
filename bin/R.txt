@@ -56,9 +56,10 @@ int drawable ic_gonggao 0x7f020023
 int drawable ic_launcher 0x7f020024
 int drawable ic_like 0x7f020025
 int drawable selector_action_bar_button 0x7f020026
-int id action_settings 0x7f090053
+int id action_settings 0x7f090054
 int id atMe 0x7f09002f
 int id back 0x7f090000
+int id bigPicrure 0x7f090053
 int id commentCountLayout 0x7f090020
 int id commentDivider 0x7f090023
 int id commentLine 0x7f090022
@@ -165,6 +166,7 @@ int layout layout_weibo_for_comment_activity 0x7f030015
 int layout layout_weibo_head 0x7f030016
 int layout view_empty 0x7f030017
 int layout view_footer 0x7f030018
+int layout view_picture 0x7f030019
 int menu base 0x7f080000
 int menu main 0x7f080001
 int string action_settings 0x7f05008e

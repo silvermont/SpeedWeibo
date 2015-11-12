@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -76,6 +77,8 @@ public class WeiboActivity extends BaseActivity {
 	private TextView retweetedRepostsCount;
 	private RelativeLayout footerView;
 	private TextView loadMore;
+	private View pictureView;
+	private ImageView bigPicture;
 	private int imageWidth;
 	private CommentsAPI mCommentsAPI;
 	private StatusesAPI mStatusesAPI;
@@ -96,6 +99,10 @@ public class WeiboActivity extends BaseActivity {
 		footerView = (RelativeLayout) View.inflate(this, R.layout.view_footer,
 				null);
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
+
+		pictureView = (RelativeLayout) View.inflate(this,
+				R.layout.view_picture, null);
+		bigPicture = (ImageView) pictureView.findViewById(R.id.bigPicrure);
 
 		weiboLayout = (RelativeLayout) findViewById(R.id.weiboLayout);
 		headLayout = (RelativeLayout) weiboLayout.findViewById(R.id.headLayout);
@@ -228,6 +235,18 @@ public class WeiboActivity extends BaseActivity {
 				status.comments_count));
 
 		MyApplication.asyncLoadImage(status.user.profile_image_url, head);
+
+		picture.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						WeiboActivity.this);
+				builder.setView(pictureView);
+				MyApplication.asyncLoadImage(status.original_pic, bigPicture);
+				builder.show();
+			}
+		});
 
 		if (null == status.pic_urls) {
 			pictureLayout.setVisibility(View.GONE);
