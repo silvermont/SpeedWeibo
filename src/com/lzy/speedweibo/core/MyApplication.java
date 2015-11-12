@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.openapi.CommentsAPI;
 import com.sina.weibo.sdk.openapi.UsersAPI;
+import com.sina.weibo.sdk.openapi.legacy.FriendshipsAPI;
 import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 import com.sina.weibo.sdk.openapi.models.Status;
 
@@ -25,7 +26,9 @@ public class MyApplication extends Application {
 	private static CommentsAPI mCommentsAPI;
 	private static StatusesAPI mStatusesAPI;
 	private static UsersAPI mUsersAPI;
+	private static FriendshipsAPI mFriendshipsAPI;
 	private static int imageWidth;
+	private static long uid;
 
 	@Override
 	public void onCreate() {
@@ -69,7 +72,7 @@ public class MyApplication extends Application {
 	public static CommentsAPI getCommentsAPI(Context context) {
 		if (mCommentsAPI == null) {
 			mCommentsAPI = new CommentsAPI(context, Constants.APP_KEY,
-					MyApplication.getmAccessToken());
+					getmAccessToken());
 		}
 		return mCommentsAPI;
 	}
@@ -77,7 +80,7 @@ public class MyApplication extends Application {
 	public static StatusesAPI getStatusesAPI(Context context) {
 		if (mStatusesAPI == null) {
 			mStatusesAPI = new StatusesAPI(context, Constants.APP_KEY,
-					MyApplication.getmAccessToken());
+					getmAccessToken());
 		}
 		return mStatusesAPI;
 	}
@@ -85,9 +88,17 @@ public class MyApplication extends Application {
 	public static UsersAPI getUsersAPI(Context context) {
 		if (mUsersAPI == null) {
 			mUsersAPI = new UsersAPI(context, Constants.APP_KEY,
-					MyApplication.getmAccessToken());
+					getmAccessToken());
 		}
 		return mUsersAPI;
+	}
+
+	public static FriendshipsAPI getFriendshipsAPI(Context context) {
+		if (mFriendshipsAPI == null) {
+			mFriendshipsAPI = new FriendshipsAPI(context, Constants.APP_KEY,
+					getmAccessToken());
+		}
+		return mFriendshipsAPI;
 	}
 
 	public static void setStatus(Status status) {
@@ -104,5 +115,12 @@ public class MyApplication extends Application {
 
 	public static void setmAccessToken(Oauth2AccessToken mAccessToken) {
 		MyApplication.mAccessToken = mAccessToken;
+	}
+
+	public static long getUid() {
+		if (uid == 0L) {
+			uid = Long.parseLong(getmAccessToken().getUid());
+		}
+		return uid;
 	}
 }

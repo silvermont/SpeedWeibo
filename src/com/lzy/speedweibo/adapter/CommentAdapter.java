@@ -23,23 +23,23 @@ import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Comment;
 
 public class CommentAdapter extends BaseAdapter {
-	private List<Comment> commentList;
+	private List<Comment> list;
 	private Context context;
 	private Holder holder;
 
 	public CommentAdapter(Context context) {
 		super();
 		this.context = context;
-		this.commentList = new ArrayList<Comment>();
+		this.list = new ArrayList<Comment>();
 	}
 
 	public void setData(List<Comment> list) {
-		this.commentList = list;
+		this.list = list;
 	}
 
 	@Override
 	public int getCount() {
-		return commentList.size();
+		return list.size();
 	}
 
 	@Override
@@ -70,19 +70,19 @@ public class CommentAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.text.setMText(commentList.get(position).text);
+		holder.text.setMText(list.get(position).text);
 		holder.text.setTextColor(context.getResources().getColor(
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.name.setText(commentList.get(position).user.screen_name);
+		holder.name.setText(list.get(position).user.screen_name);
 		holder.source
-				.setText(Utils.transformSource(commentList.get(position).source));
+				.setText(Utils.transformSource(list.get(position).source));
 		holder.time
-				.setText(Utils.transformTime(commentList.get(position).created_at));
+				.setText(Utils.transformTime(list.get(position).created_at));
 
 		MyApplication.asyncLoadImage(
-				commentList.get(position).user.profile_image_url, holder.head);
+				list.get(position).user.profile_image_url, holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
 
@@ -98,9 +98,9 @@ public class CommentAdapter extends BaseAdapter {
 								Intent intent = new Intent(context,
 										EditActivity.class);
 								intent.putExtra("id",
-										commentList.get(position).id);
+										list.get(position).id);
 								intent.putExtra("statusID",
-										commentList.get(position).status.id);
+										list.get(position).status.id);
 								switch (which) {
 								case 0:
 									intent.putExtra("action", "回复评论");
@@ -111,9 +111,9 @@ public class CommentAdapter extends BaseAdapter {
 									intent.putExtra(
 											"text",
 											"//@"
-													+ commentList.get(position).user.screen_name
+													+ list.get(position).user.screen_name
 													+ "："
-													+ commentList.get(position).text);
+													+ list.get(position).text);
 									context.startActivity(intent);
 									break;
 								default:

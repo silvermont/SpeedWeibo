@@ -24,23 +24,23 @@ import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Comment;
 
 public class CommentToMeAdapter extends BaseAdapter {
-	private List<Comment> commentList;
+	private List<Comment> list;
 	private Context context;
 	private Holder holder;
 
 	public CommentToMeAdapter(Context context) {
 		super();
 		this.context = context;
-		this.commentList = new ArrayList<Comment>();
+		this.list = new ArrayList<Comment>();
 	}
 
 	public void setData(List<Comment> list) {
-		this.commentList = list;
+		this.list = list;
 	}
 
 	@Override
 	public int getCount() {
-		return commentList.size();
+		return list.size();
 	}
 
 	@Override
@@ -80,30 +80,30 @@ public class CommentToMeAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.text.setMText(commentList.get(position).text);
+		holder.text.setMText(list.get(position).text);
 		holder.text.setTextColor(context.getResources().getColor(
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.name.setText(commentList.get(position).user.screen_name);
+		holder.name.setText(list.get(position).user.screen_name);
 		holder.source
-				.setText(Utils.transformSource(commentList.get(position).source));
+				.setText(Utils.transformSource(list.get(position).source));
 		holder.time
-				.setText(Utils.transformTime(commentList.get(position).created_at));
+				.setText(Utils.transformTime(list.get(position).created_at));
 
-		if (null != commentList.get(position).reply_comment) {
+		if (null != list.get(position).reply_comment) {
 			holder.retweetedText.setMText("回复我的评论："
-					+ commentList.get(position).reply_comment.text);
+					+ list.get(position).reply_comment.text);
 		} else {
 			holder.retweetedText.setMText("评论我的微博："
-					+ commentList.get(position).status.text);
+					+ list.get(position).status.text);
 		}
 		holder.retweetedText.setTextColor(context.getResources().getColor(
 				R.color.text_black_light));
 		holder.retweetedText.invalidate();
 
 		MyApplication.asyncLoadImage(
-				commentList.get(position).user.profile_image_url, holder.head);
+				list.get(position).user.profile_image_url, holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
 
@@ -121,16 +121,16 @@ public class CommentToMeAdapter extends BaseAdapter {
 									Intent intent = new Intent(context,
 											EditActivity.class);
 									intent.putExtra("id",
-											commentList.get(position).id);
+											list.get(position).id);
 									intent.putExtra("statusID",
-											commentList.get(position).status.id);
+											list.get(position).status.id);
 									intent.putExtra("action", "回复评论");
 									context.startActivity(intent);
 									break;
 								case 1:
 									Intent newIntent = new Intent(context,
 											WeiboActivity.class);
-									MyApplication.setStatus(commentList
+									MyApplication.setStatus(list
 											.get(position).status);
 									context.startActivity(newIntent);
 									break;

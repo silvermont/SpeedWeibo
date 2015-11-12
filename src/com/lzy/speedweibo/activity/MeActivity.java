@@ -95,7 +95,7 @@ public class MeActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(MeActivity.this,
 						UserListActivity.class);
-				intent.putExtra("action", "follow");
+				intent.putExtra("action", "关注");
 				startActivity(intent);
 			}
 		});
@@ -106,7 +106,7 @@ public class MeActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(MeActivity.this,
 						UserListActivity.class);
-				intent.putExtra("action", "follower");
+				intent.putExtra("action", "粉丝");
 				startActivity(intent);
 			}
 		});
@@ -132,8 +132,7 @@ public class MeActivity extends BaseActivity {
 			}
 		});
 
-		mUsersAPI.show(Long.parseLong(AccessTokenKeeper.readAccessToken(this)
-				.getUid()), mListener);
+		mUsersAPI.show(MyApplication.getUid(), mListener);
 	}
 
 	private void initActionBar() {

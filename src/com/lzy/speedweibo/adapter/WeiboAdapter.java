@@ -26,7 +26,7 @@ import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Status;
 
 public class WeiboAdapter extends BaseAdapter {
-	private List<Status> statusList;
+	private List<Status> list;
 	private int imageWidth;
 	private Context context;
 	private Holder holder;
@@ -34,17 +34,17 @@ public class WeiboAdapter extends BaseAdapter {
 	public WeiboAdapter(Context context) {
 		super();
 		this.context = context;
-		this.statusList = new ArrayList<Status>();
+		this.list = new ArrayList<Status>();
 		this.imageWidth = MyApplication.getImageWidth();
 	}
 
 	public void setData(List<Status> statusList) {
-		this.statusList = statusList;
+		this.list = statusList;
 	}
 
 	@Override
 	public int getCount() {
-		return statusList.size();
+		return list.size();
 	}
 
 	@Override
@@ -140,37 +140,37 @@ public class WeiboAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.text.setMText(statusList.get(position).text);
+		holder.text.setMText(list.get(position).text);
 		holder.text.setTextColor(context.getResources().getColor(
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.name.setText(statusList.get(position).user.screen_name);
+		holder.name.setText(list.get(position).user.screen_name);
 		holder.source
-				.setText(Utils.transformSource(statusList.get(position).source));
+				.setText(Utils.transformSource(list.get(position).source));
 		holder.time
-				.setText(Utils.transformTime(statusList.get(position).created_at));
+				.setText(Utils.transformTime(list.get(position).created_at));
 		holder.repostsCount.setText(Utils.transformRepostsCount(
-				statusList.get(position).reposts_count,
-				statusList.get(position).comments_count));
+				list.get(position).reposts_count,
+				list.get(position).comments_count));
 
 		MyApplication.asyncLoadImage(
-				statusList.get(position).user.profile_image_url, holder.head);
+				list.get(position).user.profile_image_url, holder.head);
 
-		if (null == statusList.get(position).pic_urls) {
+		if (null == list.get(position).pic_urls) {
 			holder.pictureLayout.setVisibility(View.GONE);
-		} else if (statusList.get(position).pic_urls.size() == 1) {
+		} else if (list.get(position).pic_urls.size() == 1) {
 			holder.pictureLayout.setVisibility(View.VISIBLE);
 			holder.picture.setVisibility(View.VISIBLE);
 			for (int i = 0; i < 9; i++) {
 				holder.pictureArray[i].setVisibility(View.GONE);
 			}
-			MyApplication.asyncLoadImage(statusList.get(position).bmiddle_pic,
+			MyApplication.asyncLoadImage(list.get(position).bmiddle_pic,
 					holder.picture);
 		} else {
 			holder.pictureLayout.setVisibility(View.VISIBLE);
 			holder.picture.setVisibility(View.GONE);
-			int imageCount = statusList.get(position).pic_urls.size();
+			int imageCount = list.get(position).pic_urls.size();
 			for (int i = 0; i < 9; i++) {
 				if (i < imageCount) {
 					holder.pictureArray[i].setVisibility(View.VISIBLE);
@@ -182,7 +182,7 @@ public class WeiboAdapter extends BaseAdapter {
 					holder.pictureArray[i]
 							.setScaleType(ImageView.ScaleType.CENTER_CROP);
 					MyApplication.asyncLoadImage(
-							statusList.get(position).pic_urls.get(i),
+							list.get(position).pic_urls.get(i),
 							holder.pictureArray[i]);
 				} else {
 					holder.pictureArray[i].setVisibility(View.GONE);
@@ -194,7 +194,7 @@ public class WeiboAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				MyApplication.setStatus(statusList.get(position));
+				MyApplication.setStatus(list.get(position));
 				Intent intent = new Intent(context, WeiboActivity.class);
 				context.startActivity(intent);
 			}
@@ -214,17 +214,17 @@ public class WeiboAdapter extends BaseAdapter {
 								Intent intent = new Intent(context,
 										EditActivity.class);
 								intent.putExtra("id",
-										statusList.get(position).id);
+										list.get(position).id);
 								switch (which) {
 								case 0:
-									if (null != statusList.get(position).retweeted_status) {
+									if (null != list.get(position).retweeted_status) {
 										intent.putExtra(
 												"text",
 												"//@"
-														+ statusList
+														+ list
 																.get(position).user.screen_name
 														+ "："
-														+ statusList
+														+ list
 																.get(position).text);
 									}
 									intent.putExtra("action", "转发");
@@ -245,11 +245,11 @@ public class WeiboAdapter extends BaseAdapter {
 			}
 		});
 
-		if (null == statusList.get(position).retweeted_status) {
+		if (null == list.get(position).retweeted_status) {
 			holder.retweetedLayout.setVisibility(View.GONE);
 		} else {
 			holder.retweetedLayout.setVisibility(View.VISIBLE);
-			if (null == statusList.get(position).retweeted_status.user) {
+			if (null == list.get(position).retweeted_status.user) {
 				// 针对转发的原微博已被删除的情况
 				holder.retweetedText.setMText("该微博已被删除");
 				holder.retweetedText.setTextColor(context.getResources()
@@ -264,7 +264,7 @@ public class WeiboAdapter extends BaseAdapter {
 
 							@Override
 							public void onClick(View v) {
-								MyApplication.setStatus(statusList
+								MyApplication.setStatus(list
 										.get(position).retweeted_status);
 								Intent intent = new Intent(context,
 										WeiboActivity.class);
@@ -292,7 +292,7 @@ public class WeiboAdapter extends BaseAdapter {
 														EditActivity.class);
 												intent.putExtra(
 														"id",
-														statusList
+														list
 																.get(position).retweeted_status.id);
 
 												switch (which) {
@@ -319,21 +319,21 @@ public class WeiboAdapter extends BaseAdapter {
 
 				holder.retweetedText
 						.setMText("@"
-								+ statusList.get(position).retweeted_status.user.screen_name
+								+ list.get(position).retweeted_status.user.screen_name
 								+ ":"
-								+ statusList.get(position).retweeted_status.text);
+								+ list.get(position).retweeted_status.text);
 				holder.retweetedText.setTextColor(context.getResources()
 						.getColor(R.color.text_black_light));
 				holder.retweetedText.invalidate();
 
 				holder.retweetedRepostsCount
 						.setText(Utils.transformRepostsCount(
-								statusList.get(position).retweeted_status.reposts_count,
-								statusList.get(position).retweeted_status.comments_count));
+								list.get(position).retweeted_status.reposts_count,
+								list.get(position).retweeted_status.comments_count));
 
-				if (null == statusList.get(position).retweeted_status.pic_urls) {
+				if (null == list.get(position).retweeted_status.pic_urls) {
 					holder.retweetedPictureLayout.setVisibility(View.GONE);
-				} else if (statusList.get(position).retweeted_status.pic_urls
+				} else if (list.get(position).retweeted_status.pic_urls
 						.size() == 1) {
 					holder.retweetedPictureLayout.setVisibility(View.VISIBLE);
 					holder.retweetedPicture.setVisibility(View.VISIBLE);
@@ -343,12 +343,12 @@ public class WeiboAdapter extends BaseAdapter {
 					}
 					MyApplication
 							.asyncLoadImage(
-									statusList.get(position).retweeted_status.bmiddle_pic,
+									list.get(position).retweeted_status.bmiddle_pic,
 									holder.retweetedPicture);
 				} else {
 					holder.retweetedPictureLayout.setVisibility(View.VISIBLE);
 					holder.retweetedPicture.setVisibility(View.GONE);
-					int imageCount = statusList.get(position).retweeted_status.pic_urls
+					int imageCount = list.get(position).retweeted_status.pic_urls
 							.size();
 					for (int i = 0; i < 9; i++) {
 						if (i < imageCount) {
@@ -364,7 +364,7 @@ public class WeiboAdapter extends BaseAdapter {
 									.setScaleType(ImageView.ScaleType.CENTER_CROP);
 							MyApplication
 									.asyncLoadImage(
-											statusList.get(position).retweeted_status.pic_urls
+											list.get(position).retweeted_status.pic_urls
 													.get(i),
 											holder.retweetedPictureArray[i]);
 						} else {

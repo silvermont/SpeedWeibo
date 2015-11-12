@@ -19,23 +19,23 @@ import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Repost;
 
 public class RepostAdapter extends BaseAdapter {
-	private List<Repost> repostList;
+	private List<Repost> list;
 	private Context context;
 	private Holder holder;
 
 	public RepostAdapter(Context context) {
 		super();
 		this.context = context;
-		this.repostList = new ArrayList<Repost>();
+		this.list = new ArrayList<Repost>();
 	}
 
 	public void setData(List<Repost> list) {
-		this.repostList = list;
+		this.list = list;
 	}
 
 	@Override
 	public int getCount() {
-		return repostList.size();
+		return list.size();
 	}
 
 	@Override
@@ -66,19 +66,19 @@ public class RepostAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.text.setMText(repostList.get(position).text);
+		holder.text.setMText(list.get(position).text);
 		holder.text.setTextColor(context.getResources().getColor(
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.name.setText(repostList.get(position).user.screen_name);
+		holder.name.setText(list.get(position).user.screen_name);
 		holder.source
-				.setText(Utils.transformSource(repostList.get(position).source));
+				.setText(Utils.transformSource(list.get(position).source));
 		holder.time
-				.setText(Utils.transformTime(repostList.get(position).created_at));
+				.setText(Utils.transformTime(list.get(position).created_at));
 
 		MyApplication.asyncLoadImage(
-				repostList.get(position).user.profile_image_url, holder.head);
+				list.get(position).user.profile_image_url, holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
 

@@ -21,23 +21,23 @@ import com.lzy.speedweibo.core.Utils;
 import com.sina.weibo.sdk.openapi.models.Status;
 
 public class AtMeAdapter extends BaseAdapter {
-	private List<Status> statusList;
+	private List<Status> list;
 	private Context context;
 	private Holder holder;
 
 	public AtMeAdapter(Context context) {
 		super();
 		this.context = context;
-		this.statusList = new ArrayList<Status>();
+		this.list = new ArrayList<Status>();
 	}
 
 	public void setData(List<Status> list) {
-		this.statusList = list;
+		this.list = list;
 	}
 
 	@Override
 	public int getCount() {
-		return statusList.size();
+		return list.size();
 	}
 
 	@Override
@@ -75,24 +75,24 @@ public class AtMeAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.text.setMText(statusList.get(position).text);
+		holder.text.setMText(list.get(position).text);
 		holder.text.setTextColor(context.getResources().getColor(
 				R.color.text_black));
 		holder.text.invalidate();
 
-		holder.userName.setText(statusList.get(position).user.screen_name);
+		holder.userName.setText(list.get(position).user.screen_name);
 		holder.source
-				.setText(Utils.transformSource(statusList.get(position).source));
+				.setText(Utils.transformSource(list.get(position).source));
 		holder.time
-				.setText(Utils.transformTime(statusList.get(position).created_at));
+				.setText(Utils.transformTime(list.get(position).created_at));
 
-		if (null != statusList.get(position).retweeted_status) {
+		if (null != list.get(position).retweeted_status) {
 			holder.retweetedLayout.setVisibility(View.VISIBLE);
 
 			holder.retweetedText
-					.setMText(statusList.get(position).retweeted_status.user.screen_name
+					.setMText(list.get(position).retweeted_status.user.screen_name
 							+ "："
-							+ statusList.get(position).retweeted_status.text);
+							+ list.get(position).retweeted_status.text);
 			holder.retweetedText.setTextColor(context.getResources().getColor(
 					R.color.text_black_light));
 			holder.retweetedText.invalidate();
@@ -101,7 +101,7 @@ public class AtMeAdapter extends BaseAdapter {
 		}
 
 		MyApplication.asyncLoadImage(
-				statusList.get(position).user.profile_image_url,
+				list.get(position).user.profile_image_url,
 				holder.userHead);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
@@ -117,7 +117,7 @@ public class AtMeAdapter extends BaseAdapter {
 				// public void onClick(DialogInterface dialog,
 				// int which) {
 				Intent intent = new Intent(context, WeiboActivity.class);
-				MyApplication.setStatus(statusList.get(position));
+				MyApplication.setStatus(list.get(position));
 				context.startActivity(intent);
 				// }
 				// });
