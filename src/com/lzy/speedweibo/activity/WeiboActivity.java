@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,7 +78,7 @@ public class WeiboActivity extends BaseActivity {
 	private TextView retweetedRepostsCount;
 	private RelativeLayout footerView;
 	private TextView loadMore;
-	private View pictureView;
+	private ScrollView pictureView;
 	private ImageView bigPicture;
 	private int imageWidth;
 	private CommentsAPI mCommentsAPI;
@@ -90,6 +91,8 @@ public class WeiboActivity extends BaseActivity {
 	private long maxCommentID;
 	private long maxRepostID;
 	private boolean isShowComments = true;
+	private AlertDialog dialog;
+	private int number;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +103,8 @@ public class WeiboActivity extends BaseActivity {
 				null);
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
 
-		pictureView = (RelativeLayout) View.inflate(this,
-				R.layout.view_picture, null);
+		pictureView = (ScrollView) View.inflate(this, R.layout.view_picture,
+				null);
 		bigPicture = (ImageView) pictureView.findViewById(R.id.bigPicrure);
 
 		weiboLayout = (RelativeLayout) findViewById(R.id.weiboLayout);
@@ -175,6 +178,11 @@ public class WeiboActivity extends BaseActivity {
 		commentAdapter = new CommentAdapter(this);
 		repostAdapter = new RepostAdapter(this);
 
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				WeiboActivity.this);
+		builder.setView(pictureView);
+		dialog = builder.create();
+
 		mListener = new RequestListener() {
 			@Override
 			public void onComplete(String response) {
@@ -236,18 +244,6 @@ public class WeiboActivity extends BaseActivity {
 
 		MyApplication.asyncLoadImage(status.user.profile_image_url, head);
 
-		picture.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						WeiboActivity.this);
-				builder.setView(pictureView);
-				MyApplication.asyncLoadImage(status.original_pic, bigPicture);
-				builder.show();
-			}
-		});
-
 		if (null == status.pic_urls) {
 			pictureLayout.setVisibility(View.GONE);
 		} else if (status.pic_urls.size() == 1) {
@@ -257,12 +253,24 @@ public class WeiboActivity extends BaseActivity {
 				pictureArray[i].setVisibility(View.GONE);
 			}
 			MyApplication.asyncLoadImage(status.bmiddle_pic, picture);
+
+			picture.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					MyApplication.asyncLoadBigImage(status.original_pic,
+							bigPicture);
+					dialog.show();
+				}
+			});
 		} else {
 			pictureLayout.setVisibility(View.VISIBLE);
 			picture.setVisibility(View.GONE);
 			int imageCount = status.pic_urls.size();
+
 			for (int i = 0; i < 9; i++) {
 				if (i < imageCount) {
+					number = i;
 					pictureArray[i].setVisibility(View.VISIBLE);
 					LayoutParams params = (LayoutParams) pictureArray[i]
 							.getLayoutParams();
@@ -273,6 +281,15 @@ public class WeiboActivity extends BaseActivity {
 							.setScaleType(ImageView.ScaleType.CENTER_CROP);
 					MyApplication.asyncLoadImage(status.pic_urls.get(i),
 							pictureArray[i]);
+
+					pictureArray[i].setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							MyApplication.asyncLoadBigImage(
+									status.pic_urls.get(number), bigPicture);
+							dialog.show();
+						}
+					});
 				} else {
 					pictureArray[i].setVisibility(View.GONE);
 				}

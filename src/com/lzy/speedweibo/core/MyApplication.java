@@ -10,6 +10,7 @@ import com.lzy.speedweibo.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.openapi.CommentsAPI;
 import com.sina.weibo.sdk.openapi.UsersAPI;
@@ -22,12 +23,14 @@ public class MyApplication extends Application {
 	private static ImageLoaderConfiguration configuration;
 	private static Status status;
 	private static DisplayImageOptions options;
+	private static DisplayImageOptions optionsBigPicture;
 	private static Oauth2AccessToken mAccessToken;
 	private static CommentsAPI mCommentsAPI;
 	private static StatusesAPI mStatusesAPI;
 	private static UsersAPI mUsersAPI;
 	private static FriendshipsAPI mFriendshipsAPI;
 	private static int imageWidth;
+	private static int displayWidth;
 	private static long uid;
 
 	@Override
@@ -41,11 +44,16 @@ public class MyApplication extends Application {
 				.showImageOnLoading(R.drawable.blank)
 				.showImageOnFail(R.drawable.blank).cacheInMemory(true)
 				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
+		optionsBigPicture = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.blank)
+				.showImageOnFail(R.drawable.blank).cacheInMemory(true)
+				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+				.imageScaleType(ImageScaleType.NONE).build();
 
 		DisplayMetrics metric = getResources().getDisplayMetrics();
-		int widthPX = metric.widthPixels;// 屏幕宽度（像素）
+		displayWidth = metric.widthPixels;// 屏幕宽度（像素）
 		float density = metric.density;// 屏幕密度（0.75 / 1.0 / 1.5）
-		imageWidth = (int) ((widthPX - 30 * density) / 3);
+		imageWidth = (int) ((displayWidth - 30 * density) / 3);
 	}
 
 	// public static MyApplication getInstance() {
@@ -65,8 +73,23 @@ public class MyApplication extends Application {
 		ImageLoader.getInstance().displayImage(imageUrl, imageView, options);
 	}
 
+	/**
+	 * 异步加载大图，因为大图无法正常显示，所以在清单文件中设置了禁止硬件加速
+	 * 
+	 * @param imageUrl
+	 * @param imageView
+	 */
+	public static void asyncLoadBigImage(String imageUrl, ImageView imageView) {
+		ImageLoader.getInstance().displayImage(imageUrl, imageView,
+				optionsBigPicture);
+	}
+
 	public static int getImageWidth() {
 		return imageWidth;
+	}
+
+	public static int getDisplayWidth() {
+		return displayWidth;
 	}
 
 	public static CommentsAPI getCommentsAPI(Context context) {
