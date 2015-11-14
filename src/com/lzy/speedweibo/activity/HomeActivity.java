@@ -137,7 +137,7 @@ public class HomeActivity extends BaseActivity {
 
 	private void initActionBar() {
 		ActionBar actionBar = this.getActionBar();
-		actionBar.setCustomView(R.layout.action_bar_entry);
+		actionBar.setCustomView(R.layout.action_bar_home);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
 		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()

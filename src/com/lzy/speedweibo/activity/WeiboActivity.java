@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -406,7 +407,7 @@ public class WeiboActivity extends BaseActivity {
 
 	private void initActionBar() {
 		ActionBar actionBar = this.getActionBar();
-		actionBar.setCustomView(R.layout.action_bar_back);
+		actionBar.setCustomView(R.layout.action_bar_weibo);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		TextView title = (TextView) actionBar.getCustomView().findViewById(
 				R.id.title);
@@ -419,6 +420,47 @@ public class WeiboActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				finish();
+			}
+		});
+
+		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()
+				.findViewById(R.id.operate);
+		operate.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						WeiboActivity.this);
+				builder.setItems(new String[] { "转发", "评论" },
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Intent intent = new Intent(WeiboActivity.this,
+										EditActivity.class);
+								intent.putExtra("id", status.id);
+								switch (which) {
+								case 0:
+									if (null != status.retweeted_status) {
+										intent.putExtra("text", "//@"
+												+ status.user.screen_name + "："
+												+ status.text);
+									}
+									intent.putExtra("action", "转发");
+									startActivity(intent);
+									break;
+								case 1:
+									intent.putExtra("action", "评论");
+									startActivity(intent);
+									break;
+								default:
+									break;
+								}
+							}
+
+						});
+				builder.show();
 			}
 		});
 	}
@@ -495,14 +537,15 @@ public class WeiboActivity extends BaseActivity {
 				loadMore.setText("加载更多");
 			}
 		} else {
-			Intent intent = new Intent(WeiboActivity.this, EditActivity.class);
-			intent.putExtra("action", "转发");
-			intent.putExtra("id", status.id);
-			if (null != status.retweeted_status) {
-				intent.putExtra("text", "//@" + status.user.screen_name + "："
-						+ status.text);
-			}
-			startActivity(intent);
+			// Intent intent = new Intent(WeiboActivity.this,
+			// EditActivity.class);
+			// intent.putExtra("action", "转发");
+			// intent.putExtra("id", status.id);
+			// if (null != status.retweeted_status) {
+			// intent.putExtra("text", "//@" + status.user.screen_name + "："
+			// + status.text);
+			// }
+			// startActivity(intent);
 		}
 	}
 
@@ -524,10 +567,11 @@ public class WeiboActivity extends BaseActivity {
 				loadMore.setText("加载更多");
 			}
 		} else {
-			Intent intent = new Intent(WeiboActivity.this, EditActivity.class);
-			intent.putExtra("action", "评论");
-			intent.putExtra("id", status.id);
-			startActivity(intent);
+			// Intent intent = new Intent(WeiboActivity.this,
+			// EditActivity.class);
+			// intent.putExtra("action", "评论");
+			// intent.putExtra("id", status.id);
+			// startActivity(intent);
 		}
 	}
 }
