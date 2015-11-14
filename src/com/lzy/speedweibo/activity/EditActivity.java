@@ -63,10 +63,12 @@ public class EditActivity extends BaseActivity {
 		}
 		if (action.equals("转发评论")) {
 			extraContent = intent.getStringExtra("text");
+			text.setText(extraContent);
 			statusID = Long.parseLong(intent.getStringExtra("statusID"));
 		}
 		if (action.equals("转发")) {
 			extraContent = intent.getStringExtra("text");
+			text.setText(extraContent);
 		}
 
 		initActionBar();
@@ -106,21 +108,19 @@ public class EditActivity extends BaseActivity {
 				if (action.equals("评论")) {
 					mCommentsAPI.create(content, id, false, mListener);
 				} else if (action.equals("转发")) {
-					if (null != extraContent) {
-						mStatusesAPI.repost(id, content + extraContent, 0,
-								mListener);
-					} else {
-						mStatusesAPI.repost(id, content, 0, mListener);
-					}
-
+					// if (null != extraContent) {
+					// mStatusesAPI.repost(id, content + extraContent, 0,
+					// mListener);
+					// } else {
+					mStatusesAPI.repost(id, content, 0, mListener);
+					// }
 				} else if (action.equals("发表新微博")) {
 					mStatusesAPI.update(content, "0", "0", mListener);
 				} else if (action.equals("回复评论")) {
 					mCommentsAPI.reply(id, statusID, content, false, false,
 							mListener);
 				} else if (action.equals("转发评论")) {
-					mStatusesAPI.repost(statusID, content + extraContent, 0,
-							mListener);
+					mStatusesAPI.repost(statusID, content, 0, mListener);
 				}
 			}
 		});
