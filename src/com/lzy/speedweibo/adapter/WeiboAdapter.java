@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -30,12 +31,23 @@ public class WeiboAdapter extends BaseAdapter {
 	private int imageWidth;
 	private Context context;
 	private Holder holder;
+	private AlertDialog dialog;
+	private ScrollView pictureView;
+	private ImageView bigPicture;
 
 	public WeiboAdapter(Context context) {
 		super();
 		this.context = context;
 		this.list = new ArrayList<Status>();
 		this.imageWidth = MyApplication.getImageWidth();
+
+		pictureView = (ScrollView) View.inflate(context, R.layout.view_picture,
+				null);
+		bigPicture = (ImageView) pictureView.findViewById(R.id.bigPicrure);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setView(pictureView);
+		dialog = builder.create();
 	}
 
 	public void setData(List<Status> statusList) {
@@ -146,16 +158,14 @@ public class WeiboAdapter extends BaseAdapter {
 		holder.text.invalidate();
 
 		holder.name.setText(list.get(position).user.screen_name);
-		holder.source
-				.setText(Utils.transformSource(list.get(position).source));
-		holder.time
-				.setText(Utils.transformTime(list.get(position).created_at));
+		holder.source.setText(Utils.transformSource(list.get(position).source));
+		holder.time.setText(Utils.transformTime(list.get(position).created_at));
 		holder.repostsCount.setText(Utils.transformRepostsCount(
 				list.get(position).reposts_count,
 				list.get(position).comments_count));
 
-		MyApplication.asyncLoadImage(
-				list.get(position).user.profile_image_url, holder.head);
+		MyApplication.asyncLoadImage(list.get(position).user.profile_image_url,
+				holder.head);
 
 		if (null == list.get(position).pic_urls) {
 			holder.pictureLayout.setVisibility(View.GONE);
@@ -167,12 +177,24 @@ public class WeiboAdapter extends BaseAdapter {
 			}
 			MyApplication.asyncLoadImage(list.get(position).bmiddle_pic,
 					holder.picture);
+
+			holder.picture.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					MyApplication.asyncLoadBigImage(
+							list.get(position).original_pic, bigPicture);
+					dialog.show();
+				}
+			});
 		} else {
 			holder.pictureLayout.setVisibility(View.VISIBLE);
 			holder.picture.setVisibility(View.GONE);
 			int imageCount = list.get(position).pic_urls.size();
+
 			for (int i = 0; i < 9; i++) {
 				if (i < imageCount) {
+					holder.pictureArray[i].setTag(i);
 					holder.pictureArray[i].setVisibility(View.VISIBLE);
 					LayoutParams params = (LayoutParams) holder.pictureArray[i]
 							.getLayoutParams();
@@ -182,8 +204,22 @@ public class WeiboAdapter extends BaseAdapter {
 					holder.pictureArray[i]
 							.setScaleType(ImageView.ScaleType.CENTER_CROP);
 					MyApplication.asyncLoadImage(
-							list.get(position).pic_urls.get(i),
+							Utils.transformThumbnailToBmiddle(list
+									.get(position).pic_urls.get(i)),
 							holder.pictureArray[i]);
+
+					holder.pictureArray[i]
+							.setOnClickListener(new OnClickListener() {
+								@Override
+								public void onClick(View v) {
+									MyApplication.asyncLoadBigImage(
+											Utils.transformThumbnailToOriginal(list
+													.get(position).pic_urls
+													.get((Integer) v.getTag())),
+											bigPicture);
+									dialog.show();
+								}
+							});
 				} else {
 					holder.pictureArray[i].setVisibility(View.GONE);
 				}
@@ -213,19 +249,16 @@ public class WeiboAdapter extends BaseAdapter {
 									int which) {
 								Intent intent = new Intent(context,
 										EditActivity.class);
-								intent.putExtra("id",
-										list.get(position).id);
+								intent.putExtra("id", list.get(position).id);
 								switch (which) {
 								case 0:
 									if (null != list.get(position).retweeted_status) {
 										intent.putExtra(
 												"text",
 												"//@"
-														+ list
-																.get(position).user.screen_name
+														+ list.get(position).user.screen_name
 														+ "："
-														+ list
-																.get(position).text);
+														+ list.get(position).text);
 									}
 									intent.putExtra("action", "转发");
 									context.startActivity(intent);
@@ -264,8 +297,7 @@ public class WeiboAdapter extends BaseAdapter {
 
 							@Override
 							public void onClick(View v) {
-								MyApplication.setStatus(list
-										.get(position).retweeted_status);
+								MyApplication.setStatus(list.get(position).retweeted_status);
 								Intent intent = new Intent(context,
 										WeiboActivity.class);
 								context.startActivity(intent);
@@ -292,8 +324,7 @@ public class WeiboAdapter extends BaseAdapter {
 														EditActivity.class);
 												intent.putExtra(
 														"id",
-														list
-																.get(position).retweeted_status.id);
+														list.get(position).retweeted_status.id);
 
 												switch (which) {
 												case 0:
@@ -317,11 +348,9 @@ public class WeiboAdapter extends BaseAdapter {
 							}
 						});
 
-				holder.retweetedText
-						.setMText("@"
-								+ list.get(position).retweeted_status.user.screen_name
-								+ ":"
-								+ list.get(position).retweeted_status.text);
+				holder.retweetedText.setMText("@"
+						+ list.get(position).retweeted_status.user.screen_name
+						+ ":" + list.get(position).retweeted_status.text);
 				holder.retweetedText.setTextColor(context.getResources()
 						.getColor(R.color.text_black_light));
 				holder.retweetedText.invalidate();
@@ -333,18 +362,28 @@ public class WeiboAdapter extends BaseAdapter {
 
 				if (null == list.get(position).retweeted_status.pic_urls) {
 					holder.retweetedPictureLayout.setVisibility(View.GONE);
-				} else if (list.get(position).retweeted_status.pic_urls
-						.size() == 1) {
+				} else if (list.get(position).retweeted_status.pic_urls.size() == 1) {
 					holder.retweetedPictureLayout.setVisibility(View.VISIBLE);
 					holder.retweetedPicture.setVisibility(View.VISIBLE);
 					for (int i = 0; i < 9; i++) {
 						holder.retweetedPictureArray[i]
 								.setVisibility(View.GONE);
 					}
-					MyApplication
-							.asyncLoadImage(
-									list.get(position).retweeted_status.bmiddle_pic,
-									holder.retweetedPicture);
+					MyApplication.asyncLoadImage(
+							list.get(position).retweeted_status.bmiddle_pic,
+							holder.retweetedPicture);
+
+					holder.retweetedPicture
+							.setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									MyApplication.asyncLoadBigImage(
+											list.get(position).retweeted_status.original_pic,
+											bigPicture);
+									dialog.show();
+								}
+							});
 				} else {
 					holder.retweetedPictureLayout.setVisibility(View.VISIBLE);
 					holder.retweetedPicture.setVisibility(View.GONE);
@@ -352,6 +391,7 @@ public class WeiboAdapter extends BaseAdapter {
 							.size();
 					for (int i = 0; i < 9; i++) {
 						if (i < imageCount) {
+							holder.retweetedPictureArray[i].setTag(i);
 							holder.retweetedPictureArray[i]
 									.setVisibility(View.VISIBLE);
 							LayoutParams params = (LayoutParams) holder.retweetedPictureArray[i]
@@ -364,9 +404,24 @@ public class WeiboAdapter extends BaseAdapter {
 									.setScaleType(ImageView.ScaleType.CENTER_CROP);
 							MyApplication
 									.asyncLoadImage(
-											list.get(position).retweeted_status.pic_urls
-													.get(i),
+											Utils.transformThumbnailToBmiddle(list
+													.get(position).retweeted_status.pic_urls
+													.get(i)),
 											holder.retweetedPictureArray[i]);
+
+							holder.retweetedPictureArray[i]
+									.setOnClickListener(new OnClickListener() {
+										@Override
+										public void onClick(View v) {
+											MyApplication.asyncLoadBigImage(
+													Utils.transformThumbnailToOriginal(list
+															.get(position).retweeted_status.pic_urls
+															.get((Integer) v
+																	.getTag())),
+													bigPicture);
+											dialog.show();
+										}
+									});
 						} else {
 							holder.retweetedPictureArray[i]
 									.setVisibility(View.GONE);

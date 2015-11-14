@@ -92,7 +92,6 @@ public class WeiboActivity extends BaseActivity {
 	private long maxRepostID;
 	private boolean isShowComments = true;
 	private AlertDialog dialog;
-	private int number;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -270,7 +269,7 @@ public class WeiboActivity extends BaseActivity {
 
 			for (int i = 0; i < 9; i++) {
 				if (i < imageCount) {
-					number = i;
+					pictureArray[i].setTag(i);
 					pictureArray[i].setVisibility(View.VISIBLE);
 					LayoutParams params = (LayoutParams) pictureArray[i]
 							.getLayoutParams();
@@ -279,14 +278,17 @@ public class WeiboActivity extends BaseActivity {
 					pictureArray[i].setLayoutParams(params);
 					pictureArray[i]
 							.setScaleType(ImageView.ScaleType.CENTER_CROP);
-					MyApplication.asyncLoadImage(status.pic_urls.get(i),
-							pictureArray[i]);
+					MyApplication.asyncLoadImage(
+							Utils.transformThumbnailToBmiddle(status.pic_urls
+									.get(i)), pictureArray[i]);
 
 					pictureArray[i].setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
 							MyApplication.asyncLoadBigImage(
-									status.pic_urls.get(number), bigPicture);
+									Utils.transformThumbnailToOriginal(status.pic_urls
+											.get((Integer) v.getTag())),
+									bigPicture);
 							dialog.show();
 						}
 					});
@@ -343,12 +345,24 @@ public class WeiboActivity extends BaseActivity {
 					MyApplication.asyncLoadImage(
 							status.retweeted_status.bmiddle_pic,
 							retweetedPicture);
+
+					retweetedPicture.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							MyApplication.asyncLoadBigImage(
+									status.retweeted_status.original_pic,
+									bigPicture);
+							dialog.show();
+						}
+					});
 				} else {
 					retweetedPictureLayout.setVisibility(View.VISIBLE);
 					retweetedPicture.setVisibility(View.GONE);
 					int imageCount = status.retweeted_status.pic_urls.size();
 					for (int i = 0; i < 9; i++) {
 						if (i < imageCount) {
+							retweetedPictureArray[i].setTag(i);
 							retweetedPictureArray[i]
 									.setVisibility(View.VISIBLE);
 							LayoutParams params = (LayoutParams) retweetedPictureArray[i]
@@ -358,9 +372,24 @@ public class WeiboActivity extends BaseActivity {
 							retweetedPictureArray[i].setLayoutParams(params);
 							retweetedPictureArray[i]
 									.setScaleType(ImageView.ScaleType.CENTER_CROP);
-							MyApplication.asyncLoadImage(
-									status.retweeted_status.pic_urls.get(i),
-									retweetedPictureArray[i]);
+							MyApplication
+									.asyncLoadImage(
+											Utils.transformThumbnailToBmiddle(status.retweeted_status.pic_urls
+													.get(i)),
+											retweetedPictureArray[i]);
+
+							retweetedPictureArray[i]
+									.setOnClickListener(new OnClickListener() {
+										@Override
+										public void onClick(View v) {
+											MyApplication.asyncLoadBigImage(
+													Utils.transformThumbnailToOriginal(status.retweeted_status.pic_urls
+															.get((Integer) v
+																	.getTag())),
+													bigPicture);
+											dialog.show();
+										}
+									});
 						} else {
 							retweetedPictureArray[i].setVisibility(View.GONE);
 						}

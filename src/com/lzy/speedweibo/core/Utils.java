@@ -121,4 +121,23 @@ public class Utils {
 		return displayCount;
 	}
 
+	/**
+	 * 转换小图url为中图url
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static String transformThumbnailToBmiddle(String url) {
+		return url.replace("thumbnail", "bmiddle");
+	}
+
+	/**
+	 * 转换小图url为大图url
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static String transformThumbnailToOriginal(String url) {
+		return url.replace("thumbnail", "large");
+	}
 }
