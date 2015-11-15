@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.lzy.speedweibo.R;
@@ -24,7 +23,7 @@ public class MyApplication extends Application {
 	private static ImageLoaderConfiguration configuration;
 	private static Status status;
 	private static DisplayImageOptions options;
-	private static DisplayImageOptions optionsBigPicture;
+	public static DisplayImageOptions optionsBigPicture;
 	private static Oauth2AccessToken mAccessToken;
 	private static CommentsAPI mCommentsAPI;
 	private static StatusesAPI mStatusesAPI;
@@ -56,13 +55,6 @@ public class MyApplication extends Application {
 		float density = metric.density;// 屏幕密度（0.75 / 1.0 / 1.5）
 		imageWidth = (int) ((displayWidth - 30 * density) / 3);
 	}
-
-	// public static MyApplication getInstance() {
-	// if (application == null) {
-	// application = new MyApplication();
-	// }
-	// return application;
-	// }
 
 	/**
 	 * 异步加载图片

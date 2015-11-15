@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -19,6 +20,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
+import com.lzy.speedweibo.activity.BigPictureActivity;
 import com.lzy.speedweibo.activity.EditActivity;
 import com.lzy.speedweibo.activity.WeiboActivity;
 import com.lzy.speedweibo.core.MyApplication;
@@ -182,9 +184,13 @@ public class WeiboAdapter extends BaseAdapter {
 
 				@Override
 				public void onClick(View v) {
-					MyApplication.asyncLoadBigImage(
-							list.get(position).original_pic, bigPicture);
-					dialog.show();
+					// MyApplication.asyncLoadBigImage(
+					// list.get(position).original_pic, bigPicture);
+					// dialog.show();
+					Intent intent = new Intent(context,
+							BigPictureActivity.class);
+					intent.putExtra("url", list.get(position).original_pic);
+					context.startActivity(intent);
 				}
 			});
 		} else {
@@ -378,10 +384,17 @@ public class WeiboAdapter extends BaseAdapter {
 
 								@Override
 								public void onClick(View v) {
-									MyApplication.asyncLoadBigImage(
-											list.get(position).retweeted_status.original_pic,
-											bigPicture);
-									dialog.show();
+									// MyApplication.asyncLoadBigImage(
+									// list.get(position).retweeted_status.original_pic,
+									// bigPicture);
+									// dialog.show();
+									Intent intent = new Intent(context,
+											BigPictureActivity.class);
+									Log.e("", list.get(position).retweeted_status.original_pic);
+									intent.putExtra(
+											"url",
+											list.get(position).retweeted_status.original_pic);
+									context.startActivity(intent);
 								}
 							});
 				} else {

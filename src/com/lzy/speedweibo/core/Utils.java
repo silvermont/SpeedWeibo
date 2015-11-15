@@ -2,8 +2,14 @@ package com.lzy.speedweibo.core;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import javax.microedition.khronos.opengles.GL10;
+
+import android.graphics.Bitmap;
 
 public class Utils {
 
@@ -139,5 +145,27 @@ public class Utils {
 	 */
 	public static String transformThumbnailToOriginal(String url) {
 		return url.replace("thumbnail", "large");
+	}
+
+	/**
+	 * 切割过长的bitmap
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public static List<Bitmap> slideBitmap(Bitmap source) {
+		int glMaxTextureSize = GL10.GL_MAX_TEXTURE_SIZE;
+		int w = source.getWidth();
+		int h = source.getHeight();
+		List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+		int processedHeight = 0;
+		while (h > 0) {
+			Bitmap subBitmap = Bitmap.createBitmap(source, 0, processedHeight,
+					w, h < glMaxTextureSize ? h : glMaxTextureSize);
+			h -= glMaxTextureSize;
+			processedHeight += glMaxTextureSize;
+			bitmaps.add(subBitmap);
+		}
+		return bitmaps;
 	}
 }
