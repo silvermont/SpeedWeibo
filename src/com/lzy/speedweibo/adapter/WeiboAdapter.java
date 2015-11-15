@@ -390,7 +390,6 @@ public class WeiboAdapter extends BaseAdapter {
 									// dialog.show();
 									Intent intent = new Intent(context,
 											BigPictureActivity.class);
-									Log.e("", list.get(position).retweeted_status.original_pic);
 									intent.putExtra(
 											"url",
 											list.get(position).retweeted_status.original_pic);

@@ -5,9 +5,10 @@ import java.util.List;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
 import com.lzy.speedweibo.R;
@@ -17,8 +18,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class BigPictureActivity extends Activity {
-	private Bitmap bitmap;
-	private int width;
 	private LinearLayout layout;
 
 	@Override
@@ -29,8 +28,8 @@ public class BigPictureActivity extends Activity {
 		layout = (LinearLayout) findViewById(R.id.bigPictureLayout);
 
 		String url = getIntent().getStringExtra("url");
-
-		width = MyApplication.getDisplayWidth();
+		Log.e("", "url "+url);
+		final int width = MyApplication.getDisplayWidth();
 
 		ImageLoader.getInstance().loadImage(url,
 				MyApplication.optionsBigPicture,
@@ -38,20 +37,21 @@ public class BigPictureActivity extends Activity {
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
 							Bitmap loadedImage) {
-						bitmap = loadedImage;
-
-						List<Bitmap> bitmaps = Utils.slideBitmap(bitmap);
+						List<Bitmap> bitmaps = Utils.slideBitmap(loadedImage);
 						for (Bitmap b : bitmaps) {
+							Log.e("", "for");
 							ImageView imageView = new ImageView(
 									BigPictureActivity.this);
-							imageView.setImageBitmap(b);
+							imageView.setScaleType(ScaleType.FIT_XY);
 							imageView
 									.setLayoutParams(new LinearLayout.LayoutParams(
-											LayoutParams.MATCH_PARENT, width
+											width, width
 													* (b.getHeight() / b
 															.getWidth())));
+							imageView.setImageBitmap(b);
 							layout.addView(imageView);
 						}
+
 					}
 				});
 	}
