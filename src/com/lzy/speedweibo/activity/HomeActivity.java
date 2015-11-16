@@ -238,6 +238,7 @@ public class HomeActivity extends BaseActivity {
 			maxWeiboID = Long.parseLong(statusList.get(0).id);
 			minWeiboID = Long
 					.parseLong(statusList.get(statusList.size() - 1).id);
+
 			isFirstRefresh = false;
 			return;
 		}

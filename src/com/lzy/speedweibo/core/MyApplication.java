@@ -1,5 +1,7 @@
 package com.lzy.speedweibo.core;
 
+import java.lang.reflect.Field;
+
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -31,6 +33,8 @@ public class MyApplication extends Application {
 	private static FriendshipsAPI mFriendshipsAPI;
 	private static int imageWidth;
 	private static int displayWidth;
+	private static int displayHeight;
+	private static int statusBarHeight;
 	private static long uid;
 
 	@Override
@@ -52,6 +56,7 @@ public class MyApplication extends Application {
 
 		DisplayMetrics metric = getResources().getDisplayMetrics();
 		displayWidth = metric.widthPixels;// 屏幕宽度（像素）
+		displayHeight = metric.heightPixels;
 		float density = metric.density;// 屏幕密度（0.75 / 1.0 / 1.5）
 		imageWidth = (int) ((displayWidth - 30 * density) / 3);
 	}
@@ -66,23 +71,37 @@ public class MyApplication extends Application {
 		ImageLoader.getInstance().displayImage(imageUrl, imageView, options);
 	}
 
-	/**
-	 * 异步加载大图，因为大图无法正常显示，所以在清单文件中设置了禁止硬件加速
-	 * 
-	 * @param imageUrl
-	 * @param imageView
-	 */
-	public static void asyncLoadBigImage(String imageUrl, ImageView imageView) {
-		ImageLoader.getInstance().displayImage(imageUrl, imageView,
-				optionsBigPicture);
-	}
-
 	public static int getImageWidth() {
 		return imageWidth;
 	}
 
 	public static int getDisplayWidth() {
 		return displayWidth;
+	}
+
+	public static int getDisplayHeight() {
+		return displayHeight;
+	}
+
+	public static int getStatusBarHeight(Context context) {
+		if (statusBarHeight == 0) {
+			Class<?> c = null;
+			Object obj = null;
+			Field field = null;
+			int x = 0;
+
+			try {
+				c = Class.forName("com.android.internal.R$dimen");
+				obj = c.newInstance();
+				field = c.getField("status_bar_height");
+				x = Integer.parseInt(field.get(obj).toString());
+				statusBarHeight = context.getResources().getDimensionPixelSize(
+						x);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+		return statusBarHeight;
 	}
 
 	public static CommentsAPI getCommentsAPI(Context context) {

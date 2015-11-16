@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -33,23 +31,12 @@ public class WeiboAdapter extends BaseAdapter {
 	private int imageWidth;
 	private Context context;
 	private Holder holder;
-	private AlertDialog dialog;
-	private ScrollView pictureView;
-	private ImageView bigPicture;
 
 	public WeiboAdapter(Context context) {
 		super();
 		this.context = context;
 		this.list = new ArrayList<Status>();
 		this.imageWidth = MyApplication.getImageWidth();
-
-		pictureView = (ScrollView) View.inflate(context, R.layout.view_picture,
-				null);
-		bigPicture = (ImageView) pictureView.findViewById(R.id.bigPicrure);
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setView(pictureView);
-		dialog = builder.create();
 	}
 
 	public void setData(List<Status> statusList) {
@@ -184,9 +171,6 @@ public class WeiboAdapter extends BaseAdapter {
 
 				@Override
 				public void onClick(View v) {
-					// MyApplication.asyncLoadBigImage(
-					// list.get(position).original_pic, bigPicture);
-					// dialog.show();
 					Intent intent = new Intent(context,
 							BigPictureActivity.class);
 					intent.putExtra("url", list.get(position).original_pic);
@@ -218,12 +202,13 @@ public class WeiboAdapter extends BaseAdapter {
 							.setOnClickListener(new OnClickListener() {
 								@Override
 								public void onClick(View v) {
-									MyApplication.asyncLoadBigImage(
-											Utils.transformThumbnailToOriginal(list
+									Intent intent = new Intent(context,
+											BigPictureActivity.class);
+									intent.putExtra("url", Utils
+											.transformThumbnailToOriginal(list
 													.get(position).pic_urls
-													.get((Integer) v.getTag())),
-											bigPicture);
-									dialog.show();
+													.get((Integer) v.getTag())));
+									context.startActivity(intent);
 								}
 							});
 				} else {
@@ -384,10 +369,6 @@ public class WeiboAdapter extends BaseAdapter {
 
 								@Override
 								public void onClick(View v) {
-									// MyApplication.asyncLoadBigImage(
-									// list.get(position).retweeted_status.original_pic,
-									// bigPicture);
-									// dialog.show();
 									Intent intent = new Intent(context,
 											BigPictureActivity.class);
 									intent.putExtra(
@@ -425,13 +406,15 @@ public class WeiboAdapter extends BaseAdapter {
 									.setOnClickListener(new OnClickListener() {
 										@Override
 										public void onClick(View v) {
-											MyApplication.asyncLoadBigImage(
+											Intent intent = new Intent(context,
+													BigPictureActivity.class);
+											intent.putExtra(
+													"url",
 													Utils.transformThumbnailToOriginal(list
 															.get(position).retweeted_status.pic_urls
 															.get((Integer) v
-																	.getTag())),
-													bigPicture);
-											dialog.show();
+																	.getTag())));
+											context.startActivity(intent);
 										}
 									});
 						} else {

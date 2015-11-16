@@ -79,8 +79,6 @@ public class WeiboActivity extends BaseActivity {
 	private TextView retweetedRepostsCount;
 	private RelativeLayout footerView;
 	private TextView loadMore;
-	private ScrollView pictureView;
-	private ImageView bigPicture;
 	private int imageWidth;
 	private CommentsAPI mCommentsAPI;
 	private StatusesAPI mStatusesAPI;
@@ -92,7 +90,6 @@ public class WeiboActivity extends BaseActivity {
 	private long maxCommentID;
 	private long maxRepostID;
 	private boolean isShowComments = true;
-	private AlertDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +99,6 @@ public class WeiboActivity extends BaseActivity {
 		footerView = (RelativeLayout) View.inflate(this, R.layout.view_footer,
 				null);
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
-
-		pictureView = (ScrollView) View.inflate(this, R.layout.view_picture,
-				null);
-		bigPicture = (ImageView) pictureView.findViewById(R.id.bigPicrure);
 
 		weiboLayout = (RelativeLayout) findViewById(R.id.weiboLayout);
 		headLayout = (RelativeLayout) weiboLayout.findViewById(R.id.headLayout);
@@ -177,11 +170,6 @@ public class WeiboActivity extends BaseActivity {
 		repostList = new ArrayList<Repost>();
 		commentAdapter = new CommentAdapter(this);
 		repostAdapter = new RepostAdapter(this);
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(
-				WeiboActivity.this);
-		builder.setView(pictureView);
-		dialog = builder.create();
 
 		mListener = new RequestListener() {
 			@Override
@@ -258,9 +246,10 @@ public class WeiboActivity extends BaseActivity {
 
 				@Override
 				public void onClick(View v) {
-					MyApplication.asyncLoadBigImage(status.original_pic,
-							bigPicture);
-					dialog.show();
+					Intent intent = new Intent(WeiboActivity.this,
+							BigPictureActivity.class);
+					intent.putExtra("url", status.original_pic);
+					startActivity(intent);
 				}
 			});
 		} else {
@@ -286,11 +275,13 @@ public class WeiboActivity extends BaseActivity {
 					pictureArray[i].setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							MyApplication.asyncLoadBigImage(
+							Intent intent = new Intent(WeiboActivity.this,
+									BigPictureActivity.class);
+							intent.putExtra(
+									"url",
 									Utils.transformThumbnailToOriginal(status.pic_urls
-											.get((Integer) v.getTag())),
-									bigPicture);
-							dialog.show();
+											.get((Integer) v.getTag())));
+							startActivity(intent);
 						}
 					});
 				} else {
@@ -351,10 +342,12 @@ public class WeiboActivity extends BaseActivity {
 
 						@Override
 						public void onClick(View v) {
-							MyApplication.asyncLoadBigImage(
-									status.retweeted_status.original_pic,
-									bigPicture);
-							dialog.show();
+
+							Intent intent = new Intent(WeiboActivity.this,
+									BigPictureActivity.class);
+							intent.putExtra("url",
+									status.retweeted_status.original_pic);
+							startActivity(intent);
 						}
 					});
 				} else {
@@ -383,12 +376,15 @@ public class WeiboActivity extends BaseActivity {
 									.setOnClickListener(new OnClickListener() {
 										@Override
 										public void onClick(View v) {
-											MyApplication.asyncLoadBigImage(
+											Intent intent = new Intent(
+													WeiboActivity.this,
+													BigPictureActivity.class);
+											intent.putExtra(
+													"url",
 													Utils.transformThumbnailToOriginal(status.retweeted_status.pic_urls
 															.get((Integer) v
-																	.getTag())),
-													bigPicture);
-											dialog.show();
+																	.getTag())));
+											startActivity(intent);
 										}
 									});
 						} else {

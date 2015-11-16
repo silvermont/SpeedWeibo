@@ -10,6 +10,7 @@ import java.util.Locale;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class Utils {
 
@@ -157,6 +158,7 @@ public class Utils {
 		int glMaxTextureSize = GL10.GL_MAX_TEXTURE_SIZE;
 		int w = source.getWidth();
 		int h = source.getHeight();
+		Log.e("", "h "+h);
 		List<Bitmap> bitmaps = new ArrayList<Bitmap>();
 		int processedHeight = 0;
 		while (h > 0) {
