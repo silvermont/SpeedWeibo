@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -117,8 +118,7 @@ public class HomeActivity extends BaseActivity {
 		listView.addFooterView(footerView);
 		listView.setEmptyView(emptyView);
 		listView.setAdapter(adapter);
-
-		listView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
+		listView.setOnScrollListener(new MyScrollListener(ImageLoader
 				.getInstance(), true, true));
 
 		requestLatestWeibo();
@@ -251,6 +251,51 @@ public class HomeActivity extends BaseActivity {
 			minWeiboID = Long
 					.parseLong(statusList.get(statusList.size() - 1).id);
 		}
+	}
+
+	/**
+	 * 返回actionbar的view
+	 * 
+	 * @return
+	 */
+	private View getActionBarView() {
+		View view = getWindow().getDecorView();
+		int actionBarId = getResources().getIdentifier("action_bar_container",
+				"id", getPackageName());
+		return view.findViewById(actionBarId);
+	}
+
+	class MyScrollListener extends PauseOnScrollListener {
+		private int lastVisibleItem;
+
+		public MyScrollListener(ImageLoader imageLoader, boolean pauseOnScroll,
+				boolean pauseOnFling) {
+			super(imageLoader, pauseOnScroll, pauseOnFling);
+
+		}
+
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem,
+				int visibleItemCount, int totalItemCount) {
+			super.onScroll(view, firstVisibleItem, visibleItemCount,
+					totalItemCount);
+
+			if (lastVisibleItem == 0) {
+				lastVisibleItem = firstVisibleItem + visibleItemCount - 1;
+			} else if (firstVisibleItem + visibleItemCount - 1 > lastVisibleItem) {
+				lastVisibleItem = firstVisibleItem + visibleItemCount - 1;
+				getActionBar().hide();
+			} else if (firstVisibleItem + visibleItemCount - 1 < lastVisibleItem) {
+				lastVisibleItem = firstVisibleItem + visibleItemCount - 1;
+				getActionBar().show();
+			}
+		}
+
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+			super.onScrollStateChanged(view, scrollState);
+		}
+
 	}
 
 }
