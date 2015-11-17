@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -250,6 +249,7 @@ public class WeiboActivity extends BaseActivity {
 							BigPictureActivity.class);
 					intent.putExtra("url", status.original_pic);
 					startActivity(intent);
+					overridePendingTransition(R.anim.activity_open, 0);
 				}
 			});
 		} else {
@@ -282,6 +282,7 @@ public class WeiboActivity extends BaseActivity {
 									Utils.transformThumbnailToOriginal(status.pic_urls
 											.get((Integer) v.getTag())));
 							startActivity(intent);
+							overridePendingTransition(R.anim.activity_open, 0);
 						}
 					});
 				} else {
@@ -348,6 +349,7 @@ public class WeiboActivity extends BaseActivity {
 							intent.putExtra("url",
 									status.retweeted_status.original_pic);
 							startActivity(intent);
+							overridePendingTransition(R.anim.activity_open, 0);
 						}
 					});
 				} else {
@@ -385,6 +387,8 @@ public class WeiboActivity extends BaseActivity {
 															.get((Integer) v
 																	.getTag())));
 											startActivity(intent);
+											overridePendingTransition(
+													R.anim.activity_open, 0);
 										}
 									});
 						} else {

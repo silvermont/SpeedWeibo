@@ -78,4 +78,10 @@ public class BigPictureActivity extends Activity {
 					}
 				});
 	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		overridePendingTransition(0, R.anim.activity_close);
+	}
 }

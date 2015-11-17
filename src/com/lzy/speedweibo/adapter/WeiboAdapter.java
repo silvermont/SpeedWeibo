@@ -3,6 +3,7 @@ package com.lzy.speedweibo.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -175,6 +176,8 @@ public class WeiboAdapter extends BaseAdapter {
 							BigPictureActivity.class);
 					intent.putExtra("url", list.get(position).original_pic);
 					context.startActivity(intent);
+					((Activity) context).overridePendingTransition(
+							R.anim.activity_open, 0);
 				}
 			});
 		} else {
@@ -209,6 +212,9 @@ public class WeiboAdapter extends BaseAdapter {
 													.get(position).pic_urls
 													.get((Integer) v.getTag())));
 									context.startActivity(intent);
+									((Activity) context)
+											.overridePendingTransition(
+													R.anim.activity_open, 0);
 								}
 							});
 				} else {
@@ -375,6 +381,9 @@ public class WeiboAdapter extends BaseAdapter {
 											"url",
 											list.get(position).retweeted_status.original_pic);
 									context.startActivity(intent);
+									((Activity) context)
+											.overridePendingTransition(
+													R.anim.activity_open, 0);
 								}
 							});
 				} else {
@@ -415,6 +424,10 @@ public class WeiboAdapter extends BaseAdapter {
 															.get((Integer) v
 																	.getTag())));
 											context.startActivity(intent);
+											((Activity) context)
+													.overridePendingTransition(
+															R.anim.activity_open,
+															0);
 										}
 									});
 						} else {
