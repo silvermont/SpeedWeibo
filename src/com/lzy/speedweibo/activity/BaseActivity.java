@@ -14,7 +14,7 @@ public class BaseActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//状态栏变色
+		// 状态栏变色
 		if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
 			getWindow().addFlags(
 					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

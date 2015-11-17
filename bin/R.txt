@@ -299,6 +299,7 @@ int string weibosdk_demo_token_to_string_format_1 0x7f060020
 int string weibosdk_demo_weibo_pay 0x7f060065
 int string weibosdk_demo_weibo_pay_get_order 0x7f060064
 int string weibosdk_demo_weibo_pay_get_order_uri 0x7f060063
+int style ActionBarTheme 0x7f070004
 int style AppBaseTheme 0x7f070000
 int style AppTheme 0x7f070001
 int style com_sina_weibo_sdk_loginview_default_style 0x7f070002
