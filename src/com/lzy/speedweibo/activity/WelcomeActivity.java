@@ -28,7 +28,7 @@ public class WelcomeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
 
-		initActionBar();
+		//initActionBar();
 
 		// 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
 		AuthInfo mAuthInfo = new AuthInfo(this, Constants.APP_KEY,
