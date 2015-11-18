@@ -175,7 +175,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/icComment"
-            android:text="查看评论"
+            android:text="给我的评论"
             android:textColor="@color/text_black"
             android:textSize="14sp" />
 
@@ -210,7 +210,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/icAt"
-            android:text="查看@"
+            android:text="给我的@"
             android:textColor="@color/text_black"
             android:textSize="14sp" />
 

@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.core.AccessTokenKeeper;
 import com.lzy.speedweibo.core.MyApplication;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
@@ -117,6 +116,7 @@ public class MeActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(MeActivity.this,
 						CommentListActivity.class);
+				intent.putExtra("action", "comments");
 				startActivity(intent);
 			}
 		});
@@ -126,8 +126,8 @@ public class MeActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MeActivity.this,
-						WeiboListActivity.class);
-				intent.putExtra("action", "查看@");
+						CommentListActivity.class);
+				intent.putExtra("action", "at");
 				startActivity(intent);
 			}
 		});

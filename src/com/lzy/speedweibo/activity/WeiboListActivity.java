@@ -7,6 +7,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
@@ -19,7 +20,9 @@ import com.lzy.speedweibo.adapter.WeiboAdapter;
 import com.lzy.speedweibo.core.MyApplication;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
+import com.sina.weibo.sdk.openapi.CommentsAPI;
 import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
+import com.sina.weibo.sdk.openapi.models.CommentList;
 import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 
@@ -79,21 +82,12 @@ public class WeiboListActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				if (action.equals("查看@")) {
-					mStatusesAPI.mentions(0, maxStatusID, 50, 1, 0, 0, 0,
-							false, mListener);
-				} else if (action.equals("微博")) {
-					mStatusesAPI.userTimeline(0, maxStatusID, 50, 1, false, 0,
-							false, mListener);
-				}
+				mStatusesAPI.userTimeline(0, maxStatusID, 50, 1, false, 0,
+						false, mListener);
 			}
 		});
 
-		if (action.equals("查看@")) {
-			mStatusesAPI.mentions(0, 0, 50, 1, 0, 0, 0, false, mListener);
-		} else if (action.equals("微博")) {
-			mStatusesAPI.userTimeline(0, 0, 50, 1, false, 0, false, mListener);
-		}
+		mStatusesAPI.userTimeline(0, 0, 50, 1, false, 0, false, mListener);
 
 		initActionBar();
 	}

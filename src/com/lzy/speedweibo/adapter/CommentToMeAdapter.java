@@ -86,24 +86,23 @@ public class CommentToMeAdapter extends BaseAdapter {
 		holder.text.invalidate();
 
 		holder.name.setText(list.get(position).user.screen_name);
-		holder.source
-				.setText(Utils.transformSource(list.get(position).source));
-		holder.time
-				.setText(Utils.transformTime(list.get(position).created_at));
+		holder.source.setText(Utils.transformSource(list.get(position).source));
+		holder.time.setText(Utils.transformTime(list.get(position).created_at));
 
 		if (null != list.get(position).reply_comment) {
 			holder.retweetedText.setMText("回复我的评论："
 					+ list.get(position).reply_comment.text);
 		} else {
-			holder.retweetedText.setMText("评论我的微博："
+			holder.retweetedText.setMText("评论"
+					+ list.get(position).status.user.screen_name + "的微博："
 					+ list.get(position).status.text);
 		}
 		holder.retweetedText.setTextColor(context.getResources().getColor(
 				R.color.text_black_light));
 		holder.retweetedText.invalidate();
 
-		MyApplication.asyncLoadImage(
-				list.get(position).user.profile_image_url, holder.head);
+		MyApplication.asyncLoadImage(list.get(position).user.profile_image_url,
+				holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
 
@@ -120,8 +119,7 @@ public class CommentToMeAdapter extends BaseAdapter {
 								case 0:
 									Intent intent = new Intent(context,
 											EditActivity.class);
-									intent.putExtra("id",
-											list.get(position).id);
+									intent.putExtra("id", list.get(position).id);
 									intent.putExtra("statusID",
 											list.get(position).status.id);
 									intent.putExtra("action", "回复评论");
@@ -130,8 +128,7 @@ public class CommentToMeAdapter extends BaseAdapter {
 								case 1:
 									Intent newIntent = new Intent(context,
 											WeiboActivity.class);
-									MyApplication.setStatus(list
-											.get(position).status);
+									MyApplication.setStatus(list.get(position).status);
 									context.startActivity(newIntent);
 									break;
 								default:

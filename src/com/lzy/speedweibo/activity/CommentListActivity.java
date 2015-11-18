@@ -32,6 +32,7 @@ public class CommentListActivity extends BaseActivity {
 	private RequestListener mListener;
 	private List<Comment> commentList;
 	private long maxCommentID;
+	private String action;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class CommentListActivity extends BaseActivity {
 			}
 		};
 
-		loadMore.setText("暂时没有评论");
+		loadMore.setText("暂时没有数据");
 		listView.addFooterView(footerView);
 		listView.setAdapter(adapter);
 
@@ -74,18 +75,29 @@ public class CommentListActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				mCommentsAPI.toME(0, maxCommentID, 50, 1, 0, 0, mListener);
+				if (action.equals("comments")) {
+					mCommentsAPI.toME(0, maxCommentID, 50, 1, 0, 0, mListener);
+				} else if (action.equals("at")) {
+					mCommentsAPI.mentions(0, maxCommentID, 50, 1, 0, 0,
+							mListener);
+				}
 			}
 		});
 
+		action = getIntent().getStringExtra("action");
+
 		initActionBar();
 
-		mCommentsAPI.toME(0, 0, 50, 1, 0, 0, mListener);
+		if (action.equals("comments")) {
+			mCommentsAPI.toME(0, 0, 50, 1, 0, 0, mListener);
+		} else if (action.equals("at")) {
+			mCommentsAPI.mentions(0, 0, 50, 1, 0, 0, mListener);
+		}
 	}
 
 	private void handleComments(List<Comment> list) {
 		boolean isDataChanged = false;
-		
+
 		if (commentList.size() == 0) {
 			commentList = list;
 		} else {
@@ -96,7 +108,7 @@ public class CommentListActivity extends BaseActivity {
 				}
 			}
 			if (!isDataChanged) {
-				Toast.makeText(this, "没有更多评论", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "没有更多", Toast.LENGTH_SHORT).show();
 				return;
 			}
 		}
@@ -126,6 +138,10 @@ public class CommentListActivity extends BaseActivity {
 
 		TextView title = (TextView) actionBar.getCustomView().findViewById(
 				R.id.title);
-		title.setText("给我的评论");
+		if (action.equals("comments")) {
+			title.setText("给我的评论");
+		} else if (action.equals("at")) {
+			title.setText("@我的评论");
+		}
 	}
 }
