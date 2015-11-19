@@ -10,6 +10,7 @@ import java.util.Locale;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.util.Log;
 
 public class Utils {
@@ -158,7 +159,7 @@ public class Utils {
 		int glMaxTextureSize = GL10.GL_MAX_TEXTURE_SIZE;
 		int w = source.getWidth();
 		int h = source.getHeight();
-		Log.e("", "h "+h);
+		Log.e("", "h " + h);
 		List<Bitmap> bitmaps = new ArrayList<Bitmap>();
 		int processedHeight = 0;
 		while (h > 0) {
@@ -169,5 +170,26 @@ public class Utils {
 			bitmaps.add(subBitmap);
 		}
 		return bitmaps;
+	}
+
+	/**
+	 * 压缩图片。
+	 * @param image
+	 * @return
+	 */
+	public static Bitmap zoomImage(Bitmap image) {
+		// 获取这个图片的宽和高
+		float width = image.getWidth();
+		float height = image.getHeight();
+		// 创建操作图片用的matrix对象
+		Matrix matrix = new Matrix();
+		// 计算宽高缩放率
+		float scaleWidth = ((float) 0) / width;
+		float scaleHeight = ((float) 0) / height;
+		// 缩放图片动作
+		matrix.postScale(scaleWidth, scaleHeight);
+		Bitmap bitmap = Bitmap.createBitmap(image, 0, 0, (int) width,
+				(int) height, matrix, true);
+		return bitmap;
 	}
 }
