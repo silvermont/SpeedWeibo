@@ -95,6 +95,7 @@ public class HomeActivity extends BaseActivity {
 
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setMessage("正在加载");
+		progressDialog.setCanceledOnTouchOutside(false);
 
 		refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
 				android.R.color.holo_red_light,
