@@ -161,10 +161,10 @@ public class WeiboActivity extends BaseActivity {
 
 		listView = (ListView) findViewById(R.id.retweetedLv);
 
-		status = MyApplication.getStatus();
-		imageWidth = MyApplication.getImageWidth();
-		mCommentsAPI = MyApplication.getCommentsAPI(this);
-		mStatusesAPI = MyApplication.getStatusesAPI(this);
+		status = MyApplication.status;
+		imageWidth = MyApplication.imageWidth;
+		mCommentsAPI = MyApplication.mCommentsAPI;
+		mStatusesAPI = MyApplication.mStatusesAPI;
 		commentList = new ArrayList<Comment>();
 		repostList = new ArrayList<Repost>();
 		commentAdapter = new CommentAdapter(this);
@@ -229,7 +229,7 @@ public class WeiboActivity extends BaseActivity {
 		repostsCount.setText(Utils.transformRepostsCount(status.reposts_count,
 				status.comments_count));
 
-		MyApplication.asyncLoadImage(status.user.profile_image_url, head);
+		MyApplication.displayImageLossless(status.user.profile_image_url, head);
 
 		if (null == status.pic_urls) {
 			pictureLayout.setVisibility(View.GONE);
@@ -239,7 +239,7 @@ public class WeiboActivity extends BaseActivity {
 			for (int i = 0; i < 9; i++) {
 				pictureArray[i].setVisibility(View.GONE);
 			}
-			MyApplication.asyncLoadImage(status.bmiddle_pic, picture);
+			MyApplication.displayImage(status.bmiddle_pic, picture);
 
 			picture.setOnClickListener(new OnClickListener() {
 
@@ -247,7 +247,7 @@ public class WeiboActivity extends BaseActivity {
 				public void onClick(View v) {
 					Intent intent = new Intent(WeiboActivity.this,
 							BigPictureActivity.class);
-					intent.putExtra("url", status.original_pic);
+					intent.putExtra("url", status.bmiddle_pic);
 					startActivity(intent);
 					overridePendingTransition(R.anim.activity_open, 0);
 				}
@@ -268,9 +268,8 @@ public class WeiboActivity extends BaseActivity {
 					pictureArray[i].setLayoutParams(params);
 					pictureArray[i]
 							.setScaleType(ImageView.ScaleType.CENTER_CROP);
-					MyApplication.asyncLoadImage(
-							Utils.transformThumbnailToBmiddle(status.pic_urls
-									.get(i)), pictureArray[i]);
+					MyApplication.displayImageLossless(status.pic_urls.get(i),
+							pictureArray[i]);
 
 					pictureArray[i].setOnClickListener(new OnClickListener() {
 						@Override
@@ -279,7 +278,7 @@ public class WeiboActivity extends BaseActivity {
 									BigPictureActivity.class);
 							intent.putExtra(
 									"url",
-									Utils.transformThumbnailToOriginal(status.pic_urls
+									Utils.transformThumbnailToBmiddle(status.pic_urls
 											.get((Integer) v.getTag())));
 							startActivity(intent);
 							overridePendingTransition(R.anim.activity_open, 0);
@@ -309,7 +308,7 @@ public class WeiboActivity extends BaseActivity {
 
 					@Override
 					public void onClick(View v) {
-						MyApplication.setStatus(status.retweeted_status);
+						MyApplication.status = status.retweeted_status;
 						Intent intent = new Intent(WeiboActivity.this,
 								WeiboActivity.class);
 						startActivity(intent);
@@ -335,7 +334,7 @@ public class WeiboActivity extends BaseActivity {
 					for (int i = 0; i < 9; i++) {
 						retweetedPictureArray[i].setVisibility(View.GONE);
 					}
-					MyApplication.asyncLoadImage(
+					MyApplication.displayImage(
 							status.retweeted_status.bmiddle_pic,
 							retweetedPicture);
 
@@ -347,7 +346,7 @@ public class WeiboActivity extends BaseActivity {
 							Intent intent = new Intent(WeiboActivity.this,
 									BigPictureActivity.class);
 							intent.putExtra("url",
-									status.retweeted_status.original_pic);
+									status.retweeted_status.bmiddle_pic);
 							startActivity(intent);
 							overridePendingTransition(R.anim.activity_open, 0);
 						}
@@ -368,11 +367,9 @@ public class WeiboActivity extends BaseActivity {
 							retweetedPictureArray[i].setLayoutParams(params);
 							retweetedPictureArray[i]
 									.setScaleType(ImageView.ScaleType.CENTER_CROP);
-							MyApplication
-									.asyncLoadImage(
-											Utils.transformThumbnailToBmiddle(status.retweeted_status.pic_urls
-													.get(i)),
-											retweetedPictureArray[i]);
+							MyApplication.displayImageLossless(
+									status.retweeted_status.pic_urls.get(i),
+									retweetedPictureArray[i]);
 
 							retweetedPictureArray[i]
 									.setOnClickListener(new OnClickListener() {
@@ -383,7 +380,7 @@ public class WeiboActivity extends BaseActivity {
 													BigPictureActivity.class);
 											intent.putExtra(
 													"url",
-													Utils.transformThumbnailToOriginal(status.retweeted_status.pic_urls
+													Utils.transformThumbnailToBmiddle(status.retweeted_status.pic_urls
 															.get((Integer) v
 																	.getTag())));
 											startActivity(intent);

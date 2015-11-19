@@ -63,7 +63,7 @@ public class UserAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		MyApplication.asyncLoadImage(list.get(position).profile_image_url,
+		MyApplication.displayImageLossless(list.get(position).profile_image_url,
 				holder.head);
 
 		holder.name.setText(list.get(position).screen_name);

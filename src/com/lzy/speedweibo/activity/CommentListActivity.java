@@ -44,7 +44,7 @@ public class CommentListActivity extends BaseActivity {
 				null);
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
 
-		mCommentsAPI = MyApplication.getCommentsAPI(this);
+		mCommentsAPI = MyApplication.mCommentsAPI;
 		adapter = new CommentToMeAdapter(this);
 		commentList = new ArrayList<Comment>();
 

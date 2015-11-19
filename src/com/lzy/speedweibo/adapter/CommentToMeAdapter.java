@@ -101,7 +101,7 @@ public class CommentToMeAdapter extends BaseAdapter {
 				R.color.text_black_light));
 		holder.retweetedText.invalidate();
 
-		MyApplication.asyncLoadImage(list.get(position).user.profile_image_url,
+		MyApplication.displayImageLossless(list.get(position).user.profile_image_url,
 				holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {
@@ -128,7 +128,7 @@ public class CommentToMeAdapter extends BaseAdapter {
 								case 1:
 									Intent newIntent = new Intent(context,
 											WeiboActivity.class);
-									MyApplication.setStatus(list.get(position).status);
+									MyApplication.status = list.get(position).status;
 									context.startActivity(newIntent);
 									break;
 								default:

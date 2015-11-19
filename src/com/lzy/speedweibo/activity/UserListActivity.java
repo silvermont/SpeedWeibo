@@ -47,7 +47,7 @@ public class UserListActivity extends BaseActivity {
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
 
 		adapter = new UserAdapter(this);
-		mFriendshipsAPI = MyApplication.getFriendshipsAPI(this);
+		mFriendshipsAPI = MyApplication.mFriendshipsAPI;
 		list = new ArrayList<User>();
 		uidList = new ArrayList<String>();
 		mListener = new RequestListener() {

@@ -28,7 +28,7 @@ public class WelcomeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
 
-		//initActionBar();
+		// initActionBar();
 
 		// 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
 		AuthInfo mAuthInfo = new AuthInfo(this, Constants.APP_KEY,
@@ -40,22 +40,16 @@ public class WelcomeActivity extends BaseActivity {
 		mAccessToken = AccessTokenKeeper.readAccessToken(this);
 		if (mAccessToken.isSessionValid()) {
 			// updateTokenView(true);
-			MyApplication.setmAccessToken(mAccessToken);
+			MyApplication
+					.setmAccessToken(getApplicationContext(), mAccessToken);
 			// 已认证则跳转到主界面
-			Intent intent = new Intent(WelcomeActivity.this,
-					HomeActivity.class);
+			Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
 			startActivity(intent);
 			finish();
 		} else {
 			mSsoHandler.authorizeWeb(new AuthListener());
 			finish();
 		}
-	}
-
-	private void initActionBar() {
-		ActionBar actionBar = this.getActionBar();
-		actionBar.setCustomView(R.layout.action_bar_general);
-		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 	}
 
 	/**
@@ -79,7 +73,8 @@ public class WelcomeActivity extends BaseActivity {
 				// 保存 Token 到 SharedPreferences
 				AccessTokenKeeper.writeAccessToken(WelcomeActivity.this,
 						mAccessToken);
-				MyApplication.setmAccessToken(mAccessToken);
+				MyApplication.setmAccessToken(getApplicationContext(),
+						mAccessToken);
 				Toast.makeText(WelcomeActivity.this,
 						R.string.weibosdk_demo_toast_auth_success,
 						Toast.LENGTH_SHORT).show();

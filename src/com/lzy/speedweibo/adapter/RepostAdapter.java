@@ -77,7 +77,7 @@ public class RepostAdapter extends BaseAdapter {
 		holder.time
 				.setText(Utils.transformTime(list.get(position).created_at));
 
-		MyApplication.asyncLoadImage(
+		MyApplication.displayImageLossless(
 				list.get(position).user.profile_image_url, holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {

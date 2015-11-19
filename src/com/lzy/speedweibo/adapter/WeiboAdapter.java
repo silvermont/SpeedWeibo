@@ -37,7 +37,7 @@ public class WeiboAdapter extends BaseAdapter {
 		super();
 		this.context = context;
 		this.list = new ArrayList<Status>();
-		this.imageWidth = MyApplication.getImageWidth();
+		this.imageWidth = MyApplication.imageWidth;
 	}
 
 	public void setData(List<Status> statusList) {
@@ -154,8 +154,8 @@ public class WeiboAdapter extends BaseAdapter {
 				list.get(position).reposts_count,
 				list.get(position).comments_count));
 
-		MyApplication.asyncLoadImage(list.get(position).user.profile_image_url,
-				holder.head);
+		MyApplication.displayImageLossless(
+				list.get(position).user.profile_image_url, holder.head);
 
 		if (null == list.get(position).pic_urls) {
 			holder.pictureLayout.setVisibility(View.GONE);
@@ -165,7 +165,7 @@ public class WeiboAdapter extends BaseAdapter {
 			for (int i = 0; i < 9; i++) {
 				holder.pictureArray[i].setVisibility(View.GONE);
 			}
-			MyApplication.asyncLoadImage(list.get(position).bmiddle_pic,
+			MyApplication.displayImage(list.get(position).bmiddle_pic,
 					holder.picture);
 
 			holder.picture.setOnClickListener(new OnClickListener() {
@@ -174,7 +174,7 @@ public class WeiboAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					Intent intent = new Intent(context,
 							BigPictureActivity.class);
-					intent.putExtra("url", list.get(position).original_pic);
+					intent.putExtra("url", list.get(position).bmiddle_pic);
 					context.startActivity(intent);
 					((Activity) context).overridePendingTransition(
 							R.anim.activity_open, 0);
@@ -196,9 +196,8 @@ public class WeiboAdapter extends BaseAdapter {
 					holder.pictureArray[i].setLayoutParams(params);
 					holder.pictureArray[i]
 							.setScaleType(ImageView.ScaleType.CENTER_CROP);
-					MyApplication.asyncLoadImage(
-							Utils.transformThumbnailToBmiddle(list
-									.get(position).pic_urls.get(i)),
+					MyApplication.displayImageLossless(
+							list.get(position).pic_urls.get(i),
 							holder.pictureArray[i]);
 
 					holder.pictureArray[i]
@@ -208,7 +207,7 @@ public class WeiboAdapter extends BaseAdapter {
 									Intent intent = new Intent(context,
 											BigPictureActivity.class);
 									intent.putExtra("url", Utils
-											.transformThumbnailToOriginal(list
+											.transformThumbnailToBmiddle(list
 													.get(position).pic_urls
 													.get((Integer) v.getTag())));
 									context.startActivity(intent);
@@ -227,7 +226,7 @@ public class WeiboAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				MyApplication.setStatus(list.get(position));
+				MyApplication.status = list.get(position);
 				Intent intent = new Intent(context, WeiboActivity.class);
 				context.startActivity(intent);
 			}
@@ -294,7 +293,7 @@ public class WeiboAdapter extends BaseAdapter {
 
 							@Override
 							public void onClick(View v) {
-								MyApplication.setStatus(list.get(position).retweeted_status);
+								MyApplication.status = list.get(position).retweeted_status;
 								Intent intent = new Intent(context,
 										WeiboActivity.class);
 								context.startActivity(intent);
@@ -366,7 +365,7 @@ public class WeiboAdapter extends BaseAdapter {
 						holder.retweetedPictureArray[i]
 								.setVisibility(View.GONE);
 					}
-					MyApplication.asyncLoadImage(
+					MyApplication.displayImage(
 							list.get(position).retweeted_status.bmiddle_pic,
 							holder.retweetedPicture);
 
@@ -379,7 +378,7 @@ public class WeiboAdapter extends BaseAdapter {
 											BigPictureActivity.class);
 									intent.putExtra(
 											"url",
-											list.get(position).retweeted_status.original_pic);
+											list.get(position).retweeted_status.bmiddle_pic);
 									context.startActivity(intent);
 									((Activity) context)
 											.overridePendingTransition(
@@ -405,10 +404,9 @@ public class WeiboAdapter extends BaseAdapter {
 							holder.retweetedPictureArray[i]
 									.setScaleType(ImageView.ScaleType.CENTER_CROP);
 							MyApplication
-									.asyncLoadImage(
-											Utils.transformThumbnailToBmiddle(list
-													.get(position).retweeted_status.pic_urls
-													.get(i)),
+									.displayImageLossless(
+											list.get(position).retweeted_status.pic_urls
+													.get(i),
 											holder.retweetedPictureArray[i]);
 
 							holder.retweetedPictureArray[i]
@@ -419,7 +417,7 @@ public class WeiboAdapter extends BaseAdapter {
 													BigPictureActivity.class);
 											intent.putExtra(
 													"url",
-													Utils.transformThumbnailToOriginal(list
+													Utils.transformThumbnailToBmiddle(list
 															.get(position).retweeted_status.pic_urls
 															.get((Integer) v
 																	.getTag())));

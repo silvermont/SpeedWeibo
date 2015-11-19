@@ -48,7 +48,7 @@ public class WeiboListActivity extends BaseActivity {
 				null);
 		loadMore = (TextView) footerView.findViewById(R.id.loadMore);
 
-		mStatusesAPI = MyApplication.getStatusesAPI(this);
+		mStatusesAPI = MyApplication.mStatusesAPI;
 		statusList = new ArrayList<Status>();
 		adapter = new WeiboAdapter(this);
 

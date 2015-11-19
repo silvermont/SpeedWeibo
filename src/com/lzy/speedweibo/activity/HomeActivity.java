@@ -67,7 +67,7 @@ public class HomeActivity extends BaseActivity {
 
 		statusList = new ArrayList<Status>();
 		adapter = new com.lzy.speedweibo.adapter.WeiboAdapter(this);
-		mStatusesAPI = MyApplication.getStatusesAPI(this);
+		mStatusesAPI = MyApplication.mStatusesAPI;
 		mListener = new RequestListener() {
 
 			@Override

@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -31,11 +32,10 @@ public class BigPictureActivity extends Activity {
 		defalutImageView = (ImageView) findViewById(R.id.defaultImageView);
 
 		String url = getIntent().getStringExtra("url");
-		final int width = MyApplication.getDisplayWidth();
-		final int height = MyApplication.getDisplayHeight();
+		final int width = MyApplication.displayWidth;
+		final int height = MyApplication.displayHeight;
 
-		ImageLoader.getInstance().loadImage(url,
-				MyApplication.optionsBigPicture,
+		ImageLoader.getInstance().loadImage(url, MyApplication.losslessOptions,
 				new SimpleImageLoadingListener() {
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
@@ -63,9 +63,7 @@ public class BigPictureActivity extends Activity {
 						} else {
 							defalutImageView.setImageBitmap(loadedImage);
 
-							final int statusBarHeight = MyApplication
-									.getStatusBarHeight(BigPictureActivity.this);
-
+							final int statusBarHeight = MyApplication.statusBarHeight;
 							int realHeight = (int) ((float) imageHeight
 									/ (float) imageWidth * width);
 							if (realHeight < height - statusBarHeight) {

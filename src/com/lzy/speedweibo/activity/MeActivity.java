@@ -52,7 +52,7 @@ public class MeActivity extends BaseActivity {
 
 		initActionBar();
 
-		UsersAPI mUsersAPI = MyApplication.getUsersAPI(this);
+		UsersAPI mUsersAPI = MyApplication.mUsersAPI;
 		RequestListener mListener = new RequestListener() {
 
 			@Override
@@ -156,7 +156,7 @@ public class MeActivity extends BaseActivity {
 	}
 
 	private void handleUser(User user) {
-		MyApplication.asyncLoadImage(user.avatar_large, head);
+		MyApplication.displayImageLossless(user.avatar_large, head);
 		name.setText(user.screen_name);
 		weiboNumber.setText(user.statuses_count + "");
 		followNumber.setText(user.friends_count + "");
