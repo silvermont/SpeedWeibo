@@ -25,7 +25,7 @@ public class MyApplication extends Application {
 	public static Status status;
 	public static DisplayImageOptions losslessOptions;
 	public static DisplayImageOptions options;
-	private static Oauth2AccessToken mAccessToken;
+	public static Oauth2AccessToken mAccessToken;
 	public static CommentsAPI mCommentsAPI;
 	public static StatusesAPI mStatusesAPI;
 	public static UsersAPI mUsersAPI;
@@ -34,7 +34,7 @@ public class MyApplication extends Application {
 	public static int displayWidth;
 	public static int displayHeight;
 	public static int statusBarHeight;
-	private static long uid;
+	public static long uid;
 
 	@Override
 	public void onCreate() {
@@ -99,27 +99,16 @@ public class MyApplication extends Application {
 		ImageLoader.getInstance().displayImage(imageUrl, imageView, options);
 	}
 
-	public static Oauth2AccessToken getmAccessToken() {
-		return mAccessToken;
-	}
-
 	public static void setmAccessToken(Context context,
 			Oauth2AccessToken mAccessToken) {
 		MyApplication.mAccessToken = mAccessToken;
 
-		mCommentsAPI = new CommentsAPI(context, Constants.APP_KEY,
-				getmAccessToken());
-		mStatusesAPI = new StatusesAPI(context, Constants.APP_KEY,
-				getmAccessToken());
-		mUsersAPI = new UsersAPI(context, Constants.APP_KEY, getmAccessToken());
+		mCommentsAPI = new CommentsAPI(context, Constants.APP_KEY, mAccessToken);
+		mStatusesAPI = new StatusesAPI(context, Constants.APP_KEY, mAccessToken);
+		mUsersAPI = new UsersAPI(context, Constants.APP_KEY, mAccessToken);
 		mFriendshipsAPI = new FriendshipsAPI(context, Constants.APP_KEY,
-				getmAccessToken());
-	}
+				mAccessToken);
 
-	public static long getUid() {
-		if (uid == 0L) {
-			uid = Long.parseLong(getmAccessToken().getUid());
-		}
-		return uid;
+		uid = Long.parseLong(mAccessToken.getUid());
 	}
 }

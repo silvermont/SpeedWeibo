@@ -132,7 +132,7 @@ public class MeActivity extends BaseActivity {
 			}
 		});
 
-		mUsersAPI.show(MyApplication.getUid(), mListener);
+		mUsersAPI.show(MyApplication.uid, mListener);
 	}
 
 	private void initActionBar() {
