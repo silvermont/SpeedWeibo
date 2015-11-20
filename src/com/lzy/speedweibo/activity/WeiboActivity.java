@@ -246,7 +246,7 @@ public class WeiboActivity extends BaseActivity {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(WeiboActivity.this,
-							BigPictureActivity.class);
+							PictureActivity.class);
 					intent.putExtra("url", status.bmiddle_pic);
 					startActivity(intent);
 					overridePendingTransition(R.anim.activity_open, 0);
@@ -275,7 +275,7 @@ public class WeiboActivity extends BaseActivity {
 						@Override
 						public void onClick(View v) {
 							Intent intent = new Intent(WeiboActivity.this,
-									BigPictureActivity.class);
+									PictureActivity.class);
 							intent.putExtra(
 									"url",
 									Utils.transformThumbnailToBmiddle(status.pic_urls
@@ -344,7 +344,7 @@ public class WeiboActivity extends BaseActivity {
 						public void onClick(View v) {
 
 							Intent intent = new Intent(WeiboActivity.this,
-									BigPictureActivity.class);
+									PictureActivity.class);
 							intent.putExtra("url",
 									status.retweeted_status.bmiddle_pic);
 							startActivity(intent);
@@ -377,7 +377,7 @@ public class WeiboActivity extends BaseActivity {
 										public void onClick(View v) {
 											Intent intent = new Intent(
 													WeiboActivity.this,
-													BigPictureActivity.class);
+													PictureActivity.class);
 											intent.putExtra(
 													"url",
 													Utils.transformThumbnailToBmiddle(status.retweeted_status.pic_urls

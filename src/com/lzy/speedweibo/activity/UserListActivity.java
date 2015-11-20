@@ -83,20 +83,19 @@ public class UserListActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				if (action.equals("关注")) {
-					mFriendshipsAPI.friends(MyApplication.getUid(), 200,
-							cursor, true, mListener);
+					mFriendshipsAPI.friends(MyApplication.uid, 200, cursor,
+							true, mListener);
 				} else if (action.equals("粉丝")) {
-					mFriendshipsAPI.followers(MyApplication.getUid(), 200,
-							cursor, false, mListener);
+					mFriendshipsAPI.followers(MyApplication.uid, 200, cursor,
+							false, mListener);
 				}
 			}
 		});
 
 		if (action.equals("关注")) {
-			mFriendshipsAPI.friends(MyApplication.getUid(), 200, 0, true,
-					mListener);
+			mFriendshipsAPI.friends(MyApplication.uid, 200, 0, true, mListener);
 		} else if (action.equals("粉丝")) {
-			mFriendshipsAPI.followers(MyApplication.getUid(), 200, 0, false,
+			mFriendshipsAPI.followers(MyApplication.uid, 200, 0, false,
 					mListener);
 		}
 

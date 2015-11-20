@@ -159,7 +159,7 @@ public class Utils {
 		int glMaxTextureSize = GL10.GL_MAX_TEXTURE_SIZE;
 		int w = source.getWidth();
 		int h = source.getHeight();
-		Log.e("", "h " + h);
+
 		List<Bitmap> bitmaps = new ArrayList<Bitmap>();
 		int processedHeight = 0;
 		while (h > 0) {
@@ -173,21 +173,22 @@ public class Utils {
 	}
 
 	/**
-	 * 压缩图片。
+	 * 压缩图片。保持长宽比，宽度为屏幕宽度。
+	 * 
 	 * @param image
 	 * @return
 	 */
 	public static Bitmap zoomImage(Bitmap image) {
-		// 获取这个图片的宽和高
+		float displayWidth = MyApplication.displayWidth;
+		// 获取这个图片的宽
 		float width = image.getWidth();
 		float height = image.getHeight();
 		// 创建操作图片用的matrix对象
 		Matrix matrix = new Matrix();
-		// 计算宽高缩放率
-		float scaleWidth = ((float) 0) / width;
-		float scaleHeight = ((float) 0) / height;
+		// 计算缩放率
+		float scale = displayWidth / width;
 		// 缩放图片动作
-		matrix.postScale(scaleWidth, scaleHeight);
+		matrix.postScale(scale, scale);
 		Bitmap bitmap = Bitmap.createBitmap(image, 0, 0, (int) width,
 				(int) height, matrix, true);
 		return bitmap;

@@ -7,10 +7,9 @@ import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
 import com.lzy.speedweibo.R;
@@ -19,7 +18,7 @@ import com.lzy.speedweibo.core.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-public class BigPictureActivity extends Activity {
+public class PictureActivity extends Activity {
 	private LinearLayout layout;
 	private ImageView defalutImageView;
 
@@ -32,7 +31,6 @@ public class BigPictureActivity extends Activity {
 		defalutImageView = (ImageView) findViewById(R.id.defaultImageView);
 
 		String url = getIntent().getStringExtra("url");
-		final int width = MyApplication.displayWidth;
 		final int height = MyApplication.displayHeight;
 
 		ImageLoader.getInstance().loadImage(url, MyApplication.losslessOptions,
@@ -40,37 +38,35 @@ public class BigPictureActivity extends Activity {
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
 							Bitmap loadedImage) {
-						int imageHeight = loadedImage.getHeight();
-						int imageWidth = loadedImage.getWidth();
+						Bitmap bitmap = Utils.zoomImage(loadedImage);
+
+						int imageHeight = bitmap.getHeight();
 
 						if (imageHeight > GL10.GL_MAX_TEXTURE_SIZE) {
 							defalutImageView.setVisibility(View.GONE);
-							List<Bitmap> bitmaps = Utils
-									.slideBitmap(loadedImage);
+
+							List<Bitmap> bitmaps = Utils.slideBitmap(bitmap);
 							for (Bitmap b : bitmaps) {
 								ImageView imageView = new ImageView(
-										BigPictureActivity.this);
-								imageView.setScaleType(ScaleType.FIT_XY);
+										PictureActivity.this);
 								imageView
 										.setLayoutParams(new LinearLayout.LayoutParams(
-												width,
-												(int) (width * ((float) b
-														.getHeight() / (float) b
-														.getWidth()))));
+												LayoutParams.WRAP_CONTENT,
+												LayoutParams.WRAP_CONTENT));
 								imageView.setImageBitmap(b);
+
 								layout.addView(imageView);
 							}
 						} else {
-							defalutImageView.setImageBitmap(loadedImage);
+							defalutImageView.setImageBitmap(bitmap);
 
 							final int statusBarHeight = MyApplication.statusBarHeight;
-							int realHeight = (int) ((float) imageHeight
-									/ (float) imageWidth * width);
-							if (realHeight < height - statusBarHeight) {
+
+							if (imageHeight < height - statusBarHeight) {
 								// 让imageview居中
 								defalutImageView.setPadding(0, (height
-										- statusBarHeight - realHeight) / 2, 0,
-										0);
+										- statusBarHeight - imageHeight) / 2,
+										0, 0);
 							}
 						}
 					}
