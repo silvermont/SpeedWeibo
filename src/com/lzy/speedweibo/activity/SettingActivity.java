@@ -17,7 +17,7 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.UsersAPI;
 import com.sina.weibo.sdk.openapi.models.User;
 
-public class MeActivity extends BaseActivity {
+public class SettingActivity extends BaseActivity {
 	private RelativeLayout user;
 	private RelativeLayout weibo;
 	private RelativeLayout follow;
@@ -81,7 +81,7 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MeActivity.this,
+				Intent intent = new Intent(SettingActivity.this,
 						WeiboListActivity.class);
 				intent.putExtra("action", "微博");
 				startActivity(intent);
@@ -92,7 +92,7 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MeActivity.this,
+				Intent intent = new Intent(SettingActivity.this,
 						UserListActivity.class);
 				intent.putExtra("action", "关注");
 				startActivity(intent);
@@ -103,7 +103,7 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MeActivity.this,
+				Intent intent = new Intent(SettingActivity.this,
 						UserListActivity.class);
 				intent.putExtra("action", "粉丝");
 				startActivity(intent);
@@ -114,7 +114,7 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MeActivity.this,
+				Intent intent = new Intent(SettingActivity.this,
 						CommentListActivity.class);
 				intent.putExtra("action", "comments");
 				startActivity(intent);
@@ -125,7 +125,7 @@ public class MeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MeActivity.this,
+				Intent intent = new Intent(SettingActivity.this,
 						CommentListActivity.class);
 				intent.putExtra("action", "at");
 				startActivity(intent);

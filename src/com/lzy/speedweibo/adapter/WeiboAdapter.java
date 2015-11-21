@@ -19,7 +19,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.lzy.speedweibo.R;
-import com.lzy.speedweibo.activity.BigPictureActivity;
+import com.lzy.speedweibo.activity.PictureActivity;
 import com.lzy.speedweibo.activity.EditActivity;
 import com.lzy.speedweibo.activity.WeiboActivity;
 import com.lzy.speedweibo.core.MyApplication;
@@ -173,7 +173,7 @@ public class WeiboAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(context,
-							BigPictureActivity.class);
+							PictureActivity.class);
 					intent.putExtra("url", list.get(position).bmiddle_pic);
 					context.startActivity(intent);
 					((Activity) context).overridePendingTransition(
@@ -205,7 +205,7 @@ public class WeiboAdapter extends BaseAdapter {
 								@Override
 								public void onClick(View v) {
 									Intent intent = new Intent(context,
-											BigPictureActivity.class);
+											PictureActivity.class);
 									intent.putExtra("url", Utils
 											.transformThumbnailToBmiddle(list
 													.get(position).pic_urls
@@ -375,7 +375,7 @@ public class WeiboAdapter extends BaseAdapter {
 								@Override
 								public void onClick(View v) {
 									Intent intent = new Intent(context,
-											BigPictureActivity.class);
+											PictureActivity.class);
 									intent.putExtra(
 											"url",
 											list.get(position).retweeted_status.bmiddle_pic);
@@ -414,7 +414,7 @@ public class WeiboAdapter extends BaseAdapter {
 										@Override
 										public void onClick(View v) {
 											Intent intent = new Intent(context,
-													BigPictureActivity.class);
+													PictureActivity.class);
 											intent.putExtra(
 													"url",
 													Utils.transformThumbnailToBmiddle(list

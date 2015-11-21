@@ -18,7 +18,7 @@ import com.lzy.speedweibo.core.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-public class BigPictureActivity extends Activity {
+public class PictureActivity extends Activity {
 	private LinearLayout layout;
 	private ImageView defalutImageView;
 
@@ -48,7 +48,7 @@ public class BigPictureActivity extends Activity {
 							List<Bitmap> bitmaps = Utils.slideBitmap(bitmap);
 							for (Bitmap b : bitmaps) {
 								ImageView imageView = new ImageView(
-										BigPictureActivity.this);
+										PictureActivity.this);
 								imageView
 										.setLayoutParams(new LinearLayout.LayoutParams(
 												LayoutParams.WRAP_CONTENT,

@@ -42,23 +42,19 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.MeActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".activity.SettingActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.lzy.speedweibo.activity.BaseActivity"
+            android:name=".activity.BaseActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.lzy.speedweibo.activity.WeiboActivity"
+            android:name=".activity.WeiboActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.lzy.speedweibo.activity.EditActivity"
+            android:name=".activity.EditActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" >
         </activity>
@@ -75,7 +71,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.BigPictureActivity"
+            android:name=".activity.PictureActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>

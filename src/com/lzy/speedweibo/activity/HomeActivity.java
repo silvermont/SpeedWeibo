@@ -146,7 +146,7 @@ public class HomeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(HomeActivity.this, MeActivity.class);
+				Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
 				startActivity(intent);
 			}
 		});
