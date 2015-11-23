@@ -139,6 +139,8 @@ public class HomeActivity extends BaseActivity {
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.action_bar_home);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		actionBar.setBackgroundDrawable(getResources()
+				.getDrawable(R.color.blue));
 
 		RelativeLayout operate = (RelativeLayout) actionBar.getCustomView()
 				.findViewById(R.id.operate);
@@ -146,7 +148,8 @@ public class HomeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
+				Intent intent = new Intent(HomeActivity.this,
+						SettingActivity.class);
 				startActivity(intent);
 			}
 		});

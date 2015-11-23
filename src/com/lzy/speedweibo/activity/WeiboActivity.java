@@ -406,6 +406,9 @@ public class WeiboActivity extends BaseActivity {
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.action_bar_weibo);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		actionBar.setBackgroundDrawable(getResources()
+				.getDrawable(R.color.blue));
+		
 		TextView title = (TextView) actionBar.getCustomView().findViewById(
 				R.id.title);
 		title.setText("微博正文");

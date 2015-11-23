@@ -125,6 +125,8 @@ public class CommentListActivity extends BaseActivity {
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setCustomView(R.layout.action_bar_back);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		actionBar.setBackgroundDrawable(getResources()
+				.getDrawable(R.color.blue));
 
 		RelativeLayout back = (RelativeLayout) actionBar.getCustomView()
 				.findViewById(R.id.back);
