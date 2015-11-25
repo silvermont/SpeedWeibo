@@ -81,7 +81,7 @@ public class CommentAdapter extends BaseAdapter {
 		holder.time
 				.setText(Utils.transformTime(list.get(position).created_at));
 
-		MyApplication.displayImageLossless(
+		MyApplication.displayImage(
 				list.get(position).user.profile_image_url, holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {

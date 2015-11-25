@@ -229,7 +229,7 @@ public class WeiboActivity extends BaseActivity {
 		repostsCount.setText(Utils.transformRepostsCount(status.reposts_count,
 				status.comments_count));
 
-		MyApplication.displayImageLossless(status.user.profile_image_url, head);
+		MyApplication.displayImage(status.user.profile_image_url, head);
 
 		if (null == status.pic_urls) {
 			pictureLayout.setVisibility(View.GONE);
@@ -239,7 +239,7 @@ public class WeiboActivity extends BaseActivity {
 			for (int i = 0; i < 9; i++) {
 				pictureArray[i].setVisibility(View.GONE);
 			}
-			MyApplication.displayImage(status.bmiddle_pic, picture);
+			MyApplication.lossyDisplayImage(status.bmiddle_pic, picture);
 
 			picture.setOnClickListener(new OnClickListener() {
 
@@ -247,7 +247,7 @@ public class WeiboActivity extends BaseActivity {
 				public void onClick(View v) {
 					Intent intent = new Intent(WeiboActivity.this,
 							PictureActivity.class);
-					intent.putExtra("url", status.bmiddle_pic);
+					intent.putExtra("urls", status.pic_urls);
 					startActivity(intent);
 					overridePendingTransition(R.anim.activity_open, 0);
 				}
@@ -268,7 +268,7 @@ public class WeiboActivity extends BaseActivity {
 					pictureArray[i].setLayoutParams(params);
 					pictureArray[i]
 							.setScaleType(ImageView.ScaleType.CENTER_CROP);
-					MyApplication.displayImageLossless(status.pic_urls.get(i),
+					MyApplication.displayImage(status.pic_urls.get(i),
 							pictureArray[i]);
 
 					pictureArray[i].setOnClickListener(new OnClickListener() {
@@ -276,10 +276,8 @@ public class WeiboActivity extends BaseActivity {
 						public void onClick(View v) {
 							Intent intent = new Intent(WeiboActivity.this,
 									PictureActivity.class);
-							intent.putExtra(
-									"url",
-									Utils.transformThumbnailToBmiddle(status.pic_urls
-											.get((Integer) v.getTag())));
+							intent.putExtra("urls", status.pic_urls);
+							intent.putExtra("index", (Integer) v.getTag());
 							startActivity(intent);
 							overridePendingTransition(R.anim.activity_open, 0);
 						}
@@ -334,7 +332,7 @@ public class WeiboActivity extends BaseActivity {
 					for (int i = 0; i < 9; i++) {
 						retweetedPictureArray[i].setVisibility(View.GONE);
 					}
-					MyApplication.displayImage(
+					MyApplication.lossyDisplayImage(
 							status.retweeted_status.bmiddle_pic,
 							retweetedPicture);
 
@@ -345,8 +343,8 @@ public class WeiboActivity extends BaseActivity {
 
 							Intent intent = new Intent(WeiboActivity.this,
 									PictureActivity.class);
-							intent.putExtra("url",
-									status.retweeted_status.bmiddle_pic);
+							intent.putExtra("urls",
+									status.retweeted_status.pic_urls);
 							startActivity(intent);
 							overridePendingTransition(R.anim.activity_open, 0);
 						}
@@ -367,7 +365,7 @@ public class WeiboActivity extends BaseActivity {
 							retweetedPictureArray[i].setLayoutParams(params);
 							retweetedPictureArray[i]
 									.setScaleType(ImageView.ScaleType.CENTER_CROP);
-							MyApplication.displayImageLossless(
+							MyApplication.displayImage(
 									status.retweeted_status.pic_urls.get(i),
 									retweetedPictureArray[i]);
 
@@ -379,10 +377,10 @@ public class WeiboActivity extends BaseActivity {
 													WeiboActivity.this,
 													PictureActivity.class);
 											intent.putExtra(
-													"url",
-													Utils.transformThumbnailToBmiddle(status.retweeted_status.pic_urls
-															.get((Integer) v
-																	.getTag())));
+													"urls",
+													status.retweeted_status.pic_urls);
+											intent.putExtra("index",
+													(Integer) v.getTag());
 											startActivity(intent);
 											overridePendingTransition(
 													R.anim.activity_open, 0);
@@ -408,7 +406,7 @@ public class WeiboActivity extends BaseActivity {
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		actionBar.setBackgroundDrawable(getResources()
 				.getDrawable(R.color.blue));
-		
+
 		TextView title = (TextView) actionBar.getCustomView().findViewById(
 				R.id.title);
 		title.setText("微博正文");

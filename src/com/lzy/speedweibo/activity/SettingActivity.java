@@ -158,7 +158,7 @@ public class SettingActivity extends BaseActivity {
 	}
 
 	private void handleUser(User user) {
-		MyApplication.displayImageLossless(user.avatar_large, head);
+		MyApplication.displayImage(user.avatar_large, head);
 		name.setText(user.screen_name);
 		weiboNumber.setText(user.statuses_count + "");
 		followNumber.setText(user.friends_count + "");

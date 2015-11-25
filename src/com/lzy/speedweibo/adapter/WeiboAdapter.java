@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -154,7 +155,7 @@ public class WeiboAdapter extends BaseAdapter {
 				list.get(position).reposts_count,
 				list.get(position).comments_count));
 
-		MyApplication.displayImageLossless(
+		MyApplication.displayImage(
 				list.get(position).user.profile_image_url, holder.head);
 
 		if (null == list.get(position).pic_urls) {
@@ -165,16 +166,15 @@ public class WeiboAdapter extends BaseAdapter {
 			for (int i = 0; i < 9; i++) {
 				holder.pictureArray[i].setVisibility(View.GONE);
 			}
-			MyApplication.displayImage(list.get(position).bmiddle_pic,
+			MyApplication.lossyDisplayImage(list.get(position).bmiddle_pic,
 					holder.picture);
 
 			holder.picture.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					Intent intent = new Intent(context,
-							PictureActivity.class);
-					intent.putExtra("url", list.get(position).bmiddle_pic);
+					Intent intent = new Intent(context, PictureActivity.class);
+					intent.putExtra("urls", list.get(position).pic_urls);
 					context.startActivity(intent);
 					((Activity) context).overridePendingTransition(
 							R.anim.activity_open, 0);
@@ -196,7 +196,7 @@ public class WeiboAdapter extends BaseAdapter {
 					holder.pictureArray[i].setLayoutParams(params);
 					holder.pictureArray[i]
 							.setScaleType(ImageView.ScaleType.CENTER_CROP);
-					MyApplication.displayImageLossless(
+					MyApplication.displayImage(
 							list.get(position).pic_urls.get(i),
 							holder.pictureArray[i]);
 
@@ -206,10 +206,10 @@ public class WeiboAdapter extends BaseAdapter {
 								public void onClick(View v) {
 									Intent intent = new Intent(context,
 											PictureActivity.class);
-									intent.putExtra("url", Utils
-											.transformThumbnailToBmiddle(list
-													.get(position).pic_urls
-													.get((Integer) v.getTag())));
+									intent.putExtra("urls",
+											list.get(position).pic_urls);
+									intent.putExtra("index",
+											(Integer) v.getTag());
 									context.startActivity(intent);
 									((Activity) context)
 											.overridePendingTransition(
@@ -365,7 +365,7 @@ public class WeiboAdapter extends BaseAdapter {
 						holder.retweetedPictureArray[i]
 								.setVisibility(View.GONE);
 					}
-					MyApplication.displayImage(
+					MyApplication.lossyDisplayImage(
 							list.get(position).retweeted_status.bmiddle_pic,
 							holder.retweetedPicture);
 
@@ -377,8 +377,8 @@ public class WeiboAdapter extends BaseAdapter {
 									Intent intent = new Intent(context,
 											PictureActivity.class);
 									intent.putExtra(
-											"url",
-											list.get(position).retweeted_status.bmiddle_pic);
+											"urls",
+											list.get(position).retweeted_status.pic_urls);
 									context.startActivity(intent);
 									((Activity) context)
 											.overridePendingTransition(
@@ -404,7 +404,7 @@ public class WeiboAdapter extends BaseAdapter {
 							holder.retweetedPictureArray[i]
 									.setScaleType(ImageView.ScaleType.CENTER_CROP);
 							MyApplication
-									.displayImageLossless(
+									.displayImage(
 											list.get(position).retweeted_status.pic_urls
 													.get(i),
 											holder.retweetedPictureArray[i]);
@@ -416,11 +416,10 @@ public class WeiboAdapter extends BaseAdapter {
 											Intent intent = new Intent(context,
 													PictureActivity.class);
 											intent.putExtra(
-													"url",
-													Utils.transformThumbnailToBmiddle(list
-															.get(position).retweeted_status.pic_urls
-															.get((Integer) v
-																	.getTag())));
+													"urls",
+													list.get(position).retweeted_status.pic_urls);
+											intent.putExtra("index",
+													(Integer) v.getTag());
 											context.startActivity(intent);
 											((Activity) context)
 													.overridePendingTransition(

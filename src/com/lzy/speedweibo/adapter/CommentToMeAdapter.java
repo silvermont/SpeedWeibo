@@ -101,7 +101,7 @@ public class CommentToMeAdapter extends BaseAdapter {
 				R.color.text_black_light));
 		holder.retweetedText.invalidate();
 
-		MyApplication.displayImageLossless(list.get(position).user.profile_image_url,
+		MyApplication.displayImage(list.get(position).user.profile_image_url,
 				holder.head);
 
 		holder.wholeLayout.setOnClickListener(new OnClickListener() {

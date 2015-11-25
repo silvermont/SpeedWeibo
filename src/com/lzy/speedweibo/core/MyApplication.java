@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.openapi.CommentsAPI;
 import com.sina.weibo.sdk.openapi.UsersAPI;
@@ -23,8 +24,8 @@ import com.sina.weibo.sdk.openapi.models.Status;
 public class MyApplication extends Application {
 
 	public static Status status;
-	public static DisplayImageOptions losslessOptions;
 	public static DisplayImageOptions options;
+	public static DisplayImageOptions lossyOptions;
 	public static Oauth2AccessToken mAccessToken;
 	public static CommentsAPI mCommentsAPI;
 	public static StatusesAPI mStatusesAPI;
@@ -44,13 +45,13 @@ public class MyApplication extends Application {
 				.createDefault(this);
 		ImageLoader.getInstance().init(configuration);
 
-		losslessOptions = new DisplayImageOptions.Builder()
+		options = new DisplayImageOptions.Builder()
 				.showImageOnLoading(R.drawable.blank)
 				.showImageOnFail(R.drawable.blank).cacheInMemory(true)
 				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
 				.imageScaleType(ImageScaleType.NONE).build();
 
-		options = new DisplayImageOptions.Builder()
+		lossyOptions = new DisplayImageOptions.Builder()
 				.showImageOnLoading(R.drawable.blank)
 				.showImageOnFail(R.drawable.blank).cacheInMemory(true)
 				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
@@ -79,24 +80,33 @@ public class MyApplication extends Application {
 	}
 
 	/**
+	 * 异步显示图片,无损
+	 * 
+	 * @param url
+	 * @param imageView
+	 */
+	public static void displayImage(String url, ImageView imageView) {
+		ImageLoader.getInstance().displayImage(url, imageView, options);
+	}
+
+	/**
+	 * 异步显示图片,有损
+	 * 
+	 * @param url
+	 * @param imageView
+	 */
+	public static void lossyDisplayImage(String url, ImageView imageView) {
+		ImageLoader.getInstance().displayImage(url, imageView, lossyOptions);
+	}
+
+	/**
 	 * 异步加载图片,无损
 	 * 
 	 * @param imageUrl
 	 * @param imageView
 	 */
-	public static void displayImageLossless(String imageUrl, ImageView imageView) {
-		ImageLoader.getInstance().displayImage(imageUrl, imageView,
-				losslessOptions);
-	}
-
-	/**
-	 * 异步加载图片,有损
-	 * 
-	 * @param imageUrl
-	 * @param imageView
-	 */
-	public static void displayImage(String imageUrl, ImageView imageView) {
-		ImageLoader.getInstance().displayImage(imageUrl, imageView, options);
+	public static void loadImage(String url, SimpleImageLoadingListener listener) {
+		ImageLoader.getInstance().loadImage(url, options, listener);
 	}
 
 	public static void setmAccessToken(Context context,
